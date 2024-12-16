@@ -1,0 +1,72 @@
+name: mddmerchant
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  carousel_slider: ^4.2.0
+  flutter_spinkit: ^5.2.1
+#  flutter_gifimage: ^2.0.0
+
+  cupertino_icons: ^1.0.8
+  http: ^1.2.2
+  geolocator: ^13.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+#  carousel_slider: ^4.2.0
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: "^0.14.1"
+  font_awesome_flutter: '>= 4.7.0'
+#  carousel_slider: ^4.2.0
+#
+#  flutter_icons:
+#    android: true
+#    ios: true
+#    image_path: "assets/logo/"
+
+flutter:
+  uses-material-design: true
+  assets:
+#    - assets/images/
+    - assets/images/main/
+    - assets/images/myalbum/
+    - assets/images/register/
+
+  fonts:
+    - family: Fontmain
+      fonts:
+        - asset: assets/fonts/Aclonica/Aclonica-Regular.ttf
+          weight: 400
+
+    - family: sub-tittle
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-SemiBold.ttf
+          weight: 100
+#
+#    - family: CustomIcons
+#      fonts:
+#        - asset: assets/icons/custom_icons.ttf
+#    - family: list-sub
+#      fonts:
+#        - asset: assets/fonts/Caveat-VariableFont_wght.ttf
+#          weight: 200
+#      - asset: assets/font/Caveat-Bold.ttf
+#        weight: 700
+
+#       - assets: fonts/Schyler-Italic.ttf
+#           style: italic
+#     - family: Trajan Pro
+#     font:
+#       - assets: font/Caveat/.ttf
+#       - asset: fonts/TrajanPro_Bold.ttf
+#           weight: 700
+
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package
