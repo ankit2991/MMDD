@@ -16,6 +16,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   http: ^1.2.2
   geolocator: ^13.0.2
+  # google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +49,10 @@ flutter:
     - family: sub-tittle
       fonts:
         - asset: assets/fonts/Poppins/Poppins-SemiBold.ttf
+          weight: 100
+    - family: hindi-font
+      fonts:
+        - asset: assets/fonts/hindi font/NotoSerifDevanagari-VariableFont_wdth,wght.ttf
           weight: 100
 #
 #    - family: CustomIcons

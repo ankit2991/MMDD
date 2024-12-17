@@ -9,6 +9,7 @@ class Api {
   static List<dynamic> Sub_CategoryList_data = [];
   static List<dynamic> state_list = [];
   static List<dynamic> city_list = [];
+  static Map<String, dynamic> H_Questions={};
   // -------------------------------------------------------------------------------------------  (send OTP)
   static Future<void> send_otp(String mob_no) async {
     // String url='https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MobileNo":'"'$mob_no'"',"ApiAdd":"MobileOTP","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MobileOtp';
@@ -245,4 +246,21 @@ class Api {
       return " ";
     }
   }
+  // ____________________________________________________________________   (Service Question List Hindi )
+  static Future<void> Service_Question_List() async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MemberMasterId":"30","ServiceId":"2","IsHindi":"1","ApiAdd":"ServiceQuestionList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=ServiceQuestionList';
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("CityList Api Call.............");
+      H_Questions.clear();
+      H_Questions = jsonDecode(res.body);
+      // city_list = data["Table1"];
+      print(H_Questions);
+    } else {
+      log("Error........ CityList Api ");
+    }
+  }
+
 }
