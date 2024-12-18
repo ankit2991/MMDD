@@ -16,6 +16,11 @@ class _QualityAssState extends State<QualityAss> {
   bool loader = false;
   // String? selectedOption;
   List op_ans = [];
+  List<String> Text_answer = [];
+  List<int> op_ans_index = [];
+  List check_box_ans_bool = <List<bool?>>[];
+  List check_box_ans = <List<String>>[];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -32,7 +37,6 @@ class _QualityAssState extends State<QualityAss> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -63,6 +67,10 @@ class _QualityAssState extends State<QualityAss> {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         op_ans.add(null);
+                        op_ans_index.add(-1);
+                        check_box_ans_bool.add([false]);
+                        check_box_ans.add([""]);
+                        Text_answer.add("");
 
                         return Container(
                             margin:
@@ -127,9 +135,13 @@ class _QualityAssState extends State<QualityAss> {
                                             // style: GoogleFonts.notoSansDevanagari(fontSize: 20),
                                             groupValue: op_ans[index],
                                             onChanged: (value) {
+                                              print(index1);
                                               setState(() {
                                                 op_ans.removeAt(index);
+                                                op_ans_index.removeAt(index);
                                                 op_ans.insert(index, value);
+                                                op_ans_index.insert(
+                                                    index, index1);
                                                 // selectedOption =
                                                 //     value; // Update the selected value
                                               });
@@ -139,27 +151,219 @@ class _QualityAssState extends State<QualityAss> {
                                       },
                                     ),
                                   ),
-                                   if (Api.H_Questions["Table1"][index]
+                                if (Api.H_Questions["Table1"][index]
                                         ["QuestionType"] ==
                                     "Input Type")
-                                    TextFormField(
-                                      maxLines: 3,
-                                      minLines: 1,
-                                      decoration: InputDecoration(
+                                  TextFormField(
+                                    maxLines: 3,
+                                    minLines: 1,
+                                    onChanged: (value) {
+                                      Text_answer.removeAt(index);
+                                      Text_answer.insert(index, value);
+                                    },
+                                    decoration: InputDecoration(
                                         labelText: "Answer",
                                         hintText: "Answer",
-                                        
-                                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide(color: const Color.fromARGB(255, 21, 0, 139),))
-                                        ,disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide(color: const Color.fromARGB(255, 21, 0, 139),))
-                                        ,enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide(color: const Color.fromARGB(255, 0, 0, 0),))
-                                      ),
-                                    ),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            borderSide: BorderSide(
+                                              color: const Color.fromARGB(
+                                                  255, 21, 0, 139),
+                                            )),
+                                        disabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            borderSide: BorderSide(
+                                              color: const Color.fromARGB(
+                                                  255, 21, 0, 139),
+                                            )),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            borderSide: BorderSide(
+                                              color: const Color.fromARGB(
+                                                  255, 0, 0, 0),
+                                            ))),
+                                  ),
+                                if (Api.H_Questions["Table1"][index]
+                                        ["QuestionType"] ==
+                                    "Multipal Optional")
+                                  ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: Api.H_Questions["Table1"].length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index2) {
+                                      // check_box_ans[index].removeAt(index2);
+                                      check_box_ans_bool[index].add(false);
+                                      check_box_ans[index].add("");
+                                      if (Api.H_Questions["Table1"][index]
+                                              ["Option" + "${index2 + 1}"] !=
+                                          null) {
+                                        return CheckboxListTile(
+                                          title: Text(utf8.decode((Api
+                                                          .H_Questions["Table1"]
+                                                      [index]
+                                                  ["Option" + "${index2 + 1}"])
+                                              .runes
+                                              .toList())),
+                                          value: check_box_ans_bool[index]
+                                              [index2],
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              check_box_ans_bool[index]
+                                                  .removeAt(index2);
+                                              check_box_ans[index]
+                                                  .removeAt(index2);
+                                              check_box_ans_bool[index]
+                                                  .insert(index2, value);
+
+                                              check_box_ans[index].insert(
+                                                  index2,
+                                                  utf8.decode((Api.H_Questions[
+                                                              "Table1"][index][
+                                                          "Option" +
+                                                              "${index2 + 1}"])
+                                                      .runes
+                                                      .toList()));
+                                              // selectedOption =
+                                              //     value; // Update the selected value
+                                            });
+                                          },
+                                        );
+                                      }
+                                    },
+                                  ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     GestureDetector(
-                                      onTap: () {
-                                        print(op_ans);
+                                      onTap: () async{
+                                        print(op_ans_index[index]);
+                                        print(op_ans[index]);
+                                        print(check_box_ans_bool[index]);
+                                        print(check_box_ans[index]);
+                                        print(Text_answer[index]);
+                                        if (Api.H_Questions["Table1"][index]
+                                                ["QuestionType"] ==
+                                            "Signal Optional") {
+                                          if (op_ans_index[index] == 0) {
+                                          await  Api.MerchantAnswareInsert(
+                                                Question: utf8.decode(Api
+                                                    .H_Questions["Table1"]
+                                                        [index]["Question"]
+                                                    .runes
+                                                    .toList()),
+                                                Q_id: Api.H_Questions["Table1"]
+                                                    [index]["Id"],
+                                                Answer1: op_ans[index]);
+                                          }
+                                          if (op_ans_index[index] == 1) {
+                                          await  Api.MerchantAnswareInsert(
+                                                Question: utf8.decode(Api
+                                                    .H_Questions["Table1"]
+                                                        [index]["Question"]
+                                                    .runes
+                                                    .toList()),
+                                                Q_id: Api.H_Questions["Table1"]
+                                                    [index]["Id"],
+                                                Answer2: op_ans[index]);
+                                          }
+                                          if (op_ans_index[index] == 2) {
+                                          await  Api.MerchantAnswareInsert(
+                                                Question: utf8.decode(Api
+                                                    .H_Questions["Table1"]
+                                                        [index]["Question"]
+                                                    .runes
+                                                    .toList()),
+                                                Q_id: Api.H_Questions["Table1"]
+                                                    [index]["Id"],
+                                                Answer3: op_ans[index]);
+                                          }
+                                          if (op_ans_index[index] == 3) {
+                                          await  Api.MerchantAnswareInsert(
+                                                Question: utf8.decode(Api
+                                                    .H_Questions["Table1"]
+                                                        [index]["Question"]
+                                                    .runes
+                                                    .toList()),
+                                                Q_id: Api.H_Questions["Table1"]
+                                                    [index]["Id"],
+                                                Answer4: op_ans[index]);
+                                          }
+                                          if (op_ans_index[index] == 4) {
+                                           await Api.MerchantAnswareInsert(
+                                                Question: utf8.decode(Api
+                                                    .H_Questions["Table1"]
+                                                        [index]["Question"]
+                                                    .runes
+                                                    .toList()),
+                                                Q_id: Api.H_Questions["Table1"]
+                                                    [index]["Id"],
+                                                Answer5: op_ans[index]);
+                                          }
+                                          if (op_ans_index[index] == 5) {
+                                           await Api.MerchantAnswareInsert(
+                                                Question: utf8.decode(Api
+                                                    .H_Questions["Table1"]
+                                                        [index]["Question"]
+                                                    .runes
+                                                    .toList()),
+                                                Q_id: Api.H_Questions["Table1"]
+                                                    [index]["Id"],
+                                                Answer6: op_ans[index]);
+                                          }
+                                          if (op_ans_index[index] == 6) {
+                                          await  Api.MerchantAnswareInsert(
+                                                Question: utf8.decode(Api
+                                                    .H_Questions["Table1"]
+                                                        [index]["Question"]
+                                                    .runes
+                                                    .toList()),
+                                                Q_id: Api.H_Questions["Table1"]
+                                                    [index]["Id"],
+                                                Answer7: op_ans[index]);
+                                          }
+                                          print(op_ans);
+                                        }
+
+                                            if (Api.H_Questions["Table1"][index]
+                                                    ["QuestionType"] ==
+                                                "Multipal Optional") {
+                                                await  Api.MerchantAnswareInsert(
+                                                    Question: utf8.decode(Api
+                                                        .H_Questions["Table1"]
+                                                            [index]["Question"]
+                                                        .runes
+                                                        .toList()),
+                                                    Q_id: Api.H_Questions["Table1"]
+                                                        [index]["Id"],
+                                                        Answer1: check_box_ans[index][0],
+                                                        Answer2: check_box_ans[index][1],
+                                                        Answer3: check_box_ans[index][2],
+                                                        Answer4: check_box_ans[index][3],
+                                                        Answer5: check_box_ans[index][4],
+                                                        Answer6: check_box_ans[index][5],
+                                                        Answer7: check_box_ans[index][6],
+                                                  );
+                                                }
+                                        if (Api.H_Questions["Table1"][index]
+                                                ["QuestionType"] ==
+                                            "Input Type") {
+                                         await  Api.MerchantAnswareInsert(
+                                            Question: utf8.decode(Api
+                                                .H_Questions["Table1"][index]
+                                                    ["Question"]
+                                                .runes
+                                                .toList()),
+                                            Q_id: Api.H_Questions["Table1"]
+                                                [index]["Id"],
+                                                Answer1: Text_answer[index],
+                                          );
+                                        }
+                                        setState(() {
+                                          
+                                        });
                                       },
                                       child: Container(
                                         width:
@@ -171,7 +375,7 @@ class _QualityAssState extends State<QualityAss> {
                                         padding:
                                             EdgeInsets.symmetric(vertical: 10),
                                         child: Text(
-                                          'Questions',
+                                          'Submit',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontFamily: 'Fontmain'),

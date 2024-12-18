@@ -1,7 +1,7 @@
 import "dart:convert";
 import "dart:developer";
 import 'package:geolocator/geolocator.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import "package:http/http.dart" as http;
 
 class Api {
@@ -9,7 +9,12 @@ class Api {
   static List<dynamic> Sub_CategoryList_data = [];
   static List<dynamic> state_list = [];
   static List<dynamic> city_list = [];
+  static var User_info;
   static Map<String, dynamic> H_Questions={};
+  static late SharedPreferences prefs ;
+  static Future<void> local_dataBase()async{
+    prefs= await SharedPreferences.getInstance();
+  }
   // -------------------------------------------------------------------------------------------  (send OTP)
   static Future<void> send_otp(String mob_no) async {
     // String url='https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MobileNo":'"'$mob_no'"',"ApiAdd":"MobileOTP","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MobileOtp';
@@ -92,7 +97,11 @@ class Api {
       log("Check Mpin Api Call.............");
       print(res);
       print(res.body);
+      
       var data = jsonDecode(res.body);
+      User_info=data;
+      await prefs.setInt('is_Hindi',0);
+      await prefs.setBool('login',true);
       return data["Table"][0]["ResultCode"];
     } else {
       log("Error........ Check_Mpin Api ");
@@ -246,20 +255,37 @@ class Api {
       return " ";
     }
   }
-  // ____________________________________________________________________   (Service Question List Hindi )
+  // ____________________________________________________________________   (Service Question List  )
   static Future<void> Service_Question_List() async {
     String url =
-        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MemberMasterId":"30","ServiceId":"2","IsHindi":"1","ApiAdd":"ServiceQuestionList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=ServiceQuestionList';
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MemberMasterId":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"ServiceId":'"'${User_info["Table"][0]["ServiceID"]}'"',"IsHindi":"${prefs.getInt("is_Hindi")}","ApiAdd":"ServiceQuestionList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=ServiceQuestionList';
+   print(url);
     var res = await http.get(Uri.parse(url));
     
     if (res.statusCode == 200) {
-      log("CityList Api Call.............");
+      log("Service_Question_List Api Call.............");
       H_Questions.clear();
       H_Questions = jsonDecode(res.body);
       // city_list = data["Table1"];
       print(H_Questions);
     } else {
-      log("Error........ CityList Api ");
+      log("Error........ Service_Question_List Api ");
+    }
+  }
+  // ____________________________________________________________________   (MerchantAnswareInsert )
+  static Future<void> MerchantAnswareInsert({required int Q_id,required String Question,String Answer1 ="",String Answer2="",String Answer3="",String Answer4="",String Answer5="",String Answer6="",String Answer7=""}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"F_MemberMaster":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"F_ServiceCatagory":'"\"${User_info["Table"][0]["ServiceID"]}\""',"F_ServiceQuestionMaster":'"\"$Q_id\""',"Question":'"\"$Question\""',"Answer1":'"\"$Answer1\""',"Answer2":'"\"$Answer2\""',"Answer3":'"\"$Answer3\""',"Answer4":'"\"$Answer4\""',"Answer5":'"\"$Answer5\""',"Answer6":'"\"$Answer6\""',"Answer7":'"\"$Answer7\""',"ApiAdd":"MerchantAnswareInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MerchantAnswareInsert';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("MerchantAnswareInsert Api Call.............");
+      var data = jsonDecode(res.body);
+     await Service_Question_List();
+      print(data);
+    } else {
+      log("Error........ MerchantAnswareInsert Api ");
     }
   }
 
