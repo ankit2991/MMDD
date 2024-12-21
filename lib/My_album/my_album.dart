@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mddmerchant/My_album/Album/images.dart';
 import 'package:mddmerchant/My_album/Video/video.dart';
 
@@ -7,7 +8,7 @@ class MyAlbum extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('My Album', style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
+          title: Text('Album'.tr, style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
           centerTitle: true,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -68,7 +69,7 @@ class MyAlbum extends StatelessWidget {
                             ),
                             Spacer(),
                             Text(
-                              "Images",
+                              "Images".tr,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 15,
@@ -114,7 +115,7 @@ class MyAlbum extends StatelessWidget {
                             ),
                             Spacer(),
                             Text(
-                              "Videos",
+                              "Videos".tr,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 15,

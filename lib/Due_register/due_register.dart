@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DueRegi extends StatelessWidget {
   @override
@@ -6,7 +7,7 @@ class DueRegi extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Due Register',
+          'Due Register'.tr,
           style: TextStyle(color: Colors.white, fontFamily: 'Fontmain'),
         ),
         backgroundColor: Color(0xffC4A68B),

@@ -456,6 +456,7 @@ class _MpinPageState extends State<MpinPage> {
                                       n5.text +
                                       n6.text);
                               if (temp == "R100") {
+                                await Api.prefs.setInt('is_Hindi',0);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

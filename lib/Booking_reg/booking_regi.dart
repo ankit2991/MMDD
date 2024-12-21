@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mddmerchant/Booking_reg/AddBooking/add_booking.dart';
+import 'package:mddmerchant/Booking_reg/completed_events.dart';
+import 'package:mddmerchant/Booking_reg/up_coming_events.dart';
 
 class MyBoking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Booking', style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
+        title:  Text('My Booking'.tr, style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
         backgroundColor: Color(0xffC4A68B),
         centerTitle: true,
         leading: IconButton(
@@ -36,10 +39,10 @@ class MyBoking extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       print('click completed event');
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => PageOne()),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CompletedEvents()),
+                      );
                     },
                     child: Container(
                       width: 100,
@@ -68,7 +71,7 @@ class MyBoking extends StatelessWidget {
                           ),
                           Spacer(),
                           Text(
-                            "Completed Events",
+                            "Completed Events".tr,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 15,
@@ -83,6 +86,10 @@ class MyBoking extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       print('click UpComing Event');
+                     Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UpComingEvents()),
+                      );
                     },
                     child: Container(
                       width: 100,
@@ -111,7 +118,7 @@ class MyBoking extends StatelessWidget {
                           ),
                           Spacer(),
                           Text(
-                            "UpComing Events",
+                            "UpComing Events".tr,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 15,

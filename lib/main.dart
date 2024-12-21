@@ -9,9 +9,12 @@ import 'package:mddmerchant/Promoss and ads/promoss_ads.dart';
 import 'package:mddmerchant/Q&A/quality_assurance.dart';
 import 'package:mddmerchant/Booking_reg/booking_regi.dart';
 import 'package:mddmerchant/App_bar/user_acc.dart';
+import 'package:mddmerchant/localization/app_localization.dart';
 // import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mddmerchant/screen/spalashscreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +26,21 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MDD Merchant',
+        translations: AppTranslations(), // Your translations
+      locale: Locale('en', 'US'), // Default locale
+      fallbackLocale: Locale('en', 'US'), // Fallback locale
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('hi', 'IN'),
+      ],
+       localizationsDelegates: [
+    // const InfosLocalizationsDelegate(),
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate
+  ],
       theme: ThemeData(
         fontFamily: 'Fontmain',
         scaffoldBackgroundColor: kBackgrundColor,
@@ -42,7 +57,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 bool loading = false;
-var prefs;
+// var prefs;
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -50,10 +65,18 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     // loading = true;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    if (Api.prefs.getInt("is_Hindi")==0) {
+      Get.updateLocale(Locale('en', 'US'));
+    }else{
+      Get.updateLocale(Locale('hi', 'IN'));
+    }      
+    },);
   }
 
   @override
   Widget build(BuildContext context) {
+   print( "${Api.prefs.getInt("is_Hindi")}");
     // var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -74,9 +97,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 loading=true;                  
                 });
                 if (Api.prefs.getInt('is_Hindi')==0) {
-               await Api.prefs.setInt('is_Hindi', 1);                  
+               await Api.prefs.setInt('is_Hindi', 1);   
+                Get.updateLocale(Locale('hi', 'IN'));               
                 }else{
-               await Api.prefs.setInt('is_Hindi', 0);                  
+               await Api.prefs.setInt('is_Hindi', 0);
+                 Get.updateLocale(Locale('en', 'US'));                  
                 }
                  setState(() {
                 loading=false;                  
@@ -155,7 +180,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    "My Album",
+                                    "Album".tr,
+                                    // "My Album",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 15,
@@ -211,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    "Q&A",
+                                    "Q&A".tr,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 15,
@@ -261,8 +287,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .cover, // Optional: Adjusts how the image is fitted
                                   ),
                                   Spacer(),
-                                  const Text(
-                                    "Booking Register",
+                                   Text(
+                                    "Booking Register".tr,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 15,
@@ -312,8 +338,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .cover, // Optional: Adjusts how the image is fitted
                                   ),
                                   Spacer(),
-                                  const Text(
-                                    "Enquiry",
+                                   Text(
+                                    "Enquiry".tr,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 15,
@@ -366,7 +392,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    "Promos & Ads",
+                                    "Promos & Ads".tr,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 15,
@@ -417,7 +443,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    "Due Register",
+                                    "Due Register".tr,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 15,

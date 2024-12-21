@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:mddmerchant/api/api.dart';
 
@@ -40,7 +41,7 @@ class _QualityAssState extends State<QualityAss> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Questions',
+            'Questions'.tr,
             style: TextStyle(color: Colors.white, fontFamily: 'Fontmain'),
           ),
           centerTitle: true,
@@ -60,7 +61,7 @@ class _QualityAssState extends State<QualityAss> {
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               child: loader
                   ? Center(
-                      child: Text("No Data Available"),
+                      child: Text("No Data Available",style: TextStyle(fontFamily: 'Fontmain'),),
                     )
                   : ListView.builder(
                       itemCount: Api.H_Questions["Table1"].length,
@@ -97,7 +98,7 @@ class _QualityAssState extends State<QualityAss> {
                                             ["Question"]
                                         .runes
                                         .toList()),
-                                    style: TextStyle(
+                                    style:Api.prefs.getInt("is_Hindi")==0?TextStyle(fontSize: 15,fontFamily: 'Fontmain'): TextStyle(
                                         fontFamily: "hindi-font",
                                         fontSize: 20)),
                                 if (Api.H_Questions["Table1"][index]
@@ -106,8 +107,10 @@ class _QualityAssState extends State<QualityAss> {
                                   Container(
                                     padding: EdgeInsets.only(bottom: 20),
                                     // color: Colors.blue,
-                                    child: ListView.builder(
-                                      itemExtent: 30,
+                                    child: GridView.builder(
+                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 3,crossAxisSpacing: 0,mainAxisSpacing: 7,),
+                                      
+                                      // itemExtent: 30,
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
                                       itemCount: Api
@@ -117,6 +120,10 @@ class _QualityAssState extends State<QualityAss> {
                                                 ["Option" + "${index1 + 1}"] !=
                                             null) {
                                           return RadioListTile<String>(
+                                        
+                                            contentPadding: EdgeInsets.zero,
+                                            visualDensity: VisualDensity(horizontal: -2, vertical: -4),    
+                                                                                     
                                             title: Text(
                                                 utf8.decode(Api
                                                     .H_Questions["Table1"]
@@ -124,9 +131,9 @@ class _QualityAssState extends State<QualityAss> {
                                                             "${index1 + 1}"]
                                                     .runes
                                                     .toList()),
-                                                style: TextStyle(
+                                                style:Api.prefs.getInt("is_Hindi")==0?TextStyle(fontSize: 11,fontFamily: 'Fontmain'): TextStyle(
                                                     fontFamily: "hindi-font",
-                                                    fontSize: 10)),
+                                                    fontSize: 15)),
                                             value: utf8.decode(Api
                                                 .H_Questions["Table1"][index]
                                                     ["Option" + "${index1 + 1}"]
@@ -134,6 +141,7 @@ class _QualityAssState extends State<QualityAss> {
                                                 .toList()),
                                             // style: GoogleFonts.notoSansDevanagari(fontSize: 20),
                                             groupValue: op_ans[index],
+                                          
                                             onChanged: (value) {
                                               print(index1);
                                               setState(() {
@@ -189,7 +197,8 @@ class _QualityAssState extends State<QualityAss> {
                                 if (Api.H_Questions["Table1"][index]
                                         ["QuestionType"] ==
                                     "Multipal Optional")
-                                  ListView.builder(
+                                  GridView.builder(
+                                    gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 2,crossAxisSpacing: 0,mainAxisSpacing: 5,),
                                     physics: NeverScrollableScrollPhysics(),
                                     itemCount: Api.H_Questions["Table1"].length,
                                     shrinkWrap: true,
@@ -206,7 +215,9 @@ class _QualityAssState extends State<QualityAss> {
                                                       [index]
                                                   ["Option" + "${index2 + 1}"])
                                               .runes
-                                              .toList())),
+                                              .toList()),style: Api.prefs.getInt("is_Hindi")==0?TextStyle(fontSize: 10,fontFamily: 'Fontmain'): TextStyle(
+                                                    fontFamily: "hindi-font",
+                                                    fontSize: 10)),
                                           value: check_box_ans_bool[index]
                                               [index2],
                                           onChanged: (bool? value) {
@@ -239,6 +250,10 @@ class _QualityAssState extends State<QualityAss> {
                                   children: [
                                     GestureDetector(
                                       onTap: () async{
+                                        setState(() {
+                                        loader=true;
+                                          
+                                        });
                                         print(op_ans_index[index]);
                                         print(op_ans[index]);
                                         print(check_box_ans_bool[index]);
@@ -362,7 +377,7 @@ class _QualityAssState extends State<QualityAss> {
                                           );
                                         }
                                         setState(() {
-                                          
+                                          loader=false;
                                         });
                                       },
                                       child: Container(

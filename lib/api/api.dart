@@ -100,8 +100,10 @@ class Api {
       
       var data = jsonDecode(res.body);
       User_info=data;
-      await prefs.setInt('is_Hindi',0);
+      
       await prefs.setBool('login',true);
+      await prefs.setString("mpin", Mpin);
+      await prefs.setString("mobile_no", mob_no);
       return data["Table"][0]["ResultCode"];
     } else {
       log("Error........ Check_Mpin Api ");
@@ -287,6 +289,87 @@ class Api {
     } else {
       log("Error........ MerchantAnswareInsert Api ");
     }
+
+   
   }
 
+ // ____________________________________________________________________   ( Event Booking Details List  )
+  static Future<List<dynamic>> EventBookingDetailsList({required String Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"EventList":'"'$Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent'"',"MerchantId":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"IsBooking":"1","ApiAdd":"EventBookingDetailsList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=EventBookingDetailsList';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("EventBookingDetailsList Api Call.............");
+      var data = jsonDecode(res.body);
+      // city_list = data["Table1"];
+      log("EventBookingDetailsList Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ EventBookingDetailsList Api ");
+      throw("Error........ EventBookingDetailsList Api ");
+    }
+  }
+ // ____________________________________________________________________   ( Event Booking Details List  )
+  static Future<void> RecipitInsert({required String Amount,required String Event_id,required String Remark}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"Amount":\"$Amount\","EventId":\"$Event_id\","F_VoucherTypeMaster":"1","F_LedgerDr":\"$Event_id\","F_LedgerCr":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"Remarks":\"$Remark\","ApiAdd":"RecipitInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=RecipitInsert';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("RecipitInsert Api Call.............");
+      var data = jsonDecode(res.body);
+      // city_list = data["Table1"];
+      log("RecipitInsert Api DATA .............");
+      // print(data);
+      // return data["Table1"];
+    } else {
+      log("Error........ RecipitInsert Api ");
+      throw("Error........ RecipitInsert Api ");
+    }
+  }
+
+  
+ // ____________________________________________________________________   (Show service in event )
+  static Future<List<dynamic>> FacilityReport() async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MerchantId":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"ApiAdd":"FacilityReport","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=FacilityReport';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("FacilityReport Api Call.............");
+      var data = jsonDecode(res.body);
+      log("FacilityReport Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ FacilityReport Api ");
+      throw("Error........ FacilityReport Api ");
+    }
+  }
+
+  
+  // ____________________________________________________________________   (add service in event )
+  static Future<bool> RecipitFacilityInsert({required List<Map> serviceAdd,required String EventId ,required String Amount,required String Remarks}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"Amount":"${double.parse(Amount).toInt()}","EventId":"${double.parse(EventId).toInt()}","F_VoucherTypeMaster":"1","F_LedgerDr":\"${double.parse(EventId).toInt()}\","F_LedgerCr":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"RequestJson":{"Services":$serviceAdd},"Remarks":"$Remarks","ApiAdd":"RecipitFacilityInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=RecipitFacilityInsert';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("RecipitFacilityInsert Api Call.............");
+      H_Questions.clear();
+      H_Questions = jsonDecode(res.body);
+      print(H_Questions);
+      return true;
+      // city_list = data["Table1"];
+    } else {
+      log("Error........ RecipitFacilityInsert Api ");
+      throw("Error........ RecipitFacilityInsert Api ");
+    }
+  }
 }

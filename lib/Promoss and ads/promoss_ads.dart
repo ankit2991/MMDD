@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mddmerchant/Promoss and ads/CreatePromoss_ads/create_pro_ads.dart';
 
 
@@ -7,7 +8,7 @@ class PromissAds extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Promos & Ads', style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
+        title: Text('Promos & Ads'.tr, style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
         centerTitle: true,
         backgroundColor: Color(0xffC4A68B),
         leading: IconButton(

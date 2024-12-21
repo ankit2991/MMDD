@@ -150,6 +150,19 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  flutter_localization:
+    dependency: "direct main"
+    description:
+      name: flutter_localization
+      sha256: "09ba1346e2fb0da970e23c6d2558c826c1dbc126a8dfc25923df30852605e722"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
+  flutter_localizations:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -224,6 +237,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.3"
+  get:
+    dependency: "direct main"
+    description:
+      name: get
+      sha256: e4e7335ede17452b391ed3b2ede016545706c01a02292a6c97619705e7d2a85e
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.6.6"
   http:
     dependency: "direct main"
     description:
@@ -248,6 +269,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.3.0"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.19.0"
   json_annotation:
     dependency: transitive
     description:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mddmerchant/Enquiry/AddEnquiry/add_enquiry.dart';
 
 
@@ -7,7 +8,7 @@ class MyEnquiry extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Enquiry', style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
+        title: Text('Enquiry'.tr, style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
         backgroundColor: Color(0xffC4A68B),
         centerTitle: true,
         leading: IconButton(
