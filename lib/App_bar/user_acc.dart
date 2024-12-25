@@ -27,7 +27,8 @@ class UserProfile extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context);
+            Api.moveFileToLocalStorage();
+            // Navigator.pop(context);
           },
         ),
       ),

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:mddmerchant/Promoss and ads/CreatePromoss_ads/create_pro_ads.dart';
 import 'package:mddmerchant/api/api.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PromissAds extends StatefulWidget {
   @override
@@ -115,7 +119,10 @@ class _PromissAdsState extends State<PromissAds> {
                                         padding: EdgeInsets.symmetric(
                                             vertical: 15, horizontal: 80),
                                         child: IconButton(
-                                            onPressed: () {
+                                            onPressed: () async{
+                                           Api.downloadPdf(fileName: "xyz.jpg",url: _Work_data[index]["ImagePath"]).then((value) {
+                                              Share.shareXFiles([XFile('${value!.path}')], text: 'Great picture');
+                                           },);
                                               // Navigator.of(context).pop();
                                             },
                                             icon: Container(

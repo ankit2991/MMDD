@@ -16,6 +16,7 @@ class _CreateProAdsState extends State<CreateProAds> {
   DateTime? _startDate;
   DateTime? _endDate;
   String ext="";
+  String ?Text_color="white";
 
   // TimeOfDay? _startTime;
   // TimeOfDay? _endTime;
@@ -43,7 +44,7 @@ var discount_con=TextEditingController();
   }
 
   File? _image;
-  
+  final GlobalKey _globalKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +68,9 @@ var discount_con=TextEditingController();
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
             child: Column(
               children: [
-                GestureDetector(
+               RepaintBoundary(
+                key: _globalKey,
+                child:  GestureDetector(
                   onTap: ()async{
                     print("object");
                  
@@ -93,7 +96,7 @@ var discount_con=TextEditingController();
                              child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                                children: [
-                                 Text("${discount_con.text}%\nOFF",style: TextStyle(color: Colors.black,fontFamily: "Fontmain"),),
+                                 Text("${discount_con.text}%\nOFF",style: TextStyle(color:Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain"),),
                                 
                                ],
                              ),
@@ -102,9 +105,9 @@ var discount_con=TextEditingController();
                             child: Column(
                               children: [
                                 if(mob_con.text.isNotEmpty)
-                                  Text(mob_con.text,style: TextStyle(color: Colors.black,fontFamily: "Fontmain")),
+                                  Text(mob_con.text,style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain")),
                                 if(address_con.text.isNotEmpty)
-                                  Text(address_con.text,style: TextStyle(color: Colors.black,fontFamily: "Fontmain")),
+                                  Text(address_con.text,style: TextStyle(color:Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain")),
                               ],
                             ),
                           )
@@ -114,16 +117,18 @@ var discount_con=TextEditingController();
                         ],)
                         ,
                         if(b_name_con.text.isNotEmpty)
-                          Text(b_name_con.text,style: TextStyle(color: Colors.black,fontFamily: "Fontmain")),
+                          Text(b_name_con.text,style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain")),
                         if( _startDate != null&&_endDate != null)
-                          Text("Valid:${_startDate!.toLocal()}".split(' ')[0]+" To "+"${_endDate!.toLocal()}".split(' ')[0],style: TextStyle(color: Colors.black,fontFamily: "Fontmain")),
+                          Text("Valid:${_startDate!.toLocal()}".split(' ')[0]+" To "+"${_endDate!.toLocal()}".split(' ')[0],style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain")),
                       ],
                     ),
                 //     child: _picker!=null ? Image.file(,fit: BoxFit.contain,)
                 // : Text("No image selected."),
                   ),
                 ),
-                SizedBox(
+            
+               ),
+                   SizedBox(
                   height: 15,
                 ),
                 TextFormField(
@@ -331,6 +336,44 @@ var discount_con=TextEditingController();
                 SizedBox(
                   height: 15,
                 ),
+                Row(
+                  children: [
+                     Container(
+                  width: 150,
+                  // color: Colors.amber,
+                   child: ListTile(
+                               title: Text('white'),
+                               leading: Radio<String>(
+                                 value: 'white',
+                                 
+                                 groupValue: Text_color,
+                                 onChanged: (String? value) {
+                                   setState(() {
+                    Text_color = value;
+                                   });
+                                 },
+                               ),
+                             ),
+                 ),
+                 Container(
+                  width: 150,
+                  // color: Colors.amber,
+                   child: ListTile(
+                               title: Text('black'),
+                               leading: Radio<String>(
+                                 value: 'black',
+                                 groupValue: Text_color,
+                                 onChanged: (String? value) {
+                                   setState(() {
+                    Text_color = value;
+                                   });
+                                 },
+                               ),
+                             ),
+                 ),
+               
+                  ],
+                ),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffC4A68B),
@@ -361,10 +404,10 @@ setState(() {
                       minimumSize: Size(650, 45),
                     ),
                     onPressed: () {
-                      // Api.img_convert(_image).then((value) {
-                       
-                      // },);
-                       Api.ImageInsert(img: _image,DocType: "3",ext: "."+ext);
+                      Api.widget_to_img(_globalKey).then((value) {
+                       Api.ImageInsert(img: value,DocType: "3",ext: "."+ext);
+                        
+                      },);
                     },
                     child: Text(
                       'UPLOAD AD',

@@ -1,12 +1,17 @@
 import "dart:convert";
 import "dart:developer";
 import "dart:io";
+import "dart:typed_data";
+import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
+import "package:flutter/services.dart";
 import 'package:geolocator/geolocator.dart';
 import "package:image_picker/image_picker.dart";
 import "package:open_filex/open_filex.dart";
 import "package:path_provider/path_provider.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 import "package:http/http.dart" as http;
+import 'dart:ui' as ui;
 
 class Api {
   static List<dynamic> CategoryList_data = [];
@@ -505,11 +510,11 @@ class Api {
     return base64Image;
   }
   // __________________________________________________________________   ( download PDF )
-  static Future<void> downloadPdf(String url, String fileName) async {
+  static Future<File?> downloadPdf({required String url,required String fileName}) async {
     try {
       // Send HTTP request to get the file
       final response = await http.get(Uri.parse(url));
-      final directorys ;
+      String ?directorys ;
       if (response.statusCode == 200) {
         // Get the app's directory for storing files
          if (Platform.isAndroid) {
@@ -517,30 +522,88 @@ class Api {
       final directory = Directory('/storage/emulated/0/Download');
       if (await directory.exists()) {
         directorys=directory.path;
-        // return 
       } else {
-        return null; // Handle the case where the directory does not exist
+        var temp= await getDownloadsDirectory(); 
+       directorys=temp!.path;
       }
     } else if (Platform.isIOS) {
       // Use the app's documents directory for iOS (iOS doesn't have a shared Downloads folder)
       final directory = await getApplicationDocumentsDirectory();
       directorys= directory.path;
     } else {
-      return null; // Unsupported platform
+      // return null; // Unsupported platform
     }
         // final directory = await getDownloadsDirectory();
-        final filePath = '${directorys}/$fileName';
+        final filePath = '$directorys/$fileName';
 
         // Save the file locally
         final file = File(filePath);
         await file.writeAsBytes(response.bodyBytes);
-        OpenFilex.open(filePath);
         print("File downloaded successfully to: $filePath");
+        return file;
+        // OpenFilex.open(filePath);
       } else {
         print("Failed to download file. HTTP Status: ${response.statusCode}");
+        // return null;
+        throw("Failed to download file. HTTP Status: ${response.statusCode}");
+        
       }
     } catch (e) {
       print("Error downloading file: $e");
+    }
+  }
+  // _________________________________________________________________________________________
+  static Future<File?> widget_to_img(final GlobalKey _globalKey)async{
+     final RenderRepaintBoundary boundary =
+          _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+
+      // Convert the boundary to an image
+      final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      final ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      final Uint8List pngBytes = byteData!.buffer.asUint8List();
+
+      // Save the image to a file
+      final directory = await getTemporaryDirectory();
+      final file = File('${directory.path}/widget_image.png');
+      await file.writeAsBytes(pngBytes);
+      print("Image saved to: ${file.path}");
+      return file;
+  }
+  // _________________________________________________________________________________________________________
+ static Future<void> moveFileToLocalStorage() async {
+    try {
+      // Load the file from the assets folder
+      final byteData = await rootBundle.load('assets/images/main/dummy.pdf');
+
+      // Get the local directory path
+      String ?directorys ;
+    if (Platform.isAndroid) {
+      // Use the external storage directory for Android
+      final directory = Directory('/storage/emulated/0/Download');
+      if (await directory.exists()) {
+        directorys=directory.path;
+      } else {
+        var temp= await getDownloadsDirectory(); 
+       directorys=temp!.path;
+      }
+    } else if (Platform.isIOS) {
+      // Use the app's documents directory for iOS (iOS doesn't have a shared Downloads folder)
+      final directory = await getApplicationDocumentsDirectory();
+      directorys= directory.path;
+    }
+      // Create the file in the local storage
+      final file = File('${directorys}/sample.pdf');
+
+      // Write the byte data to the file
+      await file.writeAsBytes(byteData.buffer.asUint8List(
+        byteData.offsetInBytes,
+        byteData.lengthInBytes,
+      ));
+
+      print('File moved to: ${file.path}');
+    } catch (e) {
+      print('Error moving file: $e');
     }
   }
 }
