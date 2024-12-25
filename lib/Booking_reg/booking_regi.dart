@@ -4,7 +4,18 @@ import 'package:mddmerchant/Booking_reg/AddBooking/add_booking.dart';
 import 'package:mddmerchant/Booking_reg/completed_events.dart';
 import 'package:mddmerchant/Booking_reg/up_coming_events.dart';
 
-class MyBoking extends StatelessWidget {
+class MyBoking extends StatefulWidget {
+  
+  @override
+  State<MyBoking> createState() => _MyBokingState();
+}
+
+class _MyBokingState extends State<MyBoking> {
+  void refresh(){
+    setState(() {
+      
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,7 +154,7 @@ class MyBoking extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddBooking()),
+              MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "1",refresh: refresh,)),
             );
           },
           label: Text(

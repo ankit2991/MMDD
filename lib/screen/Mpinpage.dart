@@ -352,11 +352,15 @@ class _MpinPageState extends State<MpinPage> {
                                                   n5.text +
                                                   n6.text);
                                           if (temp == "R100") {
-                                            Navigator.push(
+                                           await  Api.prefs.setBool('login',true).then((value) {
+                                            print(Api.prefs.getBool('login'));
+                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         HomeScreen()));
+                                             },);
+                                            
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
@@ -456,11 +460,17 @@ class _MpinPageState extends State<MpinPage> {
                                       n5.text +
                                       n6.text);
                               if (temp == "R100") {
-                                await Api.prefs.setInt('is_Hindi',0);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomeScreen()));
+                                await Api.prefs.setInt('is_Hindi',0).then((value) {
+                                     Api.prefs.setBool('login',true).then((value) {
+                                            print(Api.prefs.getBool('login'));
+                                               Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        HomeScreen()));
+                                             },);
+                                },);                                
+                              
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text("invalid M-pin")));

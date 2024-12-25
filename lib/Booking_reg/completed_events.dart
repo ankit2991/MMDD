@@ -22,7 +22,7 @@ class _CompletedEventsState extends State<CompletedEvents> {
     super.initState();
     loder = true;
     _data.clear();
-    Api.EventBookingDetailsList(Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "CompleteEvent").then(
+    Api.EventBookingDetailsList( Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "CompleteEvent").then(
       (value) {
         _data = value;
         setState(() {

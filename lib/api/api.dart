@@ -1,6 +1,10 @@
 import "dart:convert";
 import "dart:developer";
+import "dart:io";
 import 'package:geolocator/geolocator.dart';
+import "package:image_picker/image_picker.dart";
+import "package:open_filex/open_filex.dart";
+import "package:path_provider/path_provider.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 import "package:http/http.dart" as http;
 
@@ -294,9 +298,9 @@ class Api {
   }
 
  // ____________________________________________________________________   ( Event Booking Details List  )
-  static Future<List<dynamic>> EventBookingDetailsList({required String Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent}) async {
+  static Future<List<dynamic>> EventBookingDetailsList({required String Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent ,required String Is_booking}) async {
     String url =
-        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"EventList":'"'$Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent'"',"MerchantId":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"IsBooking":"1","ApiAdd":"EventBookingDetailsList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=EventBookingDetailsList';
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"EventList":'"'$Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent'"',"MerchantId":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"IsBooking":'"'$Is_booking'"',"MerchantId":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"ApiAdd":"EventBookingDetailsList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=EventBookingDetailsList';
    print(url);
     var res = await http.get(Uri.parse(url));
     
@@ -351,6 +355,57 @@ class Api {
       throw("Error........ FacilityReport Api ");
     }
   }
+  
+ // ____________________________________________________________________   (All images )
+  static Future<List<dynamic>> AccountDocument() async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"AccountId":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"ApiAdd":"AccountDocument","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=AccountDocument';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("AccountDocument Api Call.............");
+      var data = jsonDecode(res.body);
+      log("AccountDocument Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ AccountDocument Api ");
+      throw("Error........ AccountDocument Api ");
+    }
+  }
+  
+ // ____________________________________________________________________   (ImageInsert )
+  static Future<void> ImageInsert({required File ?img,required String DocType,required String ext}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/UploadFile2';
+   print("=================================================================================");
+   print(url);
+  final headers = {
+      'Content-Type': 'application/json',
+    };
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+       request.files.add(
+        await http.MultipartFile.fromPath(
+          "base64", // Field name expected by the API
+          img!.path,
+        ),
+      );
+      request.fields["AccountId"] ="${User_info["Table"][0]["Id"].toInt()}";
+      request.fields["DocType"] = DocType;
+      request.fields["fileExtention"] = ext;
+      var res= await request.send();    
+    if (res.statusCode == 200) {
+      log("ImageInsert Api Call.............");
+      var data =  await res.stream.bytesToString();;
+      log("ImageInsert Api DATA .............");
+      print(data);
+      // return data["Table1"];
+    } else {
+      log("Error........ FacilityReport Api ");
+      throw("Error........ FacilityReport Api ");
+    }
+  }
 
   
   // ____________________________________________________________________   (add service in event )
@@ -370,6 +425,122 @@ class Api {
     } else {
       log("Error........ RecipitFacilityInsert Api ");
       throw("Error........ RecipitFacilityInsert Api ");
+    }
+  }
+  // ____________________________________________________________________   (MerchentLicanceDetail  )
+  static Future<bool> MerchentLicanceDetail({required String FassiLicNo ,required String Gst,required String nigamlicanceNo}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"FassiLicNo":\"$FassiLicNo\","nigamlicanceNo":\"$nigamlicanceNo\","GSTNo":\"$Gst\","MemberId":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"ApiAdd":"MerchentLicanceDetail","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MerchentLicanceDetail';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("MerchentLicanceDetail Api Call.............");
+     
+      var data = jsonDecode(res.body);
+      print(data);
+      return true;
+      // city_list = data["Table1"];
+    } else {
+      log("Error........ MerchentLicanceDetail Api ");
+      throw("Error........ MerchentLicanceDetail Api ");
+    }
+  }
+  // ____________________________________________________________________   (Merchent Bank Detail  )
+  static Future<bool> MerchentBankDetail({required String Mer_AcHolderName ,required String Mer_bankAcc,required String Mer_IFSCCode,required String Mer_bankName}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"Mer_AcHolderName":\"$Mer_AcHolderName\","Mer_bankAcc":\"$Mer_bankAcc\","Mer_IFSCCode":\"$Mer_IFSCCode\","Mer_bankName":\"$Mer_bankName\","ApiAdd":"MerchentBankDetail","MemberId":"242","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MerchentBankDetail';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("MerchentBankDetail Api Call.............");
+     
+      var data = jsonDecode(res.body);
+      print(data);
+      return true;
+      // city_list = data["Table1"];
+    } else {
+      log("Error........ MerchentBankDetail Api ");
+      throw("Error........ MerchentBankDetail Api ");
+    }
+  }
+  // ____________________________________________________________________   (add service in event )
+  static Future<bool> CustomerRegistration({required String Mobile,required String CName ,required String Email,required String Remarks,required String EventName,required String Longitude,required String Latitude,required String EventAddress,required String EventEndDate, required String Isbooking ,required String EventStartDate,required String EventStartTime,required String EventEndTime,required String TotalAmount,required String BookingAmount,required String DueAmount,}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"Mobile":"$Mobile","CName":"$CName","Email":"$Email","ServiceId":"0","MerchantId":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"Isbooking":"$Isbooking","EventName":"$EventName","Longitude":"$Longitude","Latitude":"$Latitude","EventAddress":"$EventAddress","EventStartDate":"$EventStartDate","EventEndDate":"$EventEndDate","EventStartTime":"$EventStartTime","EventEndTime":"$EventEndTime","TotalAmount":"$TotalAmount","BookingAmount":"$BookingAmount","DueAmount":"$DueAmount","Remarks":"$Remarks","F_VoucherTypeMaster":"1","ApiAdd":"CustomerRegistration","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=CustomerRegistration';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("RecipitFacilityInsert Api Call.............");
+      H_Questions.clear();
+      H_Questions = jsonDecode(res.body);
+      print(H_Questions);
+      return true;
+      // city_list = data["Table1"];
+    } else {
+      log("Error........ RecipitFacilityInsert Api ");
+      throw("Error........ RecipitFacilityInsert Api ");
+    }
+  }
+  // -------------------------------------------------------------- (send Image )
+ static Future<Map<String,dynamic>> pickImage({required ImageSource source,required bool img}) async {
+  final ImagePicker _picker = ImagePicker();
+    final XFile? pickedFile =img? await _picker.pickImage(source: source):await _picker.pickVideo(source: source);
+    if (pickedFile != null) {
+      print(pickedFile.path);
+      String ext=pickedFile.path.split(".").last;
+       return {"file": File(pickedFile.path),
+                "ext":ext,
+       };
+    }
+    return{"file":"","ext":""};
+  }
+ static Future<String> img_convert(File? img)async{
+        final File imageFile = File(img!.path);
+    final bytes = await imageFile.readAsBytes();
+    final String base64Image = base64Encode(bytes);
+    print(base64Image);
+    return base64Image;
+  }
+  // __________________________________________________________________   ( download PDF )
+  static Future<void> downloadPdf(String url, String fileName) async {
+    try {
+      // Send HTTP request to get the file
+      final response = await http.get(Uri.parse(url));
+      final directorys ;
+      if (response.statusCode == 200) {
+        // Get the app's directory for storing files
+         if (Platform.isAndroid) {
+      // Use the external storage directory for Android
+      final directory = Directory('/storage/emulated/0/Download');
+      if (await directory.exists()) {
+        directorys=directory.path;
+        // return 
+      } else {
+        return null; // Handle the case where the directory does not exist
+      }
+    } else if (Platform.isIOS) {
+      // Use the app's documents directory for iOS (iOS doesn't have a shared Downloads folder)
+      final directory = await getApplicationDocumentsDirectory();
+      directorys= directory.path;
+    } else {
+      return null; // Unsupported platform
+    }
+        // final directory = await getDownloadsDirectory();
+        final filePath = '${directorys}/$fileName';
+
+        // Save the file locally
+        final file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+        OpenFilex.open(filePath);
+        print("File downloaded successfully to: $filePath");
+      } else {
+        print("Failed to download file. HTTP Status: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error downloading file: $e");
     }
   }
 }

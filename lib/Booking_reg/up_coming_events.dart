@@ -7,7 +7,8 @@ import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:mddmerchant/api/api.dart';
 
 class UpComingEvents extends StatefulWidget {
-  const UpComingEvents({super.key});
+  bool prev;
+   UpComingEvents({this.prev=false});
 
   @override
   State<UpComingEvents> createState() => _UpComingEventsState();
@@ -32,7 +33,21 @@ class _UpComingEventsState extends State<UpComingEvents> {
     super.initState();
     loder = true;
     _data.clear();
-    Api.EventBookingDetailsList(
+   if (widget.prev) {
+      Api.EventBookingDetailsList(Is_booking: "1",
+            Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
+                "CompleteEvent")
+        .then(
+      (value) {
+        _data = value;
+        setState(() {
+          loder = false;
+        });
+        // print(value);
+      },
+    );
+   }else{
+     Api.EventBookingDetailsList(Is_booking: "1",
             Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
                 "UpcomingEvent")
         .then(
@@ -44,13 +59,16 @@ class _UpComingEventsState extends State<UpComingEvents> {
         // print(value);
       },
     );
+   }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('UpComing Events'.tr,
+          elevation: 2.4,
+          title:widget.prev?Text('Due Register',
+              style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')): Text('UpComing Events'.tr,
               style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
           backgroundColor: Color(0xffC4A68B),
           centerTitle: true,
@@ -307,7 +325,24 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                      
                                                                       _data
                                                                           .clear();
-                                                                      Api.EventBookingDetailsList(
+                                                                          if (widget.prev) {
+                                                                                Api.EventBookingDetailsList(Is_booking: "1",
+                                                                              Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "CompleteEvent")
+                                                                          .then(
+                                                                        (value) {
+                                                                          _data =
+                                                                              value;
+                                                                          setState(
+                                                                              () {
+                                                                            loder =
+                                                                                false;
+                                                                          });
+                                                                          // print(value);
+                                                                        },
+                                                                      );
+                                                                  
+                                                                          }else{
+                                                                      Api.EventBookingDetailsList(Is_booking: "1",
                                                                               Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "UpcomingEvent")
                                                                           .then(
                                                                         (value) {
@@ -321,7 +356,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                           // print(value);
                                                                         },
                                                                       );
-                                                                    }
+                                                                           } }
                                                                   },
                                                                 );
                                                          
@@ -580,7 +615,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                   onTap: () {
                                     log("Add PAYMENT ");
                                     amount_con.clear();
-                                    remark_con.clear();
+                                    Payment_remark_con.clear();
                                     showModalBottomSheet(
                                       context: context,
                                       // enableDrag: true,
@@ -791,7 +826,27 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                           .toString())
                                                                   .then(
                                                                 (value) {
-                                                                  Api.EventBookingDetailsList(
+                                                                  if (widget.prev) {
+                                                                      Api.EventBookingDetailsList(Is_booking: "1",
+                                                                          Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
+                                                                              "CompleteEvent")
+                                                                      .then(
+                                                                    (value) {
+                                                                      _data
+                                                                          .clear();
+                                                                      _data =
+                                                                          value;
+                                                                      setState(
+                                                                          () {
+                                                                        loder =
+                                                                            false;
+                                                                      });
+                                                                      // print(value);
+                                                                    },
+                                                                  );
+                                                             
+                                                                  }else{
+                                                                  Api.EventBookingDetailsList(Is_booking: "1",
                                                                           Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
                                                                               "UpcomingEvent")
                                                                       .then(
@@ -808,7 +863,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                       // print(value);
                                                                     },
                                                                   );
-                                                                },
+                                                                }},
                                                               );
                                                               amount_con
                                                                   .clear();

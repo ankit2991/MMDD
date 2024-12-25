@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mddmerchant/Booking_reg/up_coming_events.dart';
 import 'package:mddmerchant/api/api.dart';
 import 'package:mddmerchant/constrans.dart';
 import 'package:mddmerchant/Due_register/due_register.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    print(Api.prefs.getBool('login'));
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MDD Merchant',
@@ -409,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => DueRegi()),
+                                    builder: (context) => UpComingEvents(prev: true,)),
                               );
                             },
                             child: Container(

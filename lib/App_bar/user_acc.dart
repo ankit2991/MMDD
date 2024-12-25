@@ -15,6 +15,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class UserProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -45,11 +46,11 @@ class UserProfile extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Thakur',
+                 Api.User_info["Table"][0]["MemberName"],
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  '8302659742',
+                  Api.User_info["Table"][0]["MobileNo"],
                   style: TextStyle(fontSize: 16, color: Colors.grey[700]),
                 ),
               ],
@@ -60,6 +61,8 @@ class UserProfile extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.symmetric(vertical: 10),
               children: [
+                ProfileOption(
+                    title: "Account Document", page: BasicInformationPage()),
                 ProfileOption(
                     title: "Basic Information", page: BasicInformationPage()),
                 ProfileOption(
@@ -121,12 +124,16 @@ class ProfileOption extends StatelessWidget {
               color: Colors.black87,
             ),
           ),
-          onTap: () {
-            // Navigate to the selected page
-            Navigator.push(
+          onTap: () async{
+            await Api.prefs.setBool('login',false).then((value) {
+              print(Api.prefs.getBool('login'));
+              Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => page),
             );
+            },);
+            // Navigate to the selected page
+            
           },
         ),
       ),
@@ -136,6 +143,15 @@ class ProfileOption extends StatelessWidget {
 
 // Example pages
 class BasicInformationPage extends StatelessWidget {
+  var nam_con=TextEditingController(text: Api.User_info["Table"][0]["MemberName"]);
+  var B_nam_con=TextEditingController(text: Api.User_info["Table"][0]["OrgName"]);
+  var mob_con=TextEditingController(text: Api.User_info["Table"][0]["MobileNo"]);
+  var alt_mob_con=TextEditingController(text: Api.User_info["Table"][0]["OtherMobileNo"]);
+  var email_con=TextEditingController(text: Api.User_info["Table"][0]["EmailId"]);
+  var state_con=TextEditingController(text: Api.User_info["Table"][0]["StateName"]);
+  var city_con=TextEditingController(text: Api.User_info["Table"][0]["CityName"]);
+  var loc_con=TextEditingController(text: Api.User_info["Table"][0]["AreaName"]);
+  var address_con=TextEditingController(text: Api.User_info["Table"][0]["OrgAddress"]);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,254 +176,279 @@ class BasicInformationPage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           child: Column(
+            spacing: 15,
             children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Owner Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: nam_con,
+                  decoration: InputDecoration(
+                    labelText: "Owner Name",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
-              const SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Business Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+             
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: B_nam_con,
+                  decoration: InputDecoration(
+                    labelText: "Business Name",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
-              const SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Mobile Number",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+           
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: mob_con,
+                  decoration: InputDecoration(
+                    labelText: "Mobile Number",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    // Default label color
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    // Label color when focused
+                    border: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Colors.grey), // Default border color
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Color(0xffC4A68B),
+                          width: 2), // Border color when focused
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  // Default label color
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  // Label color when focused
-                  border: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Colors.grey), // Default border color
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Color(0xffC4A68B),
-                        width: 2), // Border color when focused
-                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly // Only numbers
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly // Only numbers
-                ],
               ),
-              const SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Alternate Mobile Number",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+             
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: alt_mob_con,
+                  decoration: InputDecoration(
+                    labelText: "Alternate Mobile Number",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    // Default label color
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    // Label color when focused
+                    border: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Colors.grey), // Default border color
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Color(0xffC4A68B),
+                          width: 2), // Border color when focused
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  // Default label color
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  // Label color when focused
-                  border: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Colors.grey), // Default border color
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Color(0xffC4A68B),
-                        width: 2), // Border color when focused
-                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly // Only numbers
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly // Only numbers
-                ],
               ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Email",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+          
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: email_con,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "State",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+             
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: state_con,
+                  decoration: InputDecoration(
+                    labelText: "State",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "City",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+             
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: city_con,
+                  decoration: InputDecoration(
+                    labelText: "City",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Locality Area",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+             
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: loc_con,
+                  decoration: InputDecoration(
+                    labelText: "Locality Area",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Address",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+             
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: address_con,
+                  decoration: InputDecoration(
+                    labelText: "Address",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
-              SizedBox(
-                height: 15,
-              ),
+              
             ],
           ),
         ),
@@ -417,8 +458,25 @@ class BasicInformationPage extends StatelessWidget {
 }
 
 class RegistrationInformationPage extends StatelessWidget {
+  var gst_no_con=TextEditingController();
+  var other_lic_con=TextEditingController();
+  var fss_con=TextEditingController();
   @override
   Widget build(BuildContext context) {
+    bool c1=false;
+    bool c2=false;
+    bool c3=false;
+    if (Api.User_info["Table"][0].containsKey("FassiLicNo")) {
+      fss_con.text=Api.User_info["Table"][0]["FassiLicNo"];
+      c3=true;
+    }if(Api.User_info["Table"][0].containsKey("nigamlicanceNo")) {
+            other_lic_con.text=Api.User_info["Table"][0]["nigamlicanceNo"];
+            c2=true;
+
+    }if(Api.User_info["Table"][0].containsKey("GSTNo")){
+        gst_no_con.text=Api.User_info["Table"][0]["GSTNo"];
+        c1=true;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -445,81 +503,94 @@ class RegistrationInformationPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           child: Column(
             children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "GST Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+              IgnorePointer(
+                ignoring: c1,
+                child: TextFormField(
+                  controller: gst_no_con,
+                  decoration: InputDecoration(
+                    labelText: "GST No",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
               const SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Other License",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+              IgnorePointer(
+                ignoring: c2,
+                child: TextFormField(
+                  controller: other_lic_con,
+                  decoration: InputDecoration(
+                    labelText: "Other License",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
               const SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "FSSAI",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+              IgnorePointer(
+                ignoring: c3,
+                child: TextFormField(
+                  controller: fss_con,
+                  decoration: InputDecoration(
+                    labelText: "FSSAI",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
               const SizedBox(height: 15),
+              if(Api.User_info["Table"][0].containsKey("FassiLicNo")!=true||Api.User_info["Table"][0].containsKey("GSTNo")!=true|| Api.User_info["Table"][0].containsKey("RegNo")!=true&&Api.User_info["Table"][0]["RegNo"]!=null)
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xffC4A68B),
@@ -527,7 +598,19 @@ class RegistrationInformationPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(0)),
                     minimumSize: Size(550, 45),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    if(fss_con.text.isNotEmpty&& gst_no_con.text.isNotEmpty&&other_lic_con.text.isNotEmpty){
+                    Api.MerchentLicanceDetail(FassiLicNo:fss_con.text.trim(),Gst: gst_no_con.text.trim(),nigamlicanceNo: other_lic_con.text.trim()).then((value) {
+                      if (value) {
+                        Navigator.of(context).pop();
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error :- ")));
+                      }
+                    },);
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("fill all fields ",style: TextStyle(color: Colors.red),)));
+                    }
+                  },
                   child: Text(
                     'SAVE',
                     style: TextStyle(
@@ -544,8 +627,33 @@ class RegistrationInformationPage extends StatelessWidget {
 }
 
 class BankInformationPage extends StatelessWidget {
+  var bnk_name_con=TextEditingController();
+  var acc_holder_name_con=TextEditingController();
+  var acc_no_con=TextEditingController();
+  var ifsc_code_con=TextEditingController();
+  bool c1=false;
+  bool c2=false;
+  bool c3=false;
+  bool c4=false;
+  // bool c1=false;
   @override
   Widget build(BuildContext context) {
+    if (Api.User_info["Table"][0]["Mer_bankName"]!=null) {
+      bnk_name_con.text=Api.User_info["Table"][0]["Mer_bankName"];
+      c1=true;
+    }
+    if (Api.User_info["Table"][0]["Mer_bankAcc"]!=null) {
+      acc_no_con.text=Api.User_info["Table"][0]["Mer_bankAcc"];
+      c3=true;
+    }
+    if (Api.User_info["Table"][0]["Mer_IFSCCode"]!=null) {
+      ifsc_code_con.text=Api.User_info["Table"][0]["Mer_IFSCCode"];
+      c4=true;
+    }
+    if (Api.User_info["Table"][0]["Mer_AcHolderName"]!=null) {
+      acc_holder_name_con.text=Api.User_info["Table"][0]["Mer_AcHolderName"];
+      c2=true;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -568,106 +676,125 @@ class BankInformationPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           child: Column(
             children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Bank Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+              IgnorePointer(
+                ignoring: c1,
+                child: TextFormField(
+                  controller: bnk_name_con,
+                  decoration: InputDecoration(
+                    labelText: "Bank Name",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
               const SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Account Holder Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+              IgnorePointer(
+                ignoring: c2,
+                child: TextFormField(
+                  controller: acc_holder_name_con,
+                  decoration: InputDecoration(
+                    labelText: "Account Holder Name",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
               const SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Account Number",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+              IgnorePointer(
+                ignoring: c3,
+                child: TextFormField(
+                  controller:acc_no_con ,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: "Account Number",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
               const SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "IFSC Code",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
+              IgnorePointer(
+                ignoring: c4,
+                child: TextFormField(
+                  controller: ifsc_code_con,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: "IFSC Code",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
                     fontFamily: 'sub-tittle',
-                    fontSize: 14,
+                    fontSize: 16.0,
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9\s]'))
+                  ],
                 ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
               ),
               const SizedBox(height: 15),
+              if(Api.User_info["Table"][0]["Mer_bankName"]==null||Api.User_info["Table"][0]["Mer_bankAcc"]==null||Api.User_info["Table"][0]["Mer_IFSCCode"]==null||Api.User_info["Table"][0]["Mer_AcHolderName"]==null)
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xffC4A68B),
@@ -675,7 +802,10 @@ class BankInformationPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(0)),
                     minimumSize: Size(650, 45),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Api.MerchentBankDetail(Mer_AcHolderName: acc_holder_name_con.text.trim(),Mer_IFSCCode: ifsc_code_con.text.trim(),Mer_bankName: bnk_name_con.text.trim(),Mer_bankAcc:acc_no_con.text.trim() );
+                    // Api.downloadPdf("https://tourism.gov.in/sites/default/files/2019-04/dummy-pdf_2.pdf", "abc.pdf");
+                  },
                   child: Text(
                     'SAVE',
                     style: TextStyle(
@@ -1111,6 +1241,7 @@ class _LogOutPageState extends State<LogOutPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(Api.prefs.getBool('login'));
     return Scaffold(
       body: Stack(
         children: [

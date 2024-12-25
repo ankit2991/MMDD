@@ -17,9 +17,14 @@ class _SplashscreenState extends State<Splashscreen>{
    void initState() {
     super.initState();
     Timer(Duration(seconds: 3),()async{
-      await Api.Mpin_check(mob_no: Api.prefs.getString("mobile_no")??"", Mpin: Api.prefs.getString("mpin")??"");
-      Api.prefs.getBool('login')==true?Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen())):
+      if (Api.prefs.getBool('login')==true) {
+      await Api.Mpin_check(mob_no: Api.prefs.getString("mobile_no")??"", Mpin: Api.prefs.getString("mpin")??"").then((value) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+      },);        
+      }else{
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LogOutPage()));
+
+      }
     });
   }
   @override

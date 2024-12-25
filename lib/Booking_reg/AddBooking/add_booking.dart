@@ -1,8 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mddmerchant/api/api.dart';
 
 class AddBooking extends StatefulWidget {
   @override
+  String Isbooking;
+  Function refresh;
+  AddBooking({required String this.Isbooking,required this.refresh});
   _AddBookingState createState() => _AddBookingState();
 }
 
@@ -11,6 +17,16 @@ class _AddBookingState extends State<AddBooking> {
   DateTime? _endDate;
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
+  String?selectedItem;
+  String? lett;
+  String? lott;
+  List<String> event_cate=["WEDDING","BIRTHDAY","RETIREMENT","ANNIVERSARY","OTHER"];
+  var name_con=TextEditingController();
+  var mob_con=TextEditingController();
+  var Omob_con=TextEditingController();
+  var event_address_con=TextEditingController();
+  var remark_con=TextEditingController();
+  var eventLocation_con=TextEditingController();
 
   Future<void> _selectDate(BuildContext context, bool isStart) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -72,6 +88,7 @@ class _AddBookingState extends State<AddBooking> {
             children: [
               // Other fields omitted for brevity...
               TextFormField(
+                controller: name_con,
                 decoration: InputDecoration(
                   labelText: "Name",
                   labelStyle: TextStyle(
@@ -94,6 +111,7 @@ class _AddBookingState extends State<AddBooking> {
               ),
               const SizedBox(height: 15),
               TextFormField(
+                controller: mob_con,
                 decoration: InputDecoration(
                   labelText: "Mobile Number",
                   labelStyle: TextStyle(
@@ -121,6 +139,7 @@ class _AddBookingState extends State<AddBooking> {
               ),
               const SizedBox(height: 15),
               TextFormField(
+                controller: Omob_con,
                 decoration: InputDecoration(
                   labelText: "Optional Mobile Number",
                   labelStyle: TextStyle(
@@ -147,27 +166,49 @@ class _AddBookingState extends State<AddBooking> {
                 ],
               ),
               const SizedBox(height: 15),
-              TextFormField(
+              DropdownButtonFormField<String>(
                 decoration: InputDecoration(
-                  labelText: "Event Category",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
-                    fontFamily: 'sub-tittle',
-                    fontSize: 14,
-                  ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
+                  labelText: 'Event Category',
+                  border: OutlineInputBorder(),
                 ),
-                style: TextStyle(fontFamily: 'sub-tittle', fontSize: 16.0,),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
+                value: selectedItem,
+                items: event_cate.map((item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedItem = value;
+                  });
+                },
+                validator: (value) =>
+                    value == null ? 'Please select a fruit' : null,
               ),
+              // TextFormField(
+              
+              //   decoration: InputDecoration(
+              //     labelText: "Event Category",
+              //     labelStyle: TextStyle(
+              //       color: Color(0xe5777474),
+              //       fontFamily: 'sub-tittle',
+              //       fontSize: 14,
+              //     ),
+              //     floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+              //     border: OutlineInputBorder(
+              //       borderSide: BorderSide(color: Color(0xffC4A68B)),
+              //     ),
+              //     focusedBorder: OutlineInputBorder(
+              //       borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+              //     ),
+              //   ),
+              //   style: TextStyle(fontFamily: 'sub-tittle', fontSize: 16.0,),
+              //   inputFormatters: [
+              //     FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+              //   ],
+              // ),
+             
               SizedBox(
                 height: 15,
               ),
@@ -280,6 +321,7 @@ class _AddBookingState extends State<AddBooking> {
               ),
               const SizedBox(height: 15),
               TextFormField(
+                controller: event_address_con,
                 decoration: InputDecoration(
                   labelText: "Event Address",
                   labelStyle: TextStyle(
@@ -303,31 +345,58 @@ class _AddBookingState extends State<AddBooking> {
               SizedBox(
                 height: 15,
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Set Event Location On Map",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
-                    fontFamily: 'sub-tittle',
-                    fontSize: 14,
+              InkWell(
+                    onTap: () {
+                      print("object");
+                      Api.get_loc().then(
+                        (value) {
+                          print("----------------------");
+                          log("${value.latitude}");
+                          print("----------------------");
+                          log("${value.longitude}");
+                          print("----------------------");
+                          lett = value.latitude.toString();
+                          lott = value.longitude.toString();
+                          String address = "${value.latitude},${value.longitude}";
+                          eventLocation_con.text = address;
+                        },
+                      );
+                    },
+                    child: IgnorePointer(
+                      ignoring: true,
+                      child: TextFormField(
+                        controller: eventLocation_con,
+                        decoration: InputDecoration(
+                          labelText: "Set Your Bussiness Location",
+                          labelStyle: TextStyle(
+                            color: Color(0xe5777474),
+                            fontFamily: 'sub-tittle',
+                            fontSize: 14,
+                          ),
+                          floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xffC4A68B)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Color(0xffC4A68B), width: 2),
+                          ),
+                        ),
+                        style: TextStyle(
+                          fontFamily: 'sub-tittle',
+                          fontSize: 16.0,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                        ],
+                      ),
+                    ),
                   ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
-                ),
-                style: TextStyle(fontFamily: 'sub-tittle', fontSize: 16.0,),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
-              ),
               SizedBox(
                 height: 15,
               ),
               TextFormField(
+                controller: remark_con,
                 decoration: InputDecoration(
                   labelText: "Remark",
                   labelStyle: TextStyle(
@@ -359,6 +428,12 @@ class _AddBookingState extends State<AddBooking> {
                   minimumSize: Size(650, 50),
                 ),
                 onPressed: () {
+                  Api.CustomerRegistration(Isbooking: widget.Isbooking ,BookingAmount: "",CName: name_con.text,DueAmount: "",Email: "",EventAddress: event_address_con.text,EventEndDate:"${_endDate!.toLocal()}".split(' ')[0],EventStartDate: "${_startDate!.toLocal()}".split(' ')[0],EventStartTime: _startTime!.format(context),EventEndTime: _endTime!.format(context),EventName: selectedItem??"",Latitude: lett??"",Longitude: lott??"",Mobile: mob_con.text,Remarks: remark_con.text,TotalAmount: "" ).then((value) {
+                    if (value) {
+                      widget.refresh();
+                      Navigator.of(context).pop();
+                    }
+                  },);
                   // Handle booking confirmation
                 },
                 child: Text(
