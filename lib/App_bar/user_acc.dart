@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:mddmerchant/constrans.dart';
 import 'package:mddmerchant/App_bar/OurService/our_service.dart';
 import 'package:mddmerchant/main.dart';
@@ -15,7 +16,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class UserProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -27,8 +27,7 @@ class UserProfile extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Api.moveFileToLocalStorage();
-            // Navigator.pop(context);
+            Navigator.pop(context);
           },
         ),
       ),
@@ -47,7 +46,7 @@ class UserProfile extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                 Api.User_info["Table"][0]["MemberName"],
+                  Api.User_info["Table"][0]["MemberName"],
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -63,7 +62,7 @@ class UserProfile extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 10),
               children: [
                 ProfileOption(
-                    title: "Account Document", page: BasicInformationPage()),
+                    title: "Account Document", page: Account_Document()),
                 ProfileOption(
                     title: "Basic Information", page: BasicInformationPage()),
                 ProfileOption(
@@ -125,17 +124,106 @@ class ProfileOption extends StatelessWidget {
               color: Colors.black87,
             ),
           ),
-          onTap: () async{
-            await Api.prefs.setBool('login',false).then((value) {
-              print(Api.prefs.getBool('login'));
-              Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => page),
+          onTap: () async {
+            await Api.prefs.setBool('login', false).then(
+              (value) {
+                print(Api.prefs.getBool('login'));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => page),
+                );
+              },
             );
-            },);
             // Navigate to the selected page
-            
           },
+        ),
+      ),
+    );
+  }
+}
+
+class Account_Document extends StatelessWidget {
+  const Account_Document({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Account Document",
+          style: TextStyle(
+            fontFamily: "Fontmain",
+          ),
+        ),
+        foregroundColor: Colors.white,
+        backgroundColor: Color(0xffC4A68B),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Api.moveFileToLocalStorage().then(
+                      (value) {
+                        Get.snackbar("success", "check your download folder",
+                            backgroundColor:
+                                const Color.fromARGB(103, 33, 149, 243),
+                            colorText: Colors.black);
+                      },
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 5,
+                              offset: Offset(0, 0))
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(10),
+                    child: Text(
+                      "Download pdf",
+                      style: TextStyle(fontFamily: "Fontmain"),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Api.pickPDF();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 5,
+                              offset: Offset(0, 0))
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(10),
+                    child: Text("Upload pdf",
+                        style: TextStyle(fontFamily: "Fontmain")),
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
@@ -144,15 +232,24 @@ class ProfileOption extends StatelessWidget {
 
 // Example pages
 class BasicInformationPage extends StatelessWidget {
-  var nam_con=TextEditingController(text: Api.User_info["Table"][0]["MemberName"]);
-  var B_nam_con=TextEditingController(text: Api.User_info["Table"][0]["OrgName"]);
-  var mob_con=TextEditingController(text: Api.User_info["Table"][0]["MobileNo"]);
-  var alt_mob_con=TextEditingController(text: Api.User_info["Table"][0]["OtherMobileNo"]);
-  var email_con=TextEditingController(text: Api.User_info["Table"][0]["EmailId"]);
-  var state_con=TextEditingController(text: Api.User_info["Table"][0]["StateName"]);
-  var city_con=TextEditingController(text: Api.User_info["Table"][0]["CityName"]);
-  var loc_con=TextEditingController(text: Api.User_info["Table"][0]["AreaName"]);
-  var address_con=TextEditingController(text: Api.User_info["Table"][0]["OrgAddress"]);
+  var nam_con =
+      TextEditingController(text: Api.User_info["Table"][0]["MemberName"]);
+  var B_nam_con =
+      TextEditingController(text: Api.User_info["Table"][0]["OrgName"]);
+  var mob_con =
+      TextEditingController(text: Api.User_info["Table"][0]["MobileNo"]);
+  var alt_mob_con =
+      TextEditingController(text: Api.User_info["Table"][0]["OtherMobileNo"]);
+  var email_con =
+      TextEditingController(text: Api.User_info["Table"][0]["EmailId"]);
+  var state_con =
+      TextEditingController(text: Api.User_info["Table"][0]["StateName"]);
+  var city_con =
+      TextEditingController(text: Api.User_info["Table"][0]["CityName"]);
+  var loc_con =
+      TextEditingController(text: Api.User_info["Table"][0]["AreaName"]);
+  var address_con =
+      TextEditingController(text: Api.User_info["Table"][0]["OrgAddress"]);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -195,7 +292,8 @@ class BasicInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -207,7 +305,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-             
               IgnorePointer(
                 ignoring: true,
                 child: TextFormField(
@@ -224,7 +321,8 @@ class BasicInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -236,7 +334,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-           
               IgnorePointer(
                 ignoring: true,
                 child: TextFormField(
@@ -252,8 +349,8 @@ class BasicInformationPage extends StatelessWidget {
                     floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
                     // Label color when focused
                     border: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.grey), // Default border color
+                      borderSide: BorderSide(
+                          color: Colors.grey), // Default border color
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -270,7 +367,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-             
               IgnorePointer(
                 ignoring: true,
                 child: TextFormField(
@@ -286,8 +382,8 @@ class BasicInformationPage extends StatelessWidget {
                     floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
                     // Label color when focused
                     border: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.grey), // Default border color
+                      borderSide: BorderSide(
+                          color: Colors.grey), // Default border color
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -304,7 +400,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-          
               IgnorePointer(
                 ignoring: true,
                 child: TextFormField(
@@ -321,7 +416,8 @@ class BasicInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -333,7 +429,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-             
               IgnorePointer(
                 ignoring: true,
                 child: TextFormField(
@@ -350,7 +445,8 @@ class BasicInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -362,7 +458,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-             
               IgnorePointer(
                 ignoring: true,
                 child: TextFormField(
@@ -379,7 +474,8 @@ class BasicInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -391,7 +487,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-             
               IgnorePointer(
                 ignoring: true,
                 child: TextFormField(
@@ -408,7 +503,8 @@ class BasicInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -420,7 +516,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-             
               IgnorePointer(
                 ignoring: true,
                 child: TextFormField(
@@ -437,7 +532,8 @@ class BasicInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -449,7 +545,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-              
             ],
           ),
         ),
@@ -459,24 +554,25 @@ class BasicInformationPage extends StatelessWidget {
 }
 
 class RegistrationInformationPage extends StatelessWidget {
-  var gst_no_con=TextEditingController();
-  var other_lic_con=TextEditingController();
-  var fss_con=TextEditingController();
+  var gst_no_con = TextEditingController();
+  var other_lic_con = TextEditingController();
+  var fss_con = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    bool c1=false;
-    bool c2=false;
-    bool c3=false;
+    bool c1 = false;
+    bool c2 = false;
+    bool c3 = false;
     if (Api.User_info["Table"][0].containsKey("FassiLicNo")) {
-      fss_con.text=Api.User_info["Table"][0]["FassiLicNo"];
-      c3=true;
-    }if(Api.User_info["Table"][0].containsKey("nigamlicanceNo")) {
-            other_lic_con.text=Api.User_info["Table"][0]["nigamlicanceNo"];
-            c2=true;
-
-    }if(Api.User_info["Table"][0].containsKey("GSTNo")){
-        gst_no_con.text=Api.User_info["Table"][0]["GSTNo"];
-        c1=true;
+      fss_con.text = Api.User_info["Table"][0]["FassiLicNo"];
+      c3 = true;
+    }
+    if (Api.User_info["Table"][0].containsKey("nigamlicanceNo")) {
+      other_lic_con.text = Api.User_info["Table"][0]["nigamlicanceNo"];
+      c2 = true;
+    }
+    if (Api.User_info["Table"][0].containsKey("GSTNo")) {
+      gst_no_con.text = Api.User_info["Table"][0]["GSTNo"];
+      c1 = true;
     }
     return Scaffold(
       appBar: AppBar(
@@ -520,7 +616,8 @@ class RegistrationInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -549,7 +646,8 @@ class RegistrationInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -578,7 +676,8 @@ class RegistrationInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -591,34 +690,50 @@ class RegistrationInformationPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              if(Api.User_info["Table"][0].containsKey("FassiLicNo")!=true||Api.User_info["Table"][0].containsKey("GSTNo")!=true|| Api.User_info["Table"][0].containsKey("RegNo")!=true&&Api.User_info["Table"][0]["RegNo"]!=null)
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xffC4A68B),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0)),
-                    minimumSize: Size(550, 45),
-                  ),
-                  onPressed: () {
-                    if(fss_con.text.isNotEmpty&& gst_no_con.text.isNotEmpty&&other_lic_con.text.isNotEmpty){
-                    Api.MerchentLicanceDetail(FassiLicNo:fss_con.text.trim(),Gst: gst_no_con.text.trim(),nigamlicanceNo: other_lic_con.text.trim()).then((value) {
-                      if (value) {
-                        Navigator.of(context).pop();
-                      }else{
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error :- ")));
-                      }
-                    },);
-                    }else{
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("fill all fields ",style: TextStyle(color: Colors.red),)));
-                    }
-                  },
-                  child: Text(
-                    'SAVE',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Fontmain',
+              if (Api.User_info["Table"][0].containsKey("FassiLicNo") != true ||
+                  Api.User_info["Table"][0].containsKey("GSTNo") != true ||
+                  Api.User_info["Table"][0].containsKey("RegNo") != true &&
+                      Api.User_info["Table"][0]["RegNo"] != null)
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffC4A68B),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0)),
+                      minimumSize: Size(550, 45),
                     ),
-                  ))
+                    onPressed: () {
+                      if (fss_con.text.isNotEmpty &&
+                          gst_no_con.text.isNotEmpty &&
+                          other_lic_con.text.isNotEmpty) {
+                        Api.MerchentLicanceDetail(
+                                FassiLicNo: fss_con.text.trim(),
+                                Gst: gst_no_con.text.trim(),
+                                nigamlicanceNo: other_lic_con.text.trim())
+                            .then(
+                          (value) {
+                            if (value) {
+                              Navigator.of(context).pop();
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Error :- ")));
+                            }
+                          },
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                          "fill all fields ",
+                          style: TextStyle(color: Colors.red),
+                        )));
+                      }
+                    },
+                    child: Text(
+                      'SAVE',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Fontmain',
+                      ),
+                    ))
             ],
           ),
         ),
@@ -628,32 +743,32 @@ class RegistrationInformationPage extends StatelessWidget {
 }
 
 class BankInformationPage extends StatelessWidget {
-  var bnk_name_con=TextEditingController();
-  var acc_holder_name_con=TextEditingController();
-  var acc_no_con=TextEditingController();
-  var ifsc_code_con=TextEditingController();
-  bool c1=false;
-  bool c2=false;
-  bool c3=false;
-  bool c4=false;
+  var bnk_name_con = TextEditingController();
+  var acc_holder_name_con = TextEditingController();
+  var acc_no_con = TextEditingController();
+  var ifsc_code_con = TextEditingController();
+  bool c1 = false;
+  bool c2 = false;
+  bool c3 = false;
+  bool c4 = false;
   // bool c1=false;
   @override
   Widget build(BuildContext context) {
-    if (Api.User_info["Table"][0]["Mer_bankName"]!=null) {
-      bnk_name_con.text=Api.User_info["Table"][0]["Mer_bankName"];
-      c1=true;
+    if (Api.User_info["Table"][0]["Mer_bankName"] != null) {
+      bnk_name_con.text = Api.User_info["Table"][0]["Mer_bankName"];
+      c1 = true;
     }
-    if (Api.User_info["Table"][0]["Mer_bankAcc"]!=null) {
-      acc_no_con.text=Api.User_info["Table"][0]["Mer_bankAcc"];
-      c3=true;
+    if (Api.User_info["Table"][0]["Mer_bankAcc"] != null) {
+      acc_no_con.text = Api.User_info["Table"][0]["Mer_bankAcc"];
+      c3 = true;
     }
-    if (Api.User_info["Table"][0]["Mer_IFSCCode"]!=null) {
-      ifsc_code_con.text=Api.User_info["Table"][0]["Mer_IFSCCode"];
-      c4=true;
+    if (Api.User_info["Table"][0]["Mer_IFSCCode"] != null) {
+      ifsc_code_con.text = Api.User_info["Table"][0]["Mer_IFSCCode"];
+      c4 = true;
     }
-    if (Api.User_info["Table"][0]["Mer_AcHolderName"]!=null) {
-      acc_holder_name_con.text=Api.User_info["Table"][0]["Mer_AcHolderName"];
-      c2=true;
+    if (Api.User_info["Table"][0]["Mer_AcHolderName"] != null) {
+      acc_holder_name_con.text = Api.User_info["Table"][0]["Mer_AcHolderName"];
+      c2 = true;
     }
     return Scaffold(
       appBar: AppBar(
@@ -693,7 +808,8 @@ class BankInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -722,7 +838,8 @@ class BankInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -738,7 +855,7 @@ class BankInformationPage extends StatelessWidget {
               IgnorePointer(
                 ignoring: c3,
                 child: TextFormField(
-                  controller:acc_no_con ,
+                  controller: acc_no_con,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: "Account Number",
@@ -752,7 +869,8 @@ class BankInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -782,7 +900,8 @@ class BankInformationPage extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xffC4A68B)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
                     ),
                   ),
                   style: TextStyle(
@@ -795,25 +914,32 @@ class BankInformationPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              if(Api.User_info["Table"][0]["Mer_bankName"]==null||Api.User_info["Table"][0]["Mer_bankAcc"]==null||Api.User_info["Table"][0]["Mer_IFSCCode"]==null||Api.User_info["Table"][0]["Mer_AcHolderName"]==null)
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xffC4A68B),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0)),
-                    minimumSize: Size(650, 45),
-                  ),
-                  onPressed: () {
-                    Api.MerchentBankDetail(Mer_AcHolderName: acc_holder_name_con.text.trim(),Mer_IFSCCode: ifsc_code_con.text.trim(),Mer_bankName: bnk_name_con.text.trim(),Mer_bankAcc:acc_no_con.text.trim() );
-                    // Api.downloadPdf("https://tourism.gov.in/sites/default/files/2019-04/dummy-pdf_2.pdf", "abc.pdf");
-                  },
-                  child: Text(
-                    'SAVE',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Fontmain',
+              if (Api.User_info["Table"][0]["Mer_bankName"] == null ||
+                  Api.User_info["Table"][0]["Mer_bankAcc"] == null ||
+                  Api.User_info["Table"][0]["Mer_IFSCCode"] == null ||
+                  Api.User_info["Table"][0]["Mer_AcHolderName"] == null)
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffC4A68B),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0)),
+                      minimumSize: Size(650, 45),
                     ),
-                  ))
+                    onPressed: () {
+                      Api.MerchentBankDetail(
+                          Mer_AcHolderName: acc_holder_name_con.text.trim(),
+                          Mer_IFSCCode: ifsc_code_con.text.trim(),
+                          Mer_bankName: bnk_name_con.text.trim(),
+                          Mer_bankAcc: acc_no_con.text.trim());
+                      // Api.downloadPdf("https://tourism.gov.in/sites/default/files/2019-04/dummy-pdf_2.pdf", "abc.pdf");
+                    },
+                    child: Text(
+                      'SAVE',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Fontmain',
+                      ),
+                    ))
             ],
           ),
         ),
@@ -854,7 +980,44 @@ class MMDDOrdersPage extends StatelessWidget {
   }
 }
 
-class MyServicesPage extends StatelessWidget {
+class MyServicesPage extends StatefulWidget {
+  @override
+  State<MyServicesPage> createState() => _MyServicesPageState();
+}
+
+class _MyServicesPageState extends State<MyServicesPage> {
+  @override
+  List<dynamic> _data = [];
+  bool loader = false;
+  void refresh(){
+    setState(() {
+loader=true;     
+    });
+    _data.clear();
+    Api.FacilityReport().then(
+      (value) {
+        _data = value;
+        setState(() {
+          loader=false;
+        });
+      },
+    );
+  }
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loader=true;
+    _data.clear();
+    Api.FacilityReport().then(
+      (value) {
+        _data = value;
+        setState(() {
+          loader=false;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -877,14 +1040,58 @@ class MyServicesPage extends StatelessWidget {
               Navigator.pop(context);
             }),
       ),
-      body: Center(
-        child: Text('No Data Available'),
+      body: Stack(
+        children: [
+          loader
+              ? Center(
+                  child: Text('No Data Available'),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _data.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.all(10),
+                      height: 80,
+                      // color: Colors.amber,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 1,
+                              color: const Color.fromARGB(146, 0, 0, 0),
+                            )
+                          ]),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(_data[index]["FacilityName"],style: TextStyle(fontFamily: "Fontmain",fontWeight: FontWeight.bold),),
+                              Text(_data[index]["Amount"].toString(),style: TextStyle(fontFamily: "Fontmain",fontWeight: FontWeight.normal),)
+                            ],
+                          ),
+                    );
+                  },
+                ),
+          if (loader)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: 50.0,
+                ),
+              ),
+            ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddService()),
+            MaterialPageRoute(builder: (context) => AddService(refresh: refresh,)),
           );
         },
         child: Icon(Icons.add, color: Colors.white),
@@ -898,7 +1105,33 @@ class MyServicesPage extends StatelessWidget {
   }
 }
 
-class AddService extends StatelessWidget {
+class AddService extends StatefulWidget {
+  Function refresh;
+  AddService({required this.refresh});
+  @override
+  State<AddService> createState() => _AddServiceState();
+}
+
+class _AddServiceState extends State<AddService> {
+  String ?_selectedValue;
+  var amount_con=TextEditingController();
+  var service_con=TextEditingController();
+  var service_name_con=TextEditingController();
+  String?_selectedCategory;
+List<dynamic> _data=[];
+int ?selectted_service_id;
+  @override
+  void initState() {
+    loading=true;
+    // TODO: implement initState
+    super.initState();
+   Api.service(Api.User_info["Table"][0]["ServiceID"].toString()).then((value) {
+     _data=value;
+     setState(() {
+       loading=false;
+     });
+   },);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -926,33 +1159,37 @@ class AddService extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           child: Column(
             children: [
-              TextFormField(
+                  const SizedBox(height: 15),
+             DropdownButtonFormField<String>(
+                    value: _selectedCategory,
+                    // iconSize: 20,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Business Category',
+                    ),
+              
+                    onChanged: (String? newValue) async {
+           
+                      int index = _data!
+                          .indexWhere((map) => map['SubCategoryName'] == newValue);
+                      setState(() {
+                        _selectedCategory = newValue!;
+                        selectted_service_id = index;
+                      });
+                     
+                    },
+                    items: _data!.map<DropdownMenuItem<String>>((var value) {
+                      return DropdownMenuItem<String>(
+                        value: value["SubCategoryName"] ?? "",
+                        child: Text(value["SubCategoryName"] ?? ""),
+                      );
+                    }).toList(),
+                  ),
+                   TextFormField(
+                controller: service_name_con,
                 decoration: InputDecoration(
-                  labelText: "Service Category",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
-                    fontFamily: 'sub-tittle',
-                    fontSize: 14,
-                  ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
-                ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
-              ),
-              const SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(
+                  
                   labelText: "Service Name",
                   labelStyle: TextStyle(
                     color: Color(0xe5777474),
@@ -975,8 +1212,10 @@ class AddService extends StatelessWidget {
                   // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
                 ],
               ),
-              const SizedBox(height: 15),
-              TextFormField(
+           
+                 TextFormField(
+                controller: amount_con,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: "Service Amount",
                   labelStyle: TextStyle(
@@ -1002,6 +1241,7 @@ class AddService extends StatelessWidget {
               ),
               const SizedBox(height: 15),
               TextFormField(
+                controller: service_con,
                 decoration: InputDecoration(
                   labelText: "Service Details",
                   labelStyle: TextStyle(
@@ -1033,7 +1273,14 @@ class AddService extends StatelessWidget {
                         borderRadius: BorderRadius.circular(0)),
                     minimumSize: Size(650, 45),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+Api.FacilityInsert_nonimg(Amount: amount_con.text.trim(),Description: service_con.text.trim(),F_SubServiceCategory: selectted_service_id.toString(),FacilityName: service_name_con.text.trim()).then((value) {
+  if (value) {
+    widget.refresh();
+    Navigator.of(context).pop();
+  }
+},);
+                  },
                   child: Text(
                     'SAVE',
                     style: TextStyle(
@@ -1350,16 +1597,16 @@ class _LogOutPageState extends State<LogOutPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            padding:
-                                EdgeInsets.symmetric(horizontal: 64, vertical: 16),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 64, vertical: 16),
                           ),
                           child: Text(
-                                  'LOGIN',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                            'LOGIN',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(height: 24),

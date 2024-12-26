@@ -86,6 +86,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
             loder
                 ? Text("")
                 : ListView.builder(
+                
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                     itemCount: _data.length,
                     shrinkWrap: true,
@@ -432,7 +433,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                               check.value = check.value ? false : true;
                                                                               if (check.value) {
                                                                                 submit_data.add({
-                                                                                  "Id": "\"${service_data[index]["Id"]}\""
+                                                                                  "\"Id\"": "\"${service_data[index]["Id"]}\""
                                                                                 });
                                                                               } else {
                                                                                 // ________________________________________________   Search element on list of map
@@ -558,8 +559,8 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                                 GestureDetector(
                                                                               onTap: () {
                                                                                 if (Quantity_con[index].text.isNotEmpty &&int.parse(Quantity_con[index].text)>=1) {  
-                                                                                int element_index = submit_data.indexWhere((map) => map['Id'] == "\"${service_data[index]["Id"]}\"");
-                                                                                // submit_data.removeAt(element_index);
+                                                                                  try {
+                                                                                int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
                                                                                 submit_data[element_index] = {
                                                                                   "\"Id\"": "\"${service_data[index]["Id"]}\"",
                                                                                   "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
@@ -568,6 +569,19 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                                   "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
                                                                                   "\"Remark\"": "\"${remark_con[index].text.trim()}\""
                                                                                 };
+                                                                                    
+                                                                                  } catch (e) {
+                                                                                      int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
+                                                                                submit_data[element_index] = {
+                                                                                  "\"Id\"": "\"${service_data[index]["Id"]}\"",
+                                                                                  "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
+                                                                                  "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
+                                                                                  "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
+                                                                                  "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
+                                                                                  "\"Remark\"": "\"${remark_con[index].text.trim()}\""
+                                                                                };
+                                                                                  }
+                                                                                // submit_data.removeAt(element_index);
 
                                                                                 // submit_data.insert(index, );
                                                                                 print(remark_con[index].text);
@@ -923,6 +937,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                       );
                     },
                   ),
+           
             if (loder)
               Container(
                 color: Colors.black.withOpacity(0.5),

@@ -37,7 +37,25 @@ class _PromissAdsState extends State<PromissAds> {
       },
     );
   }
-
+void refresh(){
+  setState(() {
+  loader = true;    
+  });
+    Api.AccountDocument().then(
+      (value) {
+        _data = value;
+        for (var i = 0; i < _data.length; i++) {
+          if (_data[i]["Doctype"] == 3) {
+          _Work_data.add(_data[i]);            
+          }
+        }
+        setState(() {
+          loader = false;
+        });
+        print(_data);
+      },
+    );
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,7 +139,7 @@ class _PromissAdsState extends State<PromissAds> {
                                         child: IconButton(
                                             onPressed: () async{
                                            Api.downloadPdf(fileName: "xyz.jpg",url: _Work_data[index]["ImagePath"]).then((value) {
-                                              Share.shareXFiles([XFile('${value!.path}')], text: 'Great picture');
+                                              Share.shareXFiles([XFile('${value!.path}')], text: '');
                                            },);
                                               // Navigator.of(context).pop();
                                             },
@@ -190,7 +208,7 @@ class _PromissAdsState extends State<PromissAds> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CreateProAds()),
+            MaterialPageRoute(builder: (context) => CreateProAds(refresh: refresh,)),
           );
         },
         child: Icon(Icons.add, color: Colors.white),

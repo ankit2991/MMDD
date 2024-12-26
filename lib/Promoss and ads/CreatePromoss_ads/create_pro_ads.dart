@@ -8,6 +8,8 @@ import 'dart:io';
 import 'package:mddmerchant/api/api.dart';
 
 class CreateProAds extends StatefulWidget {
+  Function refresh;
+  CreateProAds({required this.refresh});
   @override
   _CreateProAdsState createState() => _CreateProAdsState();
 }
@@ -405,7 +407,10 @@ setState(() {
                     ),
                     onPressed: () {
                       Api.widget_to_img(_globalKey).then((value) {
-                       Api.ImageInsert(img: value,DocType: "3",ext: "."+ext);
+                       Api.ImageInsert(img: value,DocType: "3",ext: "."+ext).then((value) {
+                         widget.refresh();
+                         Navigator.of(context).pop();
+                       },);
                         
                       },);
                     },

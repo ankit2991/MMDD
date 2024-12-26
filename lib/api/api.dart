@@ -1,7 +1,9 @@
 import "dart:convert";
 import "dart:developer";
 import "dart:io";
-import "dart:typed_data";
+import "dart:ui";
+import 'dart:ui' as ui;
+import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:flutter/services.dart";
@@ -11,7 +13,6 @@ import "package:open_filex/open_filex.dart";
 import "package:path_provider/path_provider.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 import "package:http/http.dart" as http;
-import 'dart:ui' as ui;
 
 class Api {
   static List<dynamic> CategoryList_data = [];
@@ -20,7 +21,7 @@ class Api {
   static List<dynamic> city_list = [];
   static var User_info;
   static Map<String, dynamic> H_Questions={};
-  static late SharedPreferences prefs ;
+  static late SharedPreferences prefs;
   static Future<void> local_dataBase()async{
     prefs= await SharedPreferences.getInstance();
   }
@@ -402,13 +403,13 @@ class Api {
       var res= await request.send();    
     if (res.statusCode == 200) {
       log("ImageInsert Api Call.............");
-      var data =  await res.stream.bytesToString();;
+      var data =  await res.stream.bytesToString();
       log("ImageInsert Api DATA .............");
       print(data);
       // return data["Table1"];
     } else {
-      log("Error........ FacilityReport Api ");
-      throw("Error........ FacilityReport Api ");
+      log("Error........ ImageInsert Api ");
+      throw("Error........ ImageInsert Api ");
     }
   }
 
@@ -422,9 +423,9 @@ class Api {
     
     if (res.statusCode == 200) {
       log("RecipitFacilityInsert Api Call.............");
-      H_Questions.clear();
-      H_Questions = jsonDecode(res.body);
-      print(H_Questions);
+      // H_Questions.clear();
+      // H_Questions = jsonDecode(res.body);
+      // print(H_Questions);
       return true;
       // city_list = data["Table1"];
     } else {
@@ -479,9 +480,9 @@ class Api {
     
     if (res.statusCode == 200) {
       log("RecipitFacilityInsert Api Call.............");
-      H_Questions.clear();
-      H_Questions = jsonDecode(res.body);
-      print(H_Questions);
+      // H_Questions.clear();
+      // H_Questions = jsonDecode(res.body);
+      // print(H_Questions);
       return true;
       // city_list = data["Table1"];
     } else {
@@ -509,7 +510,7 @@ class Api {
     print(base64Image);
     return base64Image;
   }
-  // __________________________________________________________________   ( download PDF )
+   // __________________________________________________________________   ( download PDF )
   static Future<File?> downloadPdf({required String url,required String fileName}) async {
     try {
       // Send HTTP request to get the file
@@ -552,7 +553,7 @@ class Api {
       print("Error downloading file: $e");
     }
   }
-  // _________________________________________________________________________________________
+   // _________________________________________________________________________________________
   static Future<File?> widget_to_img(final GlobalKey _globalKey)async{
      final RenderRepaintBoundary boundary =
           _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
@@ -574,7 +575,7 @@ class Api {
  static Future<void> moveFileToLocalStorage() async {
     try {
       // Load the file from the assets folder
-      final byteData = await rootBundle.load('assets/images/main/dummy.pdf');
+      final byteData = await rootBundle.load('assets/images/main/downloadedFile.pdf');
 
       // Get the local directory path
       String ?directorys ;
@@ -604,6 +605,76 @@ class Api {
       print('File moved to: ${file.path}');
     } catch (e) {
       print('Error moving file: $e');
+    }
+  }
+  // _______________________________________________________________
+ static Future<String?> pickPDF() async {
+  final result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+    allowedExtensions: ['pdf'],
+  );
+
+  if (result != null) {
+    final filePath = result.files.single.path;
+    print('Selected PDF path: $filePath');
+    return filePath;
+  } else {
+    print('No file selected');
+  }
+}
+// ________________________________________________________________________ (banner images)
+ static Future<List<dynamic>> BannerReport() async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MerchantId":\"${User_info["Table"][0]["Id"].toInt()}\","ApiAdd":"BannerReport","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=BannerReport';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("BannerReport Api Call.............");
+      var data = jsonDecode(res.body);
+      log("BannerReport Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ BannerReport Api ");
+      throw("Error........ BannerReport Api ");
+    }
+  }
+// ________________________________________________________________________ (service)
+ static Future<List<dynamic>> service(String service_id) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"F_ServiceCategory":\"$service_id\","ApiAdd":"SubServiceCategoryList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=SubServiceCategoryList';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("service Api Call.............");
+      var data = jsonDecode(res.body);
+      log("service Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ service Api ");
+      throw("Error........ service Api ");
+    }
+  }
+   // ____________________________________________________________________   (FacilityInsert_nonimg )
+  static Future<bool> FacilityInsert_nonimg({required String FacilityName,required String F_SubServiceCategory ,required String Amount,required String Description,}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"FacilityName":"$FacilityName","MerchantId":\"${User_info["Table"][0]["Id"].toInt()}\","F_SubServiceCategory":"$F_SubServiceCategory","Amount":"$Amount","Description":"$Description","FacilityImg":"","ApiAdd":"FacilityInsert_nonimg","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=FacilityInsert_nonimg';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("FacilityInsert_nonimg Api Call.............");
+      // H_Questions.clear();
+      // H_Questions = jsonDecode(res.body);
+      // print(H_Questions);
+      return true;
+      // city_list = data["Table1"];
+    } else {
+      log("Error........ FacilityInsert_nonimg Api ");
+      throw("Error........ FacilityInsert_nonimg Api ");
     }
   }
 }
