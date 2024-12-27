@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -105,16 +107,30 @@ void refresh(){
                                 fit: StackFit.expand,
                                 children: [
                                   Container(
-                                    // margin: EdgeInsets.symmetric(vertical: 100,horizontal: 50),
                                     color: const Color.fromARGB(122, 0, 0, 0),
-                                    // height: 300,
-                                    // width: 50,
                                     child: Container(
-                                      // foregroundDecoration: BoxDecoration(image: DecorationImage(image: AssetImage("assetsimages/main/ads.png"))),
-
-                                      child: InteractiveViewer(
-                                          child: Image.network(
-                                              _Work_data[index]["ImagePath"])),
+                                      child: CachedNetworkImage(
+                                        progressIndicatorBuilder:
+                                            (context, url, progress) {
+                                          return Center(child: CupertinoActivityIndicator());
+                                        },
+                                        errorWidget: (context, url, error) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "assets/images/main/img.jpg"),
+                                                    )),
+                                          );
+                                        },
+                                        imageUrl: _Work_data[index]
+                                            ["ImagePath"],
+                                        imageBuilder: (context, imageProvider) {
+                                          return InteractiveViewer(
+                                              child:
+                                                  Image(image: imageProvider));
+                                        },
+                                      ),
                                     ),
                                   ),
                                   Align(
@@ -137,10 +153,7 @@ void refresh(){
                                         padding: EdgeInsets.symmetric(
                                             vertical: 15, horizontal: 80),
                                         child: IconButton(
-                                            onPressed: () async{
-                                           Api.downloadPdf(fileName: "xyz.jpg",url: _Work_data[index]["ImagePath"]).then((value) {
-                                              Share.shareXFiles([XFile('${value!.path}')], text: '');
-                                           },);
+                                            onPressed: () {
                                               // Navigator.of(context).pop();
                                             },
                                             icon: Container(
@@ -176,19 +189,34 @@ void refresh(){
                               );
                             },
                           );
-                          print("object");
+                            print("object");
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.amber,
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                    _Work_data[index]["ImagePath"],
-                                  ),
-                                  fit: BoxFit.cover)),
-                        ),
-                      );
+                        child: CachedNetworkImage(
+                          imageUrl: _Work_data[index]["ImagePath"],
+                          progressIndicatorBuilder: (context, url, progress) {
+                            return CupertinoActivityIndicator();
+                          },
+                          errorWidget: (context, url, error) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/main/img.jpg"),
+                                      fit: BoxFit.cover)),
+                            );
+                          },
+                          imageBuilder: (context, imageProvider) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.amber,
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                      image: imageProvider, fit: BoxFit.cover)),
+                            );
+                          },
+                        ));
+              
+                      
                 
                   },
                 ),

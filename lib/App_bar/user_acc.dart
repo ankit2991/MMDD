@@ -199,8 +199,12 @@ class Account_Document extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Api.pickPDF().then((value) {
-                  File temp=File(value??"");
+               if(value!=null){
+                   File temp=File(value??"");
                   Api.ImageInsert(DocType: "4",MemberAgreementUpload_UploadFile2: "UploadFile2",ext:".pdf",img: temp );
+               }else{
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("File not select")));
+               }
                 },);
               },
               child: Container(
@@ -1802,7 +1806,9 @@ class _LogOutPageState extends State<LogOutPage> {
                       TextField(
                         controller: mob_con,
                         keyboardType: TextInputType.phone,
+                        maxLength: 10,
                         decoration: InputDecoration(
+                          // errorBorder: OutlineInputBorder(),
                           labelText: 'Mobile Number',
                           labelStyle: TextStyle(color: Colors.white),
                           enabledBorder: UnderlineInputBorder(
@@ -1818,7 +1824,8 @@ class _LogOutPageState extends State<LogOutPage> {
                       Center(
                         child: ElevatedButton(
                           onPressed: () async {
-                            setState(() {
+                          if (mob_con.text.isNotEmpty) {
+                              setState(() {
                               loader = true;
                             });
                             if (loader) {
@@ -1847,6 +1854,9 @@ class _LogOutPageState extends State<LogOutPage> {
                             setState(() {
                               loader = false;
                             });
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please enter phone number")));
+                          }
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(

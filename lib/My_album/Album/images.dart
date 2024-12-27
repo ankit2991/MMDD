@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -77,94 +79,122 @@ class _MyImageState extends State<MyImage> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Stack(
-                              fit: StackFit.expand,
-                              children: [
-                                Container(
-                                  // margin: EdgeInsets.symmetric(vertical: 100,horizontal: 50),
-                                  color: const Color.fromARGB(122, 0, 0, 0),
-                                  // height: 300,
-                                  // width: 50,
-                                  child: Container(
-                                    // foregroundDecoration: BoxDecoration(image: DecorationImage(image: AssetImage("assetsimages/main/ads.png"))),
-
-                                    child: InteractiveViewer(
-                                        child: Image.network(
-                                            _Work_data[index]["ImagePath"])),
-                                  ),
-                                ),
-                                Align(
-                                    alignment: Alignment.topRight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: IconButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          icon: Icon(
-                                            Icons.close,
-                                            size: 30,
-                                            color: Colors.white,
-                                          )),
-                                    )),
-                                Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 80),
-                                      child: IconButton(
-                                          onPressed: () {
-                                            // Navigator.of(context).pop();
-                                          },
-                                          icon: Container(
-                                            height: 50,
-                                            padding: EdgeInsets.all(5),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  Container(
+                                    color: const Color.fromARGB(122, 0, 0, 0),
+                                    child: Container(
+                                      child: CachedNetworkImage(
+                                        progressIndicatorBuilder:
+                                            (context, url, progress) {
+                                          return Center(child: CupertinoActivityIndicator());
+                                        },
+                                        errorWidget: (context, url, error) {
+                                          return Container(
                                             decoration: BoxDecoration(
-                                                color: Color(0xffC4A68B),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.share,
-                                                  size: 30,
-                                                  color: Colors.white,
-                                                ),
-                                                Text(
-                                                  "Share",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 25),
-                                                )
-                                              ],
-                                            ),
-                                          )),
-                                    )),
-                                // IconButton(onPressed: (){}, icon: Container(child: Text("Share")))
-                                // ElevatedButton.icon(onPressed: (){}, label: Text("Share"))
-                              ],
+                                                image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "assets/images/main/img.jpg"),
+                                                    )),
+                                          );
+                                        },
+                                        imageUrl: _Work_data[index]
+                                            ["ImagePath"],
+                                        imageBuilder: (context, imageProvider) {
+                                          return InteractiveViewer(
+                                              child:
+                                                  Image(image: imageProvider));
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                      alignment: Alignment.topRight,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            icon: Icon(
+                                              Icons.close,
+                                              size: 30,
+                                              color: Colors.white,
+                                            )),
+                                      )),
+                                  Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 15, horizontal: 80),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              // Navigator.of(context).pop();
+                                            },
+                                            icon: Container(
+                                              height: 50,
+                                              padding: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xffC4A68B),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.share,
+                                                    size: 30,
+                                                    color: Colors.white,
+                                                  ),
+                                                  Text(
+                                                    "Share",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 25),
+                                                  )
+                                                ],
+                                              ),
+                                            )),
+                                      )),
+                                  // IconButton(onPressed: (){}, icon: Container(child: Text("Share")))
+                                  // ElevatedButton.icon(onPressed: (){}, label: Text("Share"))
+                                ],
+                              );
+                            },
+                          );
+                          print("object");
+                        },
+                        child: CachedNetworkImage(
+                          imageUrl: _Work_data[index]["ImagePath"],
+                          progressIndicatorBuilder: (context, url, progress) {
+                            return CupertinoActivityIndicator();
+                          },
+                          errorWidget: (context, url, error) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/main/img.jpg"),
+                                      fit: BoxFit.cover)),
                             );
                           },
-                        );
-                        print("object");
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.amber,
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                  _Work_data[index]["ImagePath"],
-                                ),
-                                fit: BoxFit.cover)),
-                      ),
-                    );
+                          imageBuilder: (context, imageProvider) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.amber,
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                      image: imageProvider, fit: BoxFit.cover)),
+                            );
+                          },
+                        ));
                   },
                 ),
           if (loader)
@@ -183,12 +213,15 @@ class _MyImageState extends State<MyImage> {
         onPressed: () async {
           await Api.pickImage(img: true, source: ImageSource.gallery).then(
             (value) {
-              Api.ImageInsert(MemberAgreementUpload_UploadFile2:"UploadFile2" ,
-                      DocType: "1", ext: "." + value["ext"], img: value["file"])
+              Api.ImageInsert(
+                      MemberAgreementUpload_UploadFile2: "UploadFile2",
+                      DocType: "1",
+                      ext: "." + value["ext"],
+                      img: value["file"])
                   .then(
                 (value) {
                   setState(() {
-                  loader = true;                    
+                    loader = true;
                   });
                   _data.clear();
                   _Work_data.clear();

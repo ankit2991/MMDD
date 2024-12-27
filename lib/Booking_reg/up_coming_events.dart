@@ -8,7 +8,7 @@ import 'package:mddmerchant/api/api.dart';
 
 class UpComingEvents extends StatefulWidget {
   bool prev;
-   UpComingEvents({this.prev=false});
+  UpComingEvents({this.prev = false});
 
   @override
   State<UpComingEvents> createState() => _UpComingEventsState();
@@ -33,33 +33,35 @@ class _UpComingEventsState extends State<UpComingEvents> {
     super.initState();
     loder = true;
     _data.clear();
-   if (widget.prev) {
-      Api.EventBookingDetailsList(Is_booking: "1",
-            Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
-                "CompleteEvent")
-        .then(
-      (value) {
-        _data = value;
-        setState(() {
-          loder = false;
-        });
-        // print(value);
-      },
-    );
-   }else{
-     Api.EventBookingDetailsList(Is_booking: "1",
-            Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
-                "UpcomingEvent")
-        .then(
-      (value) {
-        _data = value;
-        setState(() {
-          loder = false;
-        });
-        // print(value);
-      },
-    );
-   }
+    if (widget.prev) {
+      Api.EventBookingDetailsList(
+              Is_booking: "1",
+              Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
+                  "CompleteEvent")
+          .then(
+        (value) {
+          _data = value;
+          setState(() {
+            loder = false;
+          });
+          // print(value);
+        },
+      );
+    } else {
+      Api.EventBookingDetailsList(
+              Is_booking: "1",
+              Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
+                  "UpcomingEvent")
+          .then(
+        (value) {
+          _data = value;
+          setState(() {
+            loder = false;
+          });
+          // print(value);
+        },
+      );
+    }
   }
 
   @override
@@ -67,9 +69,12 @@ class _UpComingEventsState extends State<UpComingEvents> {
     return Scaffold(
         appBar: AppBar(
           elevation: 2.4,
-          title:widget.prev?Text('Due Register',
-              style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')): Text('UpComing Events'.tr,
-              style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
+          title: widget.prev
+              ? Text('Due Register',
+                  style: TextStyle(color: Colors.white, fontFamily: 'Fontmain'))
+              : Text('UpComing Events'.tr,
+                  style:
+                      TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
           backgroundColor: Color(0xffC4A68B),
           centerTitle: true,
           leading: IconButton(
@@ -86,7 +91,6 @@ class _UpComingEventsState extends State<UpComingEvents> {
             loder
                 ? Text("")
                 : ListView.builder(
-                
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                     itemCount: _data.length,
                     shrinkWrap: true,
@@ -279,17 +283,28 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                               index
                                                           ? GestureDetector(
                                                               onTap: () async {
-                                                                 setState(() {
-                                                                 loder =true;                                                                   
-                                                                 });
-                                                                 Navigator.of(context).pop();
+                                                                setState(() {
+                                                                  loder = true;
+                                                                });
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
                                                                 print(
                                                                     submit_data);
-                                                                    for (var i = 0; i < submit_data.length; i++) {
-                                                                      if (submit_data[i].length<=2) {
-                                                                        submit_data.removeAt(i);
-                                                                      }
-                                                                    }
+                                                                for (var i = 0;
+                                                                    i <
+                                                                        submit_data
+                                                                            .length;
+                                                                    i++) {
+                                                                  if (submit_data[
+                                                                              i]
+                                                                          .length <=
+                                                                      2) {
+                                                                    submit_data
+                                                                        .removeAt(
+                                                                            i);
+                                                                  }
+                                                                }
                                                                 var tot = 0.0;
                                                                 //  String a="\"3000.0\"";
                                                                 //  tot=double.parse(a)+tot;
@@ -308,66 +323,61 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                   }
                                                                 }
                                                                 print(tot);
-                                                                if (submit_data.isNotEmpty) {
-                                                                      await Api.RecipitFacilityInsert(
-                                                                        Amount: tot
-                                                                            .toString(),
-                                                                        EventId:
-                                                                            _data[Top_index]["id"]
-                                                                                .toString(),
-                                                                        Remarks:
-                                                                            _data[Top_index]["Remarks"]
-                                                                                .toString(),
-                                                                        serviceAdd:
-                                                                            submit_data)
-                                                                    .then(
-                                                                  (value) {
-                                                                    if (value) {
-                                                                     
-                                                                      _data
-                                                                          .clear();
-                                                                          if (widget.prev) {
-                                                                                Api.EventBookingDetailsList(Is_booking: "1",
-                                                                              Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "CompleteEvent")
-                                                                          .then(
-                                                                        (value) {
-                                                                          _data =
-                                                                              value;
-                                                                          setState(
-                                                                              () {
-                                                                            loder =
-                                                                                false;
-                                                                          });
-                                                                          // print(value);
-                                                                        },
-                                                                      );
-                                                                  
-                                                                          }else{
-                                                                      Api.EventBookingDetailsList(Is_booking: "1",
-                                                                              Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "UpcomingEvent")
-                                                                          .then(
-                                                                        (value) {
-                                                                          _data =
-                                                                              value;
-                                                                          setState(
-                                                                              () {
-                                                                            loder =
-                                                                                false;
-                                                                          });
-                                                                          // print(value);
-                                                                        },
-                                                                      );
-                                                                           } }
-                                                                  },
-                                                                );
-                                                         
-                                                                }else{
+                                                                if (submit_data
+                                                                    .isNotEmpty) {
+                                                                  await Api.RecipitFacilityInsert(
+                                                                          Amount: tot
+                                                                              .toString(),
+                                                                          EventId: _data[Top_index]["id"]
+                                                                              .toString(),
+                                                                          Remarks: _data[Top_index]["Remarks"]
+                                                                              .toString(),
+                                                                          serviceAdd:
+                                                                              submit_data)
+                                                                      .then(
+                                                                    (value) {
+                                                                      if (value) {
+                                                                        _data
+                                                                            .clear();
+                                                                        if (widget
+                                                                            .prev) {
+                                                                          Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "CompleteEvent")
+                                                                              .then(
+                                                                            (value) {
+                                                                              _data = value;
+                                                                              setState(() {
+                                                                                loder = false;
+                                                                              });
+                                                                              // print(value);
+                                                                            },
+                                                                          );
+                                                                        } else {
+                                                                          Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "UpcomingEvent")
+                                                                              .then(
+                                                                            (value) {
+                                                                              _data = value;
+                                                                              setState(() {
+                                                                                loder = false;
+                                                                              });
+                                                                              // print(value);
+                                                                            },
+                                                                          );
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                  );
+                                                                } else {
                                                                   setState(() {
-                                                                    loder=false;
+                                                                    loder =
+                                                                        false;
                                                                   });
-                                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("palce select services")));
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(SnackBar(
+                                                                          content:
+                                                                              Text("please select services")));
                                                                 }
-                                                                 },
+                                                              },
                                                               child: Container(
                                                                 height: 50,
                                                                 margin: EdgeInsets
@@ -476,8 +486,8 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                                   }
                                                                                 },
                                                                                 keyboardType: TextInputType.number,
-                                                                                style: TextStyle(color:check.value? const Color.fromARGB(255, 66, 65, 65): const Color.fromARGB(255, 146, 145, 145)),
-                                                                                decoration: InputDecoration(label: Text("Quantity"), labelStyle: TextStyle(color:check.value? const Color.fromARGB(255, 66, 65, 65): const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
+                                                                                style: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
+                                                                                decoration: InputDecoration(label: Text("Quantity"), labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
                                                                               ),
                                                                             ),
                                                                           ),
@@ -493,8 +503,8 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                               child: TextFormField(
                                                                                 controller: price_con,
                                                                                 keyboardType: TextInputType.number,
-                                                                                style: TextStyle(color:check.value? const Color.fromARGB(255, 66, 65, 65): const Color.fromARGB(255, 146, 145, 145)),
-                                                                                decoration: InputDecoration(labelText: "price", labelStyle: TextStyle(color:check.value? const Color.fromARGB(255, 66, 65, 65): const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
+                                                                                style: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
+                                                                                decoration: InputDecoration(labelText: "price", labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
                                                                               ),
                                                                             ),
                                                                           ),
@@ -509,9 +519,9 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                               ignoring: true,
                                                                               child: TextFormField(
                                                                                 controller: Total_con[index],
-                                                                                style: TextStyle(color:check.value? const Color.fromARGB(255, 66, 65, 65): const Color.fromARGB(255, 146, 145, 145)),
+                                                                                style: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
                                                                                 keyboardType: TextInputType.number,
-                                                                                decoration: InputDecoration(labelText: "Total", labelStyle: TextStyle(color:check.value? const Color.fromARGB(255, 66, 65, 65): const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
+                                                                                decoration: InputDecoration(labelText: "Total", labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
                                                                               ),
                                                                             ),
                                                                           ),
@@ -531,12 +541,12 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                             controller:
                                                                                 remark_con[index],
                                                                             style:
-                                                                                TextStyle(color:check.value? const Color.fromARGB(255, 66, 65, 65): const Color.fromARGB(255, 146, 145, 145)),
+                                                                                TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
                                                                             decoration: InputDecoration(
                                                                                 labelText: "remark",
-                                                                                labelStyle: TextStyle(color:check.value? const Color.fromARGB(255, 66, 65, 65): const Color.fromARGB(255, 146, 145, 145)),
-                                                                                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color:check.value? const Color.fromARGB(255, 66, 65, 65): const Color.fromARGB(255, 146, 145, 145))),
-                                                                                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color:check.value? const Color.fromARGB(255, 66, 65, 65): const Color.fromARGB(255, 146, 145, 145)))),
+                                                                                labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
+                                                                                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145))),
+                                                                                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)))),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -553,38 +563,38 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                                 100,
                                                                             alignment:
                                                                                 Alignment.center,
-                                                                            color:check.value?
-                                                                                Color(0xffC4A68B):Color.fromARGB(139, 196, 166, 139),
+                                                                            color: check.value
+                                                                                ? Color(0xffC4A68B)
+                                                                                : Color.fromARGB(139, 196, 166, 139),
                                                                             child:
                                                                                 GestureDetector(
                                                                               onTap: () {
-                                                                                if (Quantity_con[index].text.isNotEmpty &&int.parse(Quantity_con[index].text)>=1) {  
+                                                                                if (Quantity_con[index].text.isNotEmpty && int.parse(Quantity_con[index].text) >= 1) {
                                                                                   try {
-                                                                                int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
-                                                                                submit_data[element_index] = {
-                                                                                  "\"Id\"": "\"${service_data[index]["Id"]}\"",
-                                                                                  "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
-                                                                                  "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
-                                                                                  "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
-                                                                                  "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
-                                                                                  "\"Remark\"": "\"${remark_con[index].text.trim()}\""
-                                                                                };
-                                                                                    
+                                                                                    int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
+                                                                                    submit_data[element_index] = {
+                                                                                      "\"Id\"": "\"${service_data[index]["Id"]}\"",
+                                                                                      "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
+                                                                                      "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
+                                                                                      "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
+                                                                                      "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
+                                                                                      "\"Remark\"": "\"${remark_con[index].text.trim()}\""
+                                                                                    };
                                                                                   } catch (e) {
-                                                                                      int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
-                                                                                submit_data[element_index] = {
-                                                                                  "\"Id\"": "\"${service_data[index]["Id"]}\"",
-                                                                                  "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
-                                                                                  "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
-                                                                                  "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
-                                                                                  "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
-                                                                                  "\"Remark\"": "\"${remark_con[index].text.trim()}\""
-                                                                                };
+                                                                                    int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
+                                                                                    submit_data[element_index] = {
+                                                                                      "\"Id\"": "\"${service_data[index]["Id"]}\"",
+                                                                                      "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
+                                                                                      "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
+                                                                                      "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
+                                                                                      "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
+                                                                                      "\"Remark\"": "\"${remark_con[index].text.trim()}\""
+                                                                                    };
                                                                                   }
-                                                                                // submit_data.removeAt(element_index);
+                                                                                  // submit_data.removeAt(element_index);
 
-                                                                                // submit_data.insert(index, );
-                                                                                print(remark_con[index].text);
+                                                                                  // submit_data.insert(index, );
+                                                                                  print(remark_con[index].text);
                                                                                 }
                                                                               },
                                                                               child: Text(
@@ -636,6 +646,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                       // isDismissible: true,
                                       isScrollControlled: true,
                                       builder: (context) {
+                                        // final _formKey = GlobalKey<FormState>();
                                         return Padding(
                                           padding: EdgeInsets.only(
                                             bottom: MediaQuery.of(context)
@@ -661,8 +672,8 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                       Color(0xffC4A68B),
                                                   centerTitle: true,
                                                   leading: IconButton(
-                                                    icon:
-                                                        Icon(Icons.arrow_back),
+                                                    icon: Icon(
+                                                        Icons.arrow_back),
                                                     onPressed: () {
                                                       Navigator.pop(context);
                                                     },
@@ -674,8 +685,10 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                 ),
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: SingleChildScrollView(
+                                                      const EdgeInsets.all(
+                                                          8.0),
+                                                  child:
+                                                      SingleChildScrollView(
                                                     child: Container(
                                                       child: Column(
                                                         spacing: 10,
@@ -736,29 +749,25 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                     child:
                                                                         Column(
                                                                       crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .end,
+                                                                          CrossAxisAlignment.end,
                                                                       children: [
                                                                         if (_data[Top_index]["TotalAmount"] !=
                                                                             null)
                                                                           Text(
                                                                             "Total Amount : ₹ ${_data[Top_index]["TotalAmount"]}",
-                                                                            style:
-                                                                                TextStyle(fontFamily: 'Fontmain', fontSize: 10),
+                                                                            style: TextStyle(fontFamily: 'Fontmain', fontSize: 10),
                                                                           ),
                                                                         if (_data[Top_index]["BookingAmount"] !=
                                                                             null)
                                                                           Text(
                                                                             "Advance Amount : ₹ ${_data[Top_index]["BookingAmount"]}",
-                                                                            style:
-                                                                                TextStyle(fontFamily: 'Fontmain', fontSize: 10),
+                                                                            style: TextStyle(fontFamily: 'Fontmain', fontSize: 10),
                                                                           ),
                                                                         if (_data[Top_index]["DueAmount"] !=
                                                                             null)
                                                                           Text(
                                                                             "Due Amount : ₹ ${_data[Top_index]["DueAmount"]}",
-                                                                            style:
-                                                                                TextStyle(fontFamily: 'Fontmain', fontSize: 10),
+                                                                            style: TextStyle(fontFamily: 'Fontmain', fontSize: 10),
                                                                           ),
                                                                       ],
                                                                     ),
@@ -775,7 +784,20 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                               keyboardType:
                                                                   TextInputType
                                                                       .number,
+                                                              validator:
+                                                                  (value) {
+                                                                if (value ==
+                                                                        null ||
+                                                                    value
+                                                                        .isEmpty) {
+                                                                  return "Please enter amount";
+                                                                }
+                                                              },
                                                               decoration: InputDecoration(
+                                                                  errorBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide(
+                                                                          color: Colors
+                                                                              .red)),
                                                                   hintText:
                                                                       "Amount",
                                                                   focusedBorder: OutlineInputBorder(
@@ -790,8 +812,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                           BorderRadius.circular(
                                                                               5),
                                                                       borderSide:
-                                                                          BorderSide(
-                                                                              color: Colors.black))),
+                                                                          BorderSide(color: Colors.black))),
                                                             ),
                                                           ),
                                                           Container(
@@ -814,13 +835,13 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                           BorderRadius.circular(
                                                                               5),
                                                                       borderSide:
-                                                                          BorderSide(
-                                                                              color: Colors.black))),
+                                                                          BorderSide(color: Colors.black))),
                                                             ),
                                                           ),
                                                           GestureDetector(
                                                             onTap: () async {
-                                                              Navigator.of(
+                                                              if (amount_con.text.isNotEmpty) {
+                                                                Navigator.of(
                                                                       context)
                                                                   .pop();
                                                               setState(() {
@@ -833,57 +854,60 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                       Remark: Payment_remark_con
                                                                           .text
                                                                           .trim(),
-                                                                      Event_id: _data[Top_index]
-                                                                              [
-                                                                              "id"]
+                                                                      Event_id: _data[Top_index]["id"]
                                                                           .toInt()
                                                                           .toString())
                                                                   .then(
                                                                 (value) {
-                                                                  if (widget.prev) {
-                                                                      Api.EventBookingDetailsList(Is_booking: "1",
-                                                                          Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
-                                                                              "CompleteEvent")
-                                                                      .then(
-                                                                    (value) {
-                                                                      _data
-                                                                          .clear();
-                                                                      _data =
-                                                                          value;
-                                                                      setState(
-                                                                          () {
-                                                                        loder =
-                                                                            false;
-                                                                      });
-                                                                      // print(value);
-                                                                    },
-                                                                  );
-                                                             
-                                                                  }else{
-                                                                  Api.EventBookingDetailsList(Is_booking: "1",
-                                                                          Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
-                                                                              "UpcomingEvent")
-                                                                      .then(
-                                                                    (value) {
-                                                                      _data
-                                                                          .clear();
-                                                                      _data =
-                                                                          value;
-                                                                      setState(
-                                                                          () {
-                                                                        loder =
-                                                                            false;
-                                                                      });
-                                                                      // print(value);
-                                                                    },
-                                                                  );
-                                                                }},
+                                                                  if (widget
+                                                                      .prev) {
+                                                                    Api.EventBookingDetailsList(
+                                                                            Is_booking: "1",
+                                                                            Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "CompleteEvent")
+                                                                        .then(
+                                                                      (value) {
+                                                                        _data
+                                                                            .clear();
+                                                                        _data =
+                                                                            value;
+                                                                        setState(
+                                                                            () {
+                                                                          loder =
+                                                                              false;
+                                                                        });
+                                                                        // print(value);
+                                                                      },
+                                                                    );
+                                                                  } else {
+                                                                    Api.EventBookingDetailsList(
+                                                                            Is_booking: "1",
+                                                                            Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "UpcomingEvent")
+                                                                        .then(
+                                                                      (value) {
+                                                                        _data
+                                                                            .clear();
+                                                                        _data =
+                                                                            value;
+                                                                        setState(
+                                                                            () {
+                                                                          loder =
+                                                                              false;
+                                                                        });
+                                                                        // print(value);
+                                                                      },
+                                                                    );
+                                                                  }
+                                                                },
                                                               );
                                                               amount_con
                                                                   .clear();
                                                               remark_con
                                                                   .clear();
-
+                                          
+                                                              }else{
+                                                                Navigator.of(context).pop();
+                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("please enter amount")));
+                                                              }
                                                               // Api.
                                                             },
                                                             child: Container(
@@ -937,7 +961,6 @@ class _UpComingEventsState extends State<UpComingEvents> {
                       );
                     },
                   ),
-           
             if (loder)
               Container(
                 color: Colors.black.withOpacity(0.5),

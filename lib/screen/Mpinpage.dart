@@ -352,15 +352,19 @@ class _MpinPageState extends State<MpinPage> {
                                                   n5.text +
                                                   n6.text);
                                           if (temp == "R100") {
-                                           await  Api.prefs.setBool('login',true).then((value) {
-                                            print(Api.prefs.getBool('login'));
-                                               Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        HomeScreen()));
-                                             },);
-                                            
+                                            await Api.prefs
+                                                .setBool('login', true)
+                                                .then(
+                                              (value) {
+                                                print(
+                                                    Api.prefs.getBool('login'));
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            HomeScreen()));
+                                              },
+                                            );
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
@@ -376,7 +380,7 @@ class _MpinPageState extends State<MpinPage> {
                                           }
                                         }
                                         setState(() {
-                                        loader=false;                                          
+                                          loader = false;
                                         });
                                       },
                                       buildCounter: (context,
@@ -418,7 +422,7 @@ class _MpinPageState extends State<MpinPage> {
                                   TextButton(
                                       onPressed: () async {
                                         setState(() {
-                                        loader=true;                                          
+                                          loader = true;
                                         });
                                         await Api.send_otp(widget.mob_no);
                                         Navigator.push(
@@ -430,9 +434,9 @@ class _MpinPageState extends State<MpinPage> {
                                                           "Mpin_Screen",
                                                     )));
                                         // Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateMPin(mob_no: mob_no,)));
-                                      setState(() {
-                                      loader=false;                                        
-                                      });
+                                        setState(() {
+                                          loader = false;
+                                        });
                                       },
                                       child: Text(
                                         'Forgot M-Pin?',
@@ -448,42 +452,51 @@ class _MpinPageState extends State<MpinPage> {
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
-                              setState(() {
-                                loader = true;
-                              });
-                              String temp = await Api.Mpin_check(
-                                  mob_no: widget.mob_no,
-                                  Mpin: n1.text +
-                                      n2.text +
-                                      n3.text +
-                                      n4.text +
-                                      n5.text +
-                                      n6.text);
-                              if (temp == "R100") {
-                                await Api.prefs.setInt('is_Hindi',0).then((value) {
-                                     Api.prefs.setBool('login',true).then((value) {
-                                            print(Api.prefs.getBool('login'));
-                                               Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        HomeScreen()));
-                                             },);
-                                },);                                
-                              
+                              if (n1.text.isNotEmpty && n2.text.isNotEmpty && n3.text.isNotEmpty&&n4.text.isNotEmpty&&n5.text.isNotEmpty&&n6.text.isNotEmpty) {
+                                setState(() {
+                                  loader = true;
+                                });
+                                String temp = await Api.Mpin_check(
+                                    mob_no: widget.mob_no,
+                                    Mpin: n1.text +
+                                        n2.text +
+                                        n3.text +
+                                        n4.text +
+                                        n5.text +
+                                        n6.text);
+                                if (temp == "R100") {
+                                  await Api.prefs.setInt('is_Hindi', 0).then(
+                                    (value) {
+                                      Api.prefs.setBool('login', true).then(
+                                        (value) {
+                                          print(Api.prefs.getBool('login'));
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      HomeScreen()));
+                                        },
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("invalid M-pin")));
+                                  n1.clear();
+                                  n2.clear();
+                                  n3.clear();
+                                  n4.clear();
+                                  n5.clear();
+                                  n6.clear();
+                                }
+                                setState(() {
+                                  loader = false;
+                                });
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text("invalid M-pin")));
-                                n1.clear();
-                                n2.clear();
-                                n3.clear();
-                                n4.clear();
-                                n5.clear();
-                                n6.clear();
+                                    SnackBar(
+                                        content: Text("please enter M-Pin")));
                               }
-                              setState(() {
-                                loader = false;
-                              });
                               // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisTration()));
                             },
                             style: ElevatedButton.styleFrom(
