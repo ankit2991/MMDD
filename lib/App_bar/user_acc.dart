@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:mddmerchant/constrans.dart';
 import 'package:mddmerchant/App_bar/OurService/our_service.dart';
@@ -164,64 +165,62 @@ class Account_Document extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Api.moveFileToLocalStorage().then(
-                      (value) {
-                        Get.snackbar("success", "check your download folder",
-                            backgroundColor:
-                                const Color.fromARGB(103, 33, 149, 243),
-                            colorText: Colors.black);
-                      },
-                    );
+            GestureDetector(
+              onTap: () {
+                Api.moveFileToLocalStorage().then(
+                  (value) {
+                    Get.snackbar("success", "check your download folder",
+                        backgroundColor:
+                            const Color.fromARGB(103, 33, 149, 243),
+                        colorText: Colors.black);
                   },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 5,
-                              offset: Offset(0, 0))
-                        ],
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.all(10),
-                    child: Text(
-                      "Download pdf",
-                      style: TextStyle(fontFamily: "Fontmain"),
-                    ),
-                  ),
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black,
+                          blurRadius: 5,
+                          offset: Offset(0, 0))
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)),
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.all(10),
+                child: Text(
+                  "Download pdf",
+                  style: TextStyle(fontFamily: "Fontmain"),
                 ),
-              ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Api.pickPDF();
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 5,
-                              offset: Offset(0, 0))
-                        ],
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.all(10),
-                    child: Text("Upload pdf",
-                        style: TextStyle(fontFamily: "Fontmain")),
-                  ),
-                ),
-              ],
+            GestureDetector(
+              onTap: () {
+                Api.pickPDF().then((value) {
+                  File temp=File(value??"");
+                  Api.ImageInsert(DocType: "4",MemberAgreementUpload_UploadFile2: "UploadFile2",ext:".pdf",img: temp );
+                },);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: double.infinity,
+                // width: double.infinity,
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black,
+                          blurRadius: 5,
+                          offset: Offset(0, 0))
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)),
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.all(10),
+                child: Text("Upload pdf",
+                    style: TextStyle(fontFamily: "Fontmain")),
+              ),
             )
           ],
         ),
@@ -989,30 +988,31 @@ class _MyServicesPageState extends State<MyServicesPage> {
   @override
   List<dynamic> _data = [];
   bool loader = false;
-  void refresh(){
+  void refresh() {
     setState(() {
-loader=true;     
+      loader = true;
     });
     _data.clear();
     Api.FacilityReport().then(
       (value) {
         _data = value;
         setState(() {
-          loader=false;
+          loader = false;
         });
       },
     );
   }
+
   void initState() {
     // TODO: implement initState
     super.initState();
-    loader=true;
+    loader = true;
     _data.clear();
     Api.FacilityReport().then(
       (value) {
         _data = value;
         setState(() {
-          loader=false;
+          loader = false;
         });
       },
     );
@@ -1064,14 +1064,24 @@ loader=true;
                               color: const Color.fromARGB(146, 0, 0, 0),
                             )
                           ]),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(_data[index]["FacilityName"],style: TextStyle(fontFamily: "Fontmain",fontWeight: FontWeight.bold),),
-                              Text(_data[index]["Amount"].toString(),style: TextStyle(fontFamily: "Fontmain",fontWeight: FontWeight.normal),)
-                            ],
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _data[index]["FacilityName"],
+                            style: TextStyle(
+                                fontFamily: "Fontmain",
+                                fontWeight: FontWeight.bold),
                           ),
+                          Text(
+                            _data[index]["Amount"].toString(),
+                            style: TextStyle(
+                                fontFamily: "Fontmain",
+                                fontWeight: FontWeight.normal),
+                          )
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -1091,7 +1101,10 @@ loader=true;
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddService(refresh: refresh,)),
+            MaterialPageRoute(
+                builder: (context) => AddService(
+                      refresh: refresh,
+                    )),
           );
         },
         child: Icon(Icons.add, color: Colors.white),
@@ -1113,25 +1126,28 @@ class AddService extends StatefulWidget {
 }
 
 class _AddServiceState extends State<AddService> {
-  String ?_selectedValue;
-  var amount_con=TextEditingController();
-  var service_con=TextEditingController();
-  var service_name_con=TextEditingController();
-  String?_selectedCategory;
-List<dynamic> _data=[];
-int ?selectted_service_id;
+  String? _selectedValue;
+  var amount_con = TextEditingController();
+  var service_con = TextEditingController();
+  var service_name_con = TextEditingController();
+  String? _selectedCategory;
+  List<dynamic> _data = [];
+  int? selectted_service_id;
   @override
   void initState() {
-    loading=true;
+    loading = true;
     // TODO: implement initState
     super.initState();
-   Api.service(Api.User_info["Table"][0]["ServiceID"].toString()).then((value) {
-     _data=value;
-     setState(() {
-       loading=false;
-     });
-   },);
+    Api.service(Api.User_info["Table"][0]["ServiceID"].toString()).then(
+      (value) {
+        _data = value;
+        setState(() {
+          loading = false;
+        });
+      },
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1159,37 +1175,34 @@ int ?selectted_service_id;
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           child: Column(
             children: [
-                  const SizedBox(height: 15),
-             DropdownButtonFormField<String>(
-                    value: _selectedCategory,
-                    // iconSize: 20,
-                    isExpanded: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Business Category',
-                    ),
-              
-                    onChanged: (String? newValue) async {
-           
-                      int index = _data!
-                          .indexWhere((map) => map['SubCategoryName'] == newValue);
-                      setState(() {
-                        _selectedCategory = newValue!;
-                        selectted_service_id = index;
-                      });
-                     
-                    },
-                    items: _data!.map<DropdownMenuItem<String>>((var value) {
-                      return DropdownMenuItem<String>(
-                        value: value["SubCategoryName"] ?? "",
-                        child: Text(value["SubCategoryName"] ?? ""),
-                      );
-                    }).toList(),
-                  ),
-                   TextFormField(
+              const SizedBox(height: 15),
+              DropdownButtonFormField<String>(
+                value: _selectedCategory,
+                // iconSize: 20,
+                isExpanded: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Business Category',
+                ),
+
+                onChanged: (String? newValue) async {
+                  int index = _data!
+                      .indexWhere((map) => map['SubCategoryName'] == newValue);
+                  setState(() {
+                    _selectedCategory = newValue!;
+                    selectted_service_id = index;
+                  });
+                },
+                items: _data!.map<DropdownMenuItem<String>>((var value) {
+                  return DropdownMenuItem<String>(
+                    value: value["SubCategoryName"] ?? "",
+                    child: Text(value["SubCategoryName"] ?? ""),
+                  );
+                }).toList(),
+              ),
+              TextFormField(
                 controller: service_name_con,
                 decoration: InputDecoration(
-                  
                   labelText: "Service Name",
                   labelStyle: TextStyle(
                     color: Color(0xe5777474),
@@ -1212,8 +1225,7 @@ int ?selectted_service_id;
                   // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
                 ],
               ),
-           
-                 TextFormField(
+              TextFormField(
                 controller: amount_con,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
@@ -1274,12 +1286,20 @@ int ?selectted_service_id;
                     minimumSize: Size(650, 45),
                   ),
                   onPressed: () {
-Api.FacilityInsert_nonimg(Amount: amount_con.text.trim(),Description: service_con.text.trim(),F_SubServiceCategory: selectted_service_id.toString(),FacilityName: service_name_con.text.trim()).then((value) {
-  if (value) {
-    widget.refresh();
-    Navigator.of(context).pop();
-  }
-},);
+                    Api.FacilityInsert_nonimg(
+                            Amount: amount_con.text.trim(),
+                            Description: service_con.text.trim(),
+                            F_SubServiceCategory:
+                                selectted_service_id.toString(),
+                            FacilityName: service_name_con.text.trim())
+                        .then(
+                      (value) {
+                        if (value) {
+                          widget.refresh();
+                          Navigator.of(context).pop();
+                        }
+                      },
+                    );
                   },
                   child: Text(
                     'SAVE',
@@ -1334,6 +1354,7 @@ class BusinessCategoryPage extends StatelessWidget {
 }
 
 class TermsAndConditionsPage extends StatelessWidget {
+  var terms_con = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1358,7 +1379,8 @@ class TermsAndConditionsPage extends StatelessWidget {
         child: Column(
           children: [
             TextField(
-              maxLength: 1000,
+              controller: terms_con,
+              // maxLength: 1000,
               maxLines: 5,
               decoration: InputDecoration(
                 hintText: "Write your Terms & Conditions...",
@@ -1368,6 +1390,9 @@ class TermsAndConditionsPage extends StatelessWidget {
               ),
               style: TextStyle(fontFamily: 'sub-tittle'),
             ),
+            SizedBox(
+              height: 10,
+            ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xffC4A68B),
@@ -1375,7 +1400,23 @@ class TermsAndConditionsPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(0)),
                   minimumSize: Size(550, 50),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  if (terms_con.text.isNotEmpty) {
+                    Api.Add_Merchant_TremAndCond(
+                            TermsAndConditions: terms_con.text)
+                        .then(
+                      (value) {
+                        if (value) {
+                          Navigator.of(context).pop();
+                        }
+                      },
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content:
+                            Text("pealse enter your Trems and condition")));
+                  }
+                },
                 child: Text(
                   'SAVE',
                   style: TextStyle(
@@ -1390,7 +1431,29 @@ class TermsAndConditionsPage extends StatelessWidget {
   }
 }
 
-class ReviewPage extends StatelessWidget {
+class ReviewPage extends StatefulWidget {
+  @override
+  State<ReviewPage> createState() => _ReviewPageState();
+}
+
+class _ReviewPageState extends State<ReviewPage> {
+  List<dynamic> _data = [];
+  bool loader = false;
+  @override
+  void initState() {
+    loader = true;
+    // TODO: implement initState
+    super.initState();
+    Api.GetMerchentcustomerReview().then(
+      (value) {
+        setState(() {
+          _data = value;
+          loader = false;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1410,16 +1473,128 @@ class ReviewPage extends StatelessWidget {
               Navigator.pop(context);
             }),
       ),
-      body: Center(
-          child: Text(
-        'Review Content',
-        style: TextStyle(fontFamily: 'Fontmain', color: Color(0xe5777474)),
-      )),
+      body: Stack(
+        children: [
+          loader
+              ? Center(
+                  child: Text(
+                  'Review Content',
+                  style: TextStyle(
+                      fontFamily: 'Fontmain', color: Color(0xe5777474)),
+                ))
+              : ListView.builder(
+                  padding: EdgeInsets.symmetric(vertical: 3.5, horizontal: 5),
+                  itemCount: _data.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: EdgeInsets.all(5),
+                      // height: 50,
+
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: const Color.fromARGB(146, 0, 0, 0),
+                                blurRadius:3,
+                                offset: Offset(0, 0))
+                          ]),
+                      margin: EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListTile(
+                            minLeadingWidth: 20,
+                            contentPadding: EdgeInsets.all(5),
+                            // enabled: ,
+                            horizontalTitleGap: 10,
+                            leading: Icon(
+                              Icons.account_box_outlined,
+                              size: 40,
+                            ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _data[index]["CustomerName"],
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                RatingBar.builder(
+                                  initialRating: _data[index]["Rating"],
+                                  // minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemSize: 20,
+                                  itemPadding:
+                                      EdgeInsets.symmetric(horizontal: 1.0),
+                                  itemBuilder: (context, _) => Icon(
+                                    Icons.star,
+                                    color:
+                                        const Color.fromARGB(255, 7, 255, 255),
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    // setState(() {
+                                    //   // _rating = rating;
+                                    // });
+                                    print("Selected rating: $rating");
+                                  },
+                                ),
+                              ],
+                            ),
+                            subtitle: Text(_data[index]["CustomerRemark"],
+                                style: TextStyle(
+                                    color:
+                                        const Color.fromARGB(255, 61, 61, 61))),
+                          ),
+                          Text(_data[index]["MembarRemark"],
+                              style: TextStyle(
+                                  color:
+                                      const Color.fromARGB(255, 151, 151, 151)))
+                        ],
+                      ),
+                    );
+                  },
+                ),
+          if (loader)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: 50.0,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
 
-class PhoneDiary extends StatelessWidget {
+class PhoneDiary extends StatefulWidget {
+  @override
+  State<PhoneDiary> createState() => _PhoneDiaryState();
+}
+
+class _PhoneDiaryState extends State<PhoneDiary> {
+  bool loader = false;
+  List<dynamic> _data = [];
+  @override
+  void initState() {
+    loader = true;
+    // TODO: implement initState
+    super.initState();
+    Api.Merchentwisecustomer().then(
+      (value) {
+        _data = value;
+        setState(() {
+          loader = false;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1439,11 +1614,91 @@ class PhoneDiary extends StatelessWidget {
               Navigator.pop(context);
             }),
       ),
-      body: Center(
-          child: Text(
-        'No Data Awailable',
-        style: TextStyle(fontFamily: 'Fontmain', color: Color(0xe5777474)),
-      )),
+      body: Stack(
+        children: [
+          Center(
+              child: loader
+                  ? Text(
+                      'No Data Awailable',
+                      style: TextStyle(
+                          fontFamily: 'Fontmain', color: Color(0xe5777474)),
+                    )
+                  : ListView.builder(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                      itemCount: _data.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        // return Container(
+                        //   margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                        //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.white,boxShadow: [BoxShadow(color: const Color.fromARGB(139, 0, 0, 0),blurRadius: .5, offset: Offset(0, 0))]),
+                        //   child: ListTile(
+                        //     dense: true,
+                        //     minLeadingWidth: 20,
+                        //     leading: CircleAvatar(radius: 25,backgroundImage: AssetImage("assets/images/main/user.png"),),
+                        //     title: Text(_data[index]["CustomerName"],style: TextStyle(fontFamily: "Fontmain"),),
+                        //     subtitle: Text(_data[index]["MobileNo"],),
+                        //     trailing: GestureDetector(
+                        //       onTap: (){
+                        //         Api.launchDialer(_data[index]["MobileNo"]);
+                        //       },
+                        //       child: Icon(Icons.phone)),
+                        //   ),
+                        // );
+                        return Container(
+                          padding: EdgeInsets.all(5),
+                          margin:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: const Color.fromARGB(139, 0, 0, 0),
+                                    blurRadius: .5,
+                                    offset: Offset(0, 0))
+                              ]),
+                          child: Column(
+                            spacing: 10,
+                            children: [
+                              Row(
+                                spacing: 10,
+                                children: [
+                                  Icon(Icons.account_box),
+                                  Text(_data[index]["CustomerName"],
+                                      style: TextStyle(fontFamily: "Fontmain"))
+                                ],
+                              ),
+                              Row(
+                                spacing: 10,
+                                children: [
+                                  GestureDetector(
+                                      onTap: () {
+                                        Api.launchDialer(
+                                            _data[index]["MobileNo"]);
+                                      },
+                                      child: Icon(Icons.phone)),
+                                  Text(_data[index]["MobileNo"],
+                                      style: TextStyle(fontFamily: "Fontmain"))
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    )),
+          if (loader)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: 50.0,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

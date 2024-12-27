@@ -183,7 +183,7 @@ class _MyImageState extends State<MyImage> {
         onPressed: () async {
           await Api.pickImage(img: true, source: ImageSource.gallery).then(
             (value) {
-              Api.ImageInsert(
+              Api.ImageInsert(MemberAgreementUpload_UploadFile2:"UploadFile2" ,
                       DocType: "1", ext: "." + value["ext"], img: value["file"])
                   .then(
                 (value) {

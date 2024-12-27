@@ -13,6 +13,7 @@ import "package:open_filex/open_filex.dart";
 import "package:path_provider/path_provider.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 import "package:http/http.dart" as http;
+import "package:url_launcher/url_launcher.dart";
 
 class Api {
   static List<dynamic> CategoryList_data = [];
@@ -286,6 +287,9 @@ class Api {
   }
   // ____________________________________________________________________   (MerchantAnswareInsert )
   static Future<void> MerchantAnswareInsert({required int Q_id,required String Question,String Answer1 ="",String Answer2="",String Answer3="",String Answer4="",String Answer5="",String Answer6="",String Answer7=""}) async {
+  //   Uint8List  ab =Uint8List.fromList(utf8.encode(Question));
+  //  String encodedQuestion= utf8.decode(ab);
+  // String encodedQuestion = URLEncoder.encode(Question, "UTF-8");
     String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"F_MemberMaster":'"\"${User_info["Table"][0]["Id"].toInt()}\""',"F_ServiceCatagory":'"\"${User_info["Table"][0]["ServiceID"]}\""',"F_ServiceQuestionMaster":'"\"$Q_id\""',"Question":'"\"$Question\""',"Answer1":'"\"$Answer1\""',"Answer2":'"\"$Answer2\""',"Answer3":'"\"$Answer3\""',"Answer4":'"\"$Answer4\""',"Answer5":'"\"$Answer5\""',"Answer6":'"\"$Answer6\""',"Answer7":'"\"$Answer7\""',"ApiAdd":"MerchantAnswareInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MerchantAnswareInsert';
    print(url);
@@ -382,9 +386,9 @@ class Api {
   }
   
  // ____________________________________________________________________   (ImageInsert )
-  static Future<void> ImageInsert({required File ?img,required String DocType,required String ext}) async {
+  static Future<void> ImageInsert({required File ?img,required String DocType,required String ext,required String MemberAgreementUpload_UploadFile2}) async {
     String url =
-        'https://wedingappapi.systranstechnology.com/MobApi.asmx/UploadFile2';
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/$MemberAgreementUpload_UploadFile2';
    print("=================================================================================");
    print(url);
   final headers = {
@@ -667,14 +671,108 @@ class Api {
     
     if (res.statusCode == 200) {
       log("FacilityInsert_nonimg Api Call.............");
-      // H_Questions.clear();
-      // H_Questions = jsonDecode(res.body);
-      // print(H_Questions);
       return true;
-      // city_list = data["Table1"];
     } else {
       log("Error........ FacilityInsert_nonimg Api ");
       throw("Error........ FacilityInsert_nonimg Api ");
+    }
+  }
+  
+// ________________________________________________________________________ (service)
+ static Future<List<dynamic>> ServiceList() async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"ApiAdd":"ServiceList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=ServiceList';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("ServiceList Api Call.............");
+      var data = jsonDecode(res.body);
+      log("ServiceList Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ service Api ");
+      throw("Error........ service Api ");
+    }
+  }
+   // ____________________________________________________________________   (ServiceEnquiryInsert )
+  static Future<bool> ServiceEnquiryInsert({required String personName,required String serviceName ,required String mobile,}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"personName":"$personName","serviceName":"$serviceName","mobile":"$mobile","MerchantId":\"${User_info["Table"][0]["Id"].toInt()}\","ApiAdd":"ServiceEnquiryInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=ServiceEnquiryInsert';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("ServiceEnquiryInsert Api Call.............");
+      return true;
+    } else {
+      log("Error........ ServiceEnquiryInsert Api ");
+      return false;
+      // throw("Error........ ServiceEnquiryInsert Api ");
+    }
+  }
+   // ____________________________________________________________________   (Add_Merchant_TremAndCond )
+  static Future<bool> Add_Merchant_TremAndCond({required String TermsAndConditions}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MemberMasterId":\"${User_info["Table"][0]["Id"].toInt()}\","TermsAndConditions":"1","ApiAdd":"MemberAddTremAndCond","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MemberAddTremAndCond';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("Add_Merchant_TremAndCond Api Call.............");
+      return true;
+    } else {
+      log("Error........ Add_Merchant_TremAndCond Api ");
+      return false;
+      // throw("Error........ ServiceEnquiryInsert Api ");
+    }
+  }
+  
+// ________________________________________________________________________ (Merchentwisecustomer)
+ static Future<List<dynamic>> Merchentwisecustomer() async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MemberId":\"${User_info["Table"][0]["Id"].toInt()}\","ApiAdd":"Merchentwisecustomer","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=Merchentwisecustomer';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("Merchentwisecustomer Api Call.............");
+      var data = jsonDecode(res.body);
+      log("Merchentwisecustomer Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ Merchentwisecustomer Api ");
+      throw("Error........ Merchentwisecustomer Api ");
+    }
+  }
+  
+// ________________________________________________________________________ (GetMerchentcustomerReview)
+ static Future<List<dynamic>> GetMerchentcustomerReview() async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"F_MemberMaster":\"${User_info["Table"][0]["Id"].toInt()}\","ApiAdd":"GetMerchentcustomerReview","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=GetMerchentcustomerReview';
+   print(url);
+    var res = await http.get(Uri.parse(url));
+    
+    if (res.statusCode == 200) {
+      log("GetMerchentcustomerReview Api Call.............");
+      var data = jsonDecode(res.body);
+      log("GetMerchentcustomerReview Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ GetMerchentcustomerReview Api ");
+      throw("Error........ GetMerchentcustomerReview Api ");
+    }
+  }
+  // ___________________________________________________________________    (open phone dailer)
+  static Future<void> launchDialer(String number) async {
+    final Uri url = Uri(scheme: 'tel', path: number);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 }

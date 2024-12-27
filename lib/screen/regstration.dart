@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mddmerchant/App_bar/user_acc.dart';
 import 'package:mddmerchant/api/api.dart';
 import 'package:mddmerchant/main.dart';
 
@@ -606,7 +607,7 @@ class _CheckboxExampleState extends State<RegisTration> {
                       );
                       if (result=="R100") {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()));                    
+                          MaterialPageRoute(builder: (context) => LogOutPage()));                    
                       }else{
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error :- ")));
                       }
