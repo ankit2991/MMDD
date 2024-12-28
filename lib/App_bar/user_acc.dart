@@ -73,6 +73,7 @@ class UserProfile extends StatelessWidget {
                     title: "Bank Information", page: BankInformationPage()),
                 ProfileOption(title: "MMDD Orders", page: MMDDOrdersPage()),
                 ProfileOption(title: "My Services", page: MyServicesPage()),
+                ProfileOption(title: "Discount", page: Discount_screen()),
                 ProfileOption(title: "Our Services", page: OurService()),
                 ProfileOption(
                     title: "My Terms & Conditions",
@@ -91,6 +92,291 @@ class UserProfile extends StatelessWidget {
 }
 
 // Custom Widget for each option as a card
+class Discount_screen extends StatefulWidget {
+  const Discount_screen({super.key});
+
+  @override
+  State<Discount_screen> createState() => _Discount_screenState();
+}
+
+class _Discount_screenState extends State<Discount_screen> {
+  List<dynamic> _data = [];
+  bool loader = false;
+  void refresh() {
+    setState(() {
+      loader = true;
+    });
+    _data.clear();
+    Api.FacilityReport().then(
+      (value) {
+        _data = value;
+        setState(() {
+          loader = false;
+        });
+      },
+    );
+  }
+
+  List<bool?> bools = [];
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loader = true;
+    _data.clear();
+
+    Api.FacilityReport().then(
+      (value) {
+        _data = value;
+        setState(() {
+          loader = false;
+        });
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Discount"),
+          elevation: 3.5,
+          backgroundColor: Color(0xffC4A68B),
+          foregroundColor: Colors.white,
+          centerTitle: true,
+        ),
+        body: Stack(children: [
+          loader
+              ? Center(
+                  child: Text('No Data Available'),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _data.length,
+                  itemBuilder: (context, index) {
+                    bools.add(_data[index]["IsDiscount"]);
+                    ValueNotifier<bool?> check =
+                        ValueNotifier(_data[index]["IsDiscount"]);
+                    ValueNotifier<double?> total = ValueNotifier(0);
+                    var discount_con = TextEditingController();
+                    if(_data[index]["IsDiscount"]){
+                      discount_con.text=_data[index]["DiscountAmount"].toString();
+                      total.value= _data[index]["Amount"]-_data[index]["DiscountAmount"];
+                    }
+                    // var tot_con=TextEditingController();
+                    return Container(
+                      margin: EdgeInsets.all(10),
+                      // height: 80,
+                      // color: Colors.amber,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 1,
+                              color: const Color.fromARGB(146, 0, 0, 0),
+                            )
+                          ]),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 10,
+                        children: [
+                          Row(
+                            children: [
+                              ValueListenableBuilder(
+                                valueListenable: check,
+                                builder: (context, value, child) {
+                                  return Checkbox(
+                                    value: bools[index],
+                                    onChanged: (values) {
+                                      setState(() {
+                                        check.value = values;
+                                        bools.removeAt(index);
+                                        bools.insert(index, values);
+                                      });
+                                    },
+                                  );
+                                },
+                              ),
+                              Text(
+                                _data[index]["FacilityName"],
+                                style: TextStyle(
+                                    fontFamily: "Fontmain",
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Container(
+                                width: 100,
+                                child: TextFormField(
+                                  readOnly: true,
+                                  initialValue:
+                                      _data[index]["Amount"].toString(),
+                                  decoration: InputDecoration(
+                                      label: Text("Amount"),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          borderSide:
+                                              BorderSide(color: Colors.black)),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          borderSide:
+                                              BorderSide(color: Colors.black))),
+                                ),
+                              ),
+                              Container(
+                                width: 100,
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  controller: discount_con,
+                                  onChanged: (valuee) {
+                                    if (valuee != "" &&
+                                        int.parse(valuee) != 0) {
+                                      if (_data[index]["Amount"] -
+                                              int.parse(valuee) >=
+                                          0) {
+                                        total.value = _data[index]["Amount"] -
+                                            int.parse(valuee);
+                                      } else {
+                                        showDialog(
+                                          
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text("Something went wrong"),
+                                            content: Text(
+                                                "Please remove extra amount"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(
+                                                      context); // Close dialog without doing anything
+                                                },
+                                                child: Text("Cancel"),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  // Perform an action here
+                                                  discount_con.text="0.0";
+                                                  Navigator.pop(
+                                                      context); // Close dialog after action
+                                                },
+                                                child: Text("Confirm"),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                        total.value = 0;
+                                      }
+                                    } else {
+                                      total.value = 0;
+                                    }
+                                  },
+                                  readOnly: bools[index] == true ? false : true,
+                                  decoration: InputDecoration(
+                                      labelText: "Discount",
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          borderSide:
+                                              BorderSide(color: Colors.black)),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          borderSide:
+                                              BorderSide(color: Colors.black))),
+                                ),
+                              ),
+                              ValueListenableBuilder(
+                                valueListenable: total,
+                                builder: (context, value, child) {
+                                  return Container(
+                                    width: 100,
+                                    child: TextFormField(
+                                      
+                                      controller: TextEditingController(
+                                          text: total.value.toString()),
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        labelText: "Net Amount",
+                                          enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                  color: Colors.black)),
+                                          focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                  color: Colors.black))),
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: (){
+                                  
+                                  Api.FacilityDiscountInsert(DiscountAmount: discount_con.text,FacilityId: _data[index]["Id"].toString(),IsDiscount:bools[index]==true?"1":"0" ).then((value) {
+                                    if(bools[index]==true){
+                                    // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Discount Activated successfully",),backgroundColor: Colors.green,));
+                                    // }else{
+                                    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please remove extra amount",style: TextStyle(color: Colors.white),),backgroundColor: Colors.red,));
+                                    // }
+                                  }else{
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Discount Deactivated successfully"),backgroundColor: Colors.green));
+
+                                  }
+                                  },);
+                                  
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffC4A68B),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: Text(
+                                    "Save",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: "Fontmain"),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+          if (loader)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: 50.0,
+                ),
+              ),
+            ),
+        ]));
+  }
+}
+
 class ProfileOption extends StatelessWidget {
   final String title;
   final Widget page;
@@ -198,14 +484,21 @@ class Account_Document extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Api.pickPDF().then((value) {
-               if(value!=null){
-                   File temp=File(value??"");
-                  Api.ImageInsert(DocType: "4",MemberAgreementUpload_UploadFile2: "UploadFile2",ext:".pdf",img: temp );
-               }else{
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("File not select")));
-               }
-                },);
+                Api.pickPDF().then(
+                  (value) {
+                    if (value != null) {
+                      File temp = File(value ?? "");
+                      Api.ImageInsert(
+                          DocType: "4",
+                          MemberAgreementUpload_UploadFile2: "UploadFile2",
+                          ext: ".pdf",
+                          img: temp);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("File not select")));
+                    }
+                  },
+                );
               },
               child: Container(
                 alignment: Alignment.center,
@@ -1495,14 +1788,13 @@ class _ReviewPageState extends State<ReviewPage> {
                       padding: EdgeInsets.all(5),
                       // height: 50,
 
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: const Color.fromARGB(146, 0, 0, 0),
-                                blurRadius:3,
-                                offset: Offset(0, 0))
-                          ]),
+                      decoration:
+                          BoxDecoration(color: Colors.white, boxShadow: [
+                        BoxShadow(
+                            color: const Color.fromARGB(146, 0, 0, 0),
+                            blurRadius: 3,
+                            offset: Offset(0, 0))
+                      ]),
                       margin: EdgeInsets.all(10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1824,39 +2116,49 @@ class _LogOutPageState extends State<LogOutPage> {
                       Center(
                         child: ElevatedButton(
                           onPressed: () async {
-                          if (mob_con.text.isNotEmpty) {
-                              setState(() {
-                              loader = true;
-                            });
-                            if (loader) {
-                              bool check_user =
-                                  await Api.mob_check(mob_con.text.trim());
-                              if (!check_user) {
-                                await Api.send_otp(mob_con.text.trim());
-                                // await Api.send_otp(mob_con.text.trim());
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => OtpPage(
-                                              mob_no: mob_con.text,
-                                              priv_screen: "Log_In_Screen",
-                                            )));
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                            if (mob_con.text.isNotEmpty) {
+                              if (mob_con.text.length == 10) {
+                                setState(() {
+                                  loader = true;
+                                });
+                                if (loader) {
+                                  bool check_user =
+                                      await Api.mob_check(mob_con.text.trim());
+                                  if (!check_user) {
+                                    await Api.send_otp(mob_con.text.trim());
+                                    // await Api.send_otp(mob_con.text.trim());
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => OtpPage(
+                                                  mob_no: mob_con.text,
+                                                  priv_screen: "Log_In_Screen",
+                                                )));
+                                    // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                                  } else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => MpinPage(
+                                                  mob_no: mob_con.text.trim(),
+                                                )));
+                                  }
+                                }
+                                setState(() {
+                                  loader = false;
+                                });
                               } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MpinPage(
-                                              mob_no: mob_con.text.trim(),
-                                            )));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            "Please enter proper phone number")));
                               }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text("Please enter phone number")));
                             }
-                            setState(() {
-                              loader = false;
-                            });
-                          }else{
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please enter phone number")));
-                          }
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(

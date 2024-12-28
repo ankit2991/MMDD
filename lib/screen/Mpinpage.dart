@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:mddmerchant/api/api.dart';
 import 'package:mddmerchant/main.dart';
 // import 'package:mddmerchant/Registration/regis.dart';
@@ -358,6 +359,7 @@ class _MpinPageState extends State<MpinPage> {
                                               (value) {
                                                 print(
                                                     Api.prefs.getBool('login'));
+                                                // Get.offAll(HomeScreen);
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -470,11 +472,12 @@ class _MpinPageState extends State<MpinPage> {
                                       Api.prefs.setBool('login', true).then(
                                         (value) {
                                           print(Api.prefs.getBool('login'));
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      HomeScreen()));
+                                          Get.offAll(HomeScreen());
+                                          // Navigator.push(
+                                          //     context,
+                                          //     MaterialPageRoute(
+                                          //         builder: (context) =>
+                                          //             HomeScreen()));
                                         },
                                       );
                                     },

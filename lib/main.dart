@@ -472,6 +472,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       ? GestureDetector(
                                                                           onTap:
                                                                               () async {
+                                                                                
                                                                             setState(
                                                                                 () {
                                                                               loading =
@@ -479,8 +480,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             });
                                                                             Navigator.of(context)
                                                                                 .pop();
-                                                                            print(
-                                                                                submit_data);
+                                                                            print(submit_data);
                                                                             for (var i = 0;
                                                                                 i < submit_data.length;
                                                                                 i++) {
@@ -493,18 +493,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                 0.0;
                                                                             //  String a="\"3000.0\"";
                                                                             //  tot=double.parse(a)+tot;
-                                                                            for (var i = 0;
-                                                                                i < service_data.length;
-                                                                                i++) {
+                                                                            for (var i = 0;i < service_data.length;i++) {
                                                                               if (Total_con[i].text !=
                                                                                   "") {
                                                                                 tot = double.parse(Total_con[i].text) + tot;
                                                                               }
                                                                             }
-                                                                            print(
-                                                                                tot);
-                                                                            if (submit_data
-                                                                                .isNotEmpty) {
+                                                                            print(tot);
+                                                                          
+                                                                            
+                                                                            if (submit_data.isNotEmpty) {
                                                                               await Api.RecipitFacilityInsert(Amount: tot.toString(), EventId: _data[Top_index]["id"].toString(), Remarks: _data[Top_index]["Remarks"].toString(), serviceAdd: submit_data).then(
                                                                                 (value) {
                                                                                   if (value) {
@@ -513,9 +511,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                     Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "TodayEvent").then(
                                                                                       (value) {
                                                                                         _data = value;
-                                                                                        setState(() {
+                                                                                        Api.createPdf(Total: tot.toString(),comp_mob_no: Api.User_info["Table"][0]["MobileNo"],compny_name:Api.User_info["Table"][0]["OrgName"],now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"],cust_name: _data[Top_index]["CustomerName"],event_date: _data[Top_index]["EventStartDate"],event_name: _data[Top_index]["EventName"],data: submit_data).then((value) {
+                                                                                           setState(() {
                                                                                           loading = false;
                                                                                         });
+                                                                                        },);
+                                                                                       
                                                                                         // print(value);
                                                                                       },
                                                                                     );
