@@ -25,12 +25,13 @@ class Api {
   static var User_info;
   static Map<String, dynamic> H_Questions = {};
   static late SharedPreferences prefs;
+  static bool loading = false;
   static Future<void> local_dataBase() async {
     prefs = await SharedPreferences.getInstance();
   }
 
   // -------------------------------------------------------------------------------------------  (send OTP)
-  static Future<void> send_otp(String mob_no) async {
+  static Future<void> send_otp(String mob_no,context) async {
     // String url='https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MobileNo":'"'$mob_no'"',"ApiAdd":"MobileOTP","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MobileOtp';
     String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MobileNo":'
@@ -39,7 +40,8 @@ class Api {
     var res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
       print(res.body);
-      // var data= jsonDecode(res.body);
+      var data= jsonDecode(res.body);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Duplicate data")));
       // log("Done Send OTP API");
       // return data["Table1"][0]["OTPNo"];
     } else {
@@ -218,23 +220,31 @@ class Api {
     }
   }
 
-  static Future<Position> get_loc() async {
+  static Future<Position> get_loc(context,Function loader)async {
     bool serviceEnable = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnable) {
       Geolocator.openLocationSettings();
+      // Geolocator.openAppSettings();
+      ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(content: Text("turn on Location")));
+      loader(false);
       return Future.error("Location services are disabled.");
     }
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        loader(false);
+         ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(content: Text("Location permissions are denied")));
         return Future.error("Location permissions are denied");
       }
     }
     if (permission == LocationPermission.deniedForever) {
+       loader(false);
+       ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(content: Text("Location Permission are permanently denied")));
       return Future.error(
           "Location Permission are permanently denied, we cannot request");
     }
+    //  loader(false);
     return await Geolocator.getCurrentPosition();
   }
 
@@ -447,7 +457,7 @@ class Api {
       {required File? img,
       required String DocType,
       required String ext,
-      required String MemberAgreementUpload_UploadFile2}) async {
+      required String MemberAgreementUpload_UploadFile2,context}) async {
     String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/$MemberAgreementUpload_UploadFile2';
     print(
@@ -468,10 +478,23 @@ class Api {
     request.fields["fileExtention"] = ext;
     var res = await request.send();
     if (res.statusCode == 200) {
+
       log("ImageInsert Api Call.............");
       var data = await res.stream.bytesToString();
       log("ImageInsert Api DATA .............");
       print(data);
+      if(data.contains("R200")){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Duplicate pdf")));
+      }else{
+        if(ext==".pdf"){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("PDF upload Done")));
+        }else if(ext==".mp4"){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Video upload Done")));
+        }else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image upload Done")));
+
+        }
+      }
       // return data["Table1"];
     } else {
       log("Error........ ImageInsert Api ");
@@ -571,7 +594,7 @@ class Api {
     required String EventEndTime,
     required String TotalAmount,
     required String BookingAmount,
-    required String DueAmount,
+    required String DueAmount,context
   }) async {
     String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"Mobile":"$Mobile","CName":"$CName","Email":"$Email","ServiceId":"0","MerchantId":'
@@ -581,12 +604,14 @@ class Api {
     var res = await http.get(Uri.parse(url));
 
     if (res.statusCode == 200) {
+      var data = jsonDecode(res.body);
+      print(data);
+      if (data["Table"][0]["ResultCode"]=="R200") {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Duplicate User")));
+        return false;
+      }
       log("RecipitFacilityInsert Api Call.............");
-      // H_Questions.clear();
-      // H_Questions = jsonDecode(res.body);
-      // print(H_Questions);
       return true;
-      // city_list = data["Table1"];
     } else {
       log("Error........ RecipitFacilityInsert Api ");
       throw ("Error........ RecipitFacilityInsert Api ");
@@ -1139,4 +1164,24 @@ class Api {
       log("Error........ RecipitFacilityInsert Api ");
       throw ("Error........ RecipitFacilityInsert Api ");
     }
-}}
+}
+
+static Future<List<dynamic>> SubscriptionList() async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"ApiAdd":"SubscriptionList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=SubscriptionList';
+    print(url);
+    var res = await http.get(Uri.parse(url));
+
+    if (res.statusCode == 200) {
+      log("SubscriptionList Api Call.............");
+      var data = jsonDecode(res.body);
+      // city_list = data["Table1"];
+      log("SubscriptionList Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ SubscriptionList Api ");
+      throw ("Error........ SubscriptionList Api ");
+    }
+  }
+}

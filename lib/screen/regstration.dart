@@ -40,6 +40,11 @@ class _CheckboxExampleState extends State<RegisTration> {
   var M_pin_con = TextEditingController();
   var ref_code_con = TextEditingController();
   bool loader=false;
+  void loding (bool a){
+    setState(() {
+      loader=a;
+    });
+  }
 
   @override
   void initState() {
@@ -511,7 +516,7 @@ class _CheckboxExampleState extends State<RegisTration> {
                           loader=true;
                         });
                         print("object");
-                        Api.get_loc().then(
+                        Api.get_loc(context,loding).then(
                           (value) {
                             print("----------------------");
                             log("${value.latitude}");

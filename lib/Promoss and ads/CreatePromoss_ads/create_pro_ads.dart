@@ -407,7 +407,7 @@ setState(() {
                     ),
                     onPressed: () {
                       Api.widget_to_img(_globalKey).then((value) {
-                       Api.ImageInsert(img: value,DocType: "3",ext: "."+ext,MemberAgreementUpload_UploadFile2:"UploadFile2" ).then((value) {
+                       Api.ImageInsert(img: value,DocType: "3",ext: "."+ext,MemberAgreementUpload_UploadFile2:"UploadFile2",context: context ).then((value) {
                          widget.refresh();
                          Navigator.of(context).pop();
                        },);

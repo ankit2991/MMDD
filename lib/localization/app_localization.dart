@@ -21,6 +21,7 @@ class AppTranslations extends Translations {
           'Videos':'Videos',
           'My Booking':'My Booking',
           'Questions':'Questions',
+          'Add Booking':'Add Booking'
           
         },
         'hi_IN': {
@@ -35,7 +36,8 @@ class AppTranslations extends Translations {
           'Images':'छवियां',
           'Videos':'वीडियो',
           'My Booking':'मेरी बुकिंग',
-          'Questions':'प्रश्न'
+          'Questions':'प्रश्न',
+          'Add Booking':'बुकिंग जोड़ें'
          
         },
       };

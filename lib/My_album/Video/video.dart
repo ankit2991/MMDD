@@ -200,7 +200,7 @@ class _MyVideoState extends State<MyVideo> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
          Api.pickImage(img: false,source: ImageSource.gallery).then((value) {
-           Api.ImageInsert(DocType: "2",ext:"."+value["ext"],img:value["file"],MemberAgreementUpload_UploadFile2: "UploadFile2").then((value) {
+           Api.ImageInsert(DocType: "2",ext:"."+value["ext"],img:value["file"],MemberAgreementUpload_UploadFile2: "UploadFile2",context: context).then((value) {
              setState(() {
              loader = true;
                

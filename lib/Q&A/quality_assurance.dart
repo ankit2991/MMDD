@@ -26,14 +26,17 @@ class _QualityAssState extends State<QualityAss> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    loader = true;
-    Api.Service_Question_List().then(
-      (value) {
-        setState(() {
-          loader = false;
-        });
-      },
-    );
+    if(Api.H_Questions.isEmpty){
+      
+    }
+    // loader = true;
+    // Api.Service_Question_List().then(
+    //   (value) {
+    //     setState(() {
+    //       loader = false;
+    //     });
+    //   },
+    // );
   }
 
   @override

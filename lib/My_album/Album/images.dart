@@ -217,7 +217,7 @@ class _MyImageState extends State<MyImage> {
                       MemberAgreementUpload_UploadFile2: "UploadFile2",
                       DocType: "1",
                       ext: "." + value["ext"],
-                      img: value["file"])
+                      img: value["file"],context: context)
                   .then(
                 (value) {
                   setState(() {

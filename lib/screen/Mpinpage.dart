@@ -426,7 +426,7 @@ class _MpinPageState extends State<MpinPage> {
                                         setState(() {
                                           loader = true;
                                         });
-                                        await Api.send_otp(widget.mob_no);
+                                        await Api.send_otp(widget.mob_no,context);
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(

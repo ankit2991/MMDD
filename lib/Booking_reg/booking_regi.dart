@@ -158,7 +158,7 @@ class _MyBokingState extends State<MyBoking> {
             );
           },
           label: Text(
-            'Add Bookings',
+            'Add Booking'.tr,
             style: TextStyle(
               fontSize: 13,
               fontFamily: 'Fontmain',

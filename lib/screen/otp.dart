@@ -469,7 +469,7 @@ class _OtpPageState extends State<OtpPage> {
                                       return OTPtimer.value.toString() == "0"
                                           ? GestureDetector(
                                             onTap: ()async{
-                                             await Api.send_otp( widget.mob_no);
+                                             await Api.send_otp( widget.mob_no,context);
                                               OTPtimer.value=30;
                                               n1.clear();
                                               n2.clear();

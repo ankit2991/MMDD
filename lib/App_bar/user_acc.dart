@@ -490,9 +490,9 @@ class Account_Document extends StatelessWidget {
                       File temp = File(value ?? "");
                       Api.ImageInsert(
                           DocType: "4",
-                          MemberAgreementUpload_UploadFile2: "UploadFile2",
+                          MemberAgreementUpload_UploadFile2: "MemberAgreementUpload",
                           ext: ".pdf",
-                          img: temp);
+                          img: temp,context: context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("File not select")));
@@ -2125,7 +2125,7 @@ class _LogOutPageState extends State<LogOutPage> {
                                   bool check_user =
                                       await Api.mob_check(mob_con.text.trim());
                                   if (!check_user) {
-                                    await Api.send_otp(mob_con.text.trim());
+                                    await Api.send_otp(mob_con.text.trim(),context);
                                     // await Api.send_otp(mob_con.text.trim());
                                     Navigator.push(
                                         context,
