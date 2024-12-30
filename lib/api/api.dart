@@ -864,7 +864,7 @@ class Api {
   static Future<bool> Add_Merchant_TremAndCond(
       {required String TermsAndConditions}) async {
     String url =
-        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MemberMasterId":\"${User_info["Table"][0]["Id"].toInt()}\","TermsAndConditions":"1","ApiAdd":"MemberAddTremAndCond","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MemberAddTremAndCond';
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MemberMasterId":\"${User_info["Table"][0]["Id"].toInt()}\","TermsAndConditions":"$TermsAndConditions","ApiAdd":"MemberAddTremAndCond","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MemberAddTremAndCond';
     print(url);
     var res = await http.get(Uri.parse(url));
 
@@ -936,9 +936,11 @@ class Api {
       required String cust_mob_no,
       required String cust_name,
       required String Total,
-      required List<Map> data}) async {
+      required List<Map> data,required bool add_service,String Amount="",String Advance_Amount="",String Du_Amount=""}  ) async {
     // Create a PDF document
     final pdf = pw.Document();
+     final fontData = await rootBundle.load('assets/fonts/Poppins/Poppins-SemiBold.ttf');
+    final ttf = pw.Font.ttf(fontData);
     List<pw.TableRow> Rows = [
       pw.TableRow(
         decoration: pw.BoxDecoration(color: PdfColors.grey300),
@@ -971,7 +973,8 @@ class Api {
         ],
       ),
     ];
-
+if(add_service){
+  
     for (var i = 0; i < data.length; i++) {
       try {
          Rows.add(pw.TableRow(
@@ -1013,9 +1016,10 @@ class Api {
         continue;
       }
         }
+}
     // Add a page
     pdf.addPage(pw.Page(
-        pageFormat: PdfPageFormat.a4,
+        // pageFormat: PdfPageFormat.a4,
         margin: pw.EdgeInsets.only(top: 20, left: 10, right: 10),
         build: (pw.Context context) => pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -1106,6 +1110,32 @@ class Api {
                       ])),
                 ]),
                 pw.SizedBox(height: 5),
+                if(add_service==false)
+                pw.Container(
+                  alignment: pw.Alignment.centerLeft,
+                  height: 60,width: double.infinity,child: pw.Column(
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                    children: [
+                  pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [pw.Text("Total Amount"),pw.Text("₹${Total}",style: pw.TextStyle(fontWeight: pw.FontWeight.bold,font: ttf)),]),
+                  pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [pw.Text("Today Amount",),pw.Text("₹${Amount}",style: pw.TextStyle(fontWeight: pw.FontWeight.bold,font: ttf)),]),
+                  pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [pw.Text("Advance Amount"),pw.Text("${Advance_Amount}",style: pw.TextStyle(fontWeight: pw.FontWeight.bold,font: ttf)),])
+                ],)),
+                if(add_service==false)
+                pw.Container(
+                  margin: pw.EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                  height: 40,
+                  width: double.maxFinite,
+                  alignment: pw.Alignment.center,
+                  color:  PdfColors.blue,
+                  child: pw.Text("Due Amount: ₹${Du_Amount}",style: pw.TextStyle(color: PdfColors.white,fontSize: 20,font: ttf))
+                ),
+                if(add_service)
                 pw.Table(
                   border: pw.TableBorder.all(
                       color: PdfColor(.5, .5, .5)), // Add border to the table
@@ -1118,6 +1148,7 @@ class Api {
                     4: pw.FlexColumnWidth(1), // Flexible width for column 3
                   },
                   children: Rows,    ),
+                if(add_service)
                 pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
@@ -1126,10 +1157,7 @@ class Api {
                       pw.Text(Total,
                           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                     ]),
-                pw.Text(
-                  '',
-                  style: pw.TextStyle(fontSize: 18),
-                ),
+                
                 pw.Text("Terms & Conditions:"),
                 pw.Text(cust_name,
                     style: pw.TextStyle(color: PdfColor(0.5, 0.5, 0.5))),
@@ -1137,7 +1165,9 @@ class Api {
             )));
     final directory = Directory('/storage/emulated/0/Download');
     final file = File("${directory!.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
+    
     await file.writeAsBytes(await pdf.save());
+    OpenFilex.open(file.path);
     log("Save done");
   }
    // ____________________________________________________________________   (FacilityDiscountInsert )
@@ -1182,6 +1212,19 @@ static Future<List<dynamic>> SubscriptionList() async {
     } else {
       log("Error........ SubscriptionList Api ");
       throw ("Error........ SubscriptionList Api ");
+    }
+  }
+  static Future<Map> get_Merchent_Trem_And_Condition()async{
+      String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MerchantId":\"${User_info["Table"][0]["Id"].toInt()}\","ApiAdd":"MerchentTNC","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MerchentTNC';
+    print(url);
+    var res = await http.get(Uri.parse(url));
+    if(res.statusCode==200){
+      log("get_Merchent_Trem_And_Condition Api call.....");
+       var data = jsonDecode(res.body);
+       return data;
+    }else{
+      throw "Error:- get_Merchent_Trem_And_Condition";
     }
   }
 }

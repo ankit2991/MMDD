@@ -30,6 +30,7 @@ dependencies:
   url_launcher: ^6.3.1
   flutter_rating_bar: ^4.0.1
   pdf: ^3.11.1
+  syncfusion_flutter_pdfviewer: ^28.1.36
   # google_fonts: ^6.2.1
 
 dev_dependencies:

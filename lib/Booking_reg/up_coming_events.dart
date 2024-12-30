@@ -27,6 +27,12 @@ class _UpComingEventsState extends State<UpComingEvents> {
   var amount_con = TextEditingController();
   var Payment_remark_con = TextEditingController();
   bool loder = false;
+  void ref(bool a) {
+    setState(() {
+      loder = a;
+    });
+  }
+
   bool service_data_loder = false;
   void initState() {
     // TODO: implement initState
@@ -88,8 +94,8 @@ class _UpComingEventsState extends State<UpComingEvents> {
         ),
         body: Stack(
           children: [
-            loder
-                ? Text("")
+            loder || _data.isEmpty
+                ? Center(child: Text("No data"))
                 : ListView.builder(
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                     itemCount: _data.length,
@@ -198,424 +204,403 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                       context: context,
                                       builder: (context) {
                                         print(service_data);
-                                        return Padding(
-                                          padding: EdgeInsets.only(
-                                            bottom: MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom,
-                                          ),
-                                          child: Container(
-                                            height: MediaQuery.sizeOf(context)
-                                                    .height /
-                                                2,
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            child: Column(
-                                              children: [
-                                                AppBar(
-                                                  title: Text('Add Service',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              'Fontmain',
-                                                          fontSize: 15)),
-                                                  backgroundColor:
-                                                      Color(0xffC4A68B),
-                                                  centerTitle: true,
-                                                  leading: IconButton(
-                                                    icon:
-                                                        Icon(Icons.arrow_back),
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    color: Colors
-                                                        .white, // Change the color of the icon
-                                                    iconSize:
-                                                        30.0, // Adjust the size of the icon
-                                                  ),
-                                                ),
-                                                Container(
-                                                  height:
-                                                      (MediaQuery.of(context)
+                                        List<bool> save = [];
+                                        return StatefulBuilder(
+                                          builder: (context, setState) {
+                                            return Padding(
+                                              padding: EdgeInsets.only(
+                                                bottom: MediaQuery.of(context)
+                                                    .viewInsets
+                                                    .bottom,
+                                              ),
+                                              child: Container(
+                                                height:
+                                                    MediaQuery.sizeOf(context)
+                                                            .height /
+                                                        2,
+                                                color: const Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                child: Column(
+                                                  children: [
+                                                    AppBar(
+                                                      title: Text('Add Service',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily:
+                                                                  'Fontmain',
+                                                              fontSize: 15)),
+                                                      backgroundColor:
+                                                          Color(0xffC4A68B),
+                                                      centerTitle: true,
+                                                      leading: IconButton(
+                                                        icon: Icon(
+                                                            Icons.arrow_back),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        color: Colors
+                                                            .white, // Change the color of the icon
+                                                        iconSize:
+                                                            30.0, // Adjust the size of the icon
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      height: (MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .height /
                                                               2) -
                                                           58,
-                                                  child: ListView.builder(
-                                                    // physics: NeverScrollableScrollPhysics(),
-                                                    shrinkWrap: true,
-                                                    itemCount:
-                                                        service_data.length + 1,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      select_Facility
-                                                          .add(false);
-                                                      Quantity_con.add(
-                                                          TextEditingController());
-                                                      remark_con.add(
-                                                          TextEditingController());
-                                                      Total_con.add(
-                                                          TextEditingController());
+                                                      child: ListView.builder(
+                                                        // physics: NeverScrollableScrollPhysics(),
+                                                        shrinkWrap: true,
+                                                        itemCount: service_data
+                                                                .length +
+                                                            1,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          save.add(true);
 
-                                                      ValueNotifier<bool>
-                                                          check = ValueNotifier(
-                                                              select_Facility[
-                                                                  index]);
-                                                      var price_con =
-                                                          TextEditingController();
-                                                      if (service_data.length >
-                                                          index) {
-                                                        price_con.text =
-                                                            service_data[index]
-                                                                    ["Amount"]
-                                                                .toString();
-                                                      }
+                                                          select_Facility
+                                                              .add(false);
+                                                          Quantity_con.add(
+                                                              TextEditingController());
+                                                          remark_con.add(
+                                                              TextEditingController());
+                                                          Total_con.add(
+                                                              TextEditingController());
 
-                                                      // var quentity_con =
-                                                      //     TextEditingController();
-                                                      // var remark_con =
-                                                      //     TextEditingController();
-                                                      // var total_con =
-                                                      // TextEditingController();
-                                                      // bool check=false;
-                                                      return service_data
-                                                                  .length <=
-                                                              index
-                                                          ? GestureDetector(
-                                                              onTap: () async {
-                                                                setState(() {
-                                                                  loder = true;
-                                                                });
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                                print(
-                                                                    submit_data);
-                                                                for (var i = 0;
-                                                                    i <
+                                                          ValueNotifier<bool>
+                                                              check =
+                                                              ValueNotifier(
+                                                                  select_Facility[
+                                                                      index]);
+                                                          var price_con =
+                                                              TextEditingController();
+                                                          if (service_data
+                                                                  .length >
+                                                              index) {
+                                                            price_con.text =
+                                                                service_data[
+                                                                            index]
+                                                                        [
+                                                                        "Amount"]
+                                                                    .toString();
+                                                          }
+
+                                                          // var quentity_con =
+                                                          //     TextEditingController();
+                                                          // var remark_con =
+                                                          //     TextEditingController();
+                                                          // var total_con =
+                                                          // TextEditingController();
+                                                          // bool check=false;
+                                                          return service_data
+                                                                      .length <=
+                                                                  index
+                                                              ? GestureDetector(
+                                                                  onTap:
+                                                                      () async {
+                                                                    setState(
+                                                                        () {
+                                                                      loder =
+                                                                          true;
+                                                                    });
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                    print(
+                                                                        submit_data);
+                                                                    for (var i =
+                                                                            0;
+                                                                        i < submit_data.length;
+                                                                        i++) {
+                                                                      if (submit_data[i]
+                                                                              .length <=
+                                                                          2) {
                                                                         submit_data
-                                                                            .length;
-                                                                    i++) {
-                                                                  if (submit_data[
-                                                                              i]
-                                                                          .length <=
-                                                                      2) {
-                                                                    submit_data
-                                                                        .removeAt(
-                                                                            i);
-                                                                  }
-                                                                }
-                                                                var tot = 0.0;
-                                                                //  String a="\"3000.0\"";
-                                                                //  tot=double.parse(a)+tot;
-                                                                for (var i = 0;
-                                                                    i <
-                                                                        service_data
-                                                                            .length;
-                                                                    i++) {
-                                                                  if (Total_con[
-                                                                              i]
-                                                                          .text !=
-                                                                      "") {
-                                                                    tot = double.parse(
-                                                                            Total_con[i].text) +
-                                                                        tot;
-                                                                  }
-                                                                }
-                                                                print(tot);
-                                                                if (submit_data
-                                                                    .isNotEmpty) {
-                                                                  await Api.RecipitFacilityInsert(
-                                                                          Amount: tot
-                                                                              .toString(),
-                                                                          EventId: _data[Top_index]["id"]
-                                                                              .toString(),
-                                                                          Remarks: _data[Top_index]["Remarks"]
-                                                                              .toString(),
-                                                                          serviceAdd:
-                                                                              submit_data)
-                                                                      .then(
-                                                                    (value) {
-                                                                      if (value) {
-                                                                        _data
-                                                                            .clear();
-                                                                        if (widget
-                                                                            .prev) {
-                                                                          Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "CompleteEvent")
-                                                                              .then(
-                                                                            (value) {
-                                                                              _data = value;
-                                                                              setState(() {
-                                                                                loder = false;
-                                                                              });
-                                                                              // print(value);
-                                                                            },
-                                                                          );
-                                                                        } else {
-                                                                          Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "UpcomingEvent")
-                                                                              .then(
-                                                                            (value) {
-                                                                              _data = value;
-                                                                              setState(() {
-                                                                                loder = false;
-                                                                              });
-                                                                              // print(value);
-                                                                            },
-                                                                          );
-                                                                        }
+                                                                            .removeAt(i);
                                                                       }
-                                                                    },
-                                                                  );
-                                                                } else {
-                                                                  setState(() {
-                                                                    loder =
-                                                                        false;
-                                                                  });
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .showSnackBar(SnackBar(
-                                                                          content:
-                                                                              Text("please select services")));
-                                                                }
-                                                              },
-                                                              child: Container(
-                                                                height: 50,
-                                                                margin: EdgeInsets
-                                                                    .symmetric(
+                                                                    }
+                                                                    var tot =
+                                                                        0.0;
+                                                                    //  String a="\"3000.0\"";
+                                                                    //  tot=double.parse(a)+tot;
+                                                                    for (var i =
+                                                                            0;
+                                                                        i < service_data.length;
+                                                                        i++) {
+                                                                      if (Total_con[i]
+                                                                              .text !=
+                                                                          "") {
+                                                                        tot = double.parse(Total_con[i].text) +
+                                                                            tot;
+                                                                      }
+                                                                    }
+                                                                    print(tot);
+                                                                    print(
+                                                                        submit_data);
+
+                                                                    if (submit_data
+                                                                        .isNotEmpty) {
+                                                                      await Api.RecipitFacilityInsert(
+                                                                              Amount: tot.toString(),
+                                                                              EventId: _data[Top_index]["id"].toString(),
+                                                                              Remarks: _data[Top_index]["Remarks"].toString(),
+                                                                              serviceAdd: submit_data)
+                                                                          .then(
+                                                                        (value) {
+                                                                          if (value) {
+                                                                            _data.clear();
+
+                                                                            Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "UpcomingEvent").then(
+                                                                              (value) {
+                                                                                _data = value;
+                                                                                Api.createPdf(Total: tot.toString(), comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"], cust_name: _data[Top_index]["CustomerName"], event_date: _data[Top_index]["EventStartDate"], event_name: _data[Top_index]["EventName"], data: submit_data, add_service: true).then(
+                                                                                  (value) {
+                                                                                    ref(false);
+                                                                                  },
+                                                                                );
+
+                                                                                // print(value);
+                                                                              },
+                                                                            );
+                                                                          }
+                                                                        },
+                                                                      );
+                                                                    } else {
+                                                                      setState(
+                                                                          () {
+                                                                        loder =
+                                                                            false;
+                                                                      });
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                              SnackBar(content: Text("palce select services")));
+                                                                    }
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    height: 50,
+                                                                    margin: EdgeInsets.symmetric(
                                                                         horizontal:
                                                                             10,
                                                                         vertical:
                                                                             5),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                color: Color(
-                                                                    0xffC4A68B),
-                                                                child: Text(
-                                                                  "Submit",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontFamily:
-                                                                          "Fontmain"),
-                                                                ),
-                                                              ),
-                                                            )
-                                                          : ValueListenableBuilder(
-                                                              valueListenable:
-                                                                  check,
-                                                              builder: (context,
-                                                                  value,
-                                                                  child) {
-                                                                return Container(
-                                                                  // height: 100,
-                                                                  margin:
-                                                                      EdgeInsets
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    color: Color(
+                                                                        0xffC4A68B),
+                                                                    child: Text(
+                                                                      "Submit",
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontFamily:
+                                                                              "Fontmain"),
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              : ValueListenableBuilder(
+                                                                  valueListenable:
+                                                                      check,
+                                                                  builder:
+                                                                      (context,
+                                                                          value,
+                                                                          child) {
+                                                                    return Container(
+                                                                      // height: 100,
+                                                                      margin: EdgeInsets
                                                                           .all(
                                                                               10),
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
+                                                                      padding:
+                                                                          EdgeInsets.all(
                                                                               10),
-                                                                  decoration: BoxDecoration(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      borderRadius: BorderRadius.circular(5),
-                                                                      boxShadow: [
-                                                                        BoxShadow(
-                                                                            blurRadius:
-                                                                                2,
-                                                                            color:
-                                                                                Colors.black,
-                                                                            offset: Offset(0, 2))
-                                                                      ]),
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Row(
+                                                                      decoration: BoxDecoration(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          borderRadius: BorderRadius.circular(5),
+                                                                          boxShadow: [
+                                                                            BoxShadow(
+                                                                                blurRadius: 2,
+                                                                                color: Colors.black,
+                                                                                offset: Offset(0, 2))
+                                                                          ]),
+                                                                      child:
+                                                                          Column(
                                                                         children: [
-                                                                          Checkbox(
-                                                                            value:
-                                                                                value,
-                                                                            onChanged:
-                                                                                (value) {
-                                                                              select_Facility.remove(index);
-                                                                              select_Facility.insert(index, check.value ? false : true);
-                                                                              check.value = check.value ? false : true;
-                                                                              if (check.value) {
-                                                                                submit_data.add({
-                                                                                  "\"Id\"": "\"${service_data[index]["Id"]}\""
-                                                                                });
-                                                                              } else {
-                                                                                // ________________________________________________   Search element on list of map
-                                                                                int element_index = submit_data.indexWhere((map) => map["Id"] == "\"${service_data[index]["Id"].toString()}\"");
-                                                                                print(element_index);
-                                                                                submit_data.removeAt(element_index);
-                                                                                print(submit_data);
-                                                                              }
-                                                                            },
+                                                                          Row(
+                                                                            children: [
+                                                                              Checkbox(
+                                                                                value: value,
+                                                                                onChanged: (value) {
+                                                                                  select_Facility.remove(index);
+                                                                                  select_Facility.insert(index, check.value ? false : true);
+                                                                                  check.value = check.value ? false : true;
+                                                                                  if (check.value) {
+                                                                                    submit_data.add({
+                                                                                      "\"Id\"": "\"${service_data[index]["Id"]}\""
+                                                                                    });
+                                                                                    save.removeAt(index);
+                                                                                    save.insert(index, true);
+                                                                                  } else {
+                                                                                    // ________________________________________________   Search element on list of map
+                                                                                    int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"].toString()}\"");
+                                                                                    print(element_index);
+                                                                                    submit_data.removeAt(element_index);
+                                                                                    save.removeAt(index);
+                                                                                    save.insert(index, false);
+                                                                                    print(submit_data);
+                                                                                  }
+                                                                                },
+                                                                              ),
+                                                                              Text(
+                                                                                service_data[index]["FacilityName"],
+                                                                                style: TextStyle(fontFamily: "Fontmain"),
+                                                                              ),
+                                                                            ],
                                                                           ),
-                                                                          Text(
-                                                                            service_data[index]["FacilityName"],
-                                                                            style:
-                                                                                TextStyle(fontFamily: "Fontmain"),
+                                                                          Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceAround,
+                                                                            children: [
+                                                                              Container(
+                                                                                width: (MediaQuery.of(context).size.width / 3) - 20,
+                                                                                // color: Colors.amber,
+                                                                                margin: EdgeInsets.only(bottom: 5),
+                                                                                child: IgnorePointer(
+                                                                                  ignoring: check.value ? false : true,
+                                                                                  child: TextFormField(
+                                                                                    controller: Quantity_con[index],
+                                                                                    onChanged: (value) {
+                                                                                      if (value.isNotEmpty && value != " " && int.parse(value) > 0) {
+                                                                                        Total_con[index].text = (int.parse(value) * service_data[index]["Amount"]).toString();
+                                                                                        // submit_data.removeAt(index);
+                                                                                        // submit_data.insert(index, {"Id":"\"${service_data[index]["Id"]}\"","Name":"\"${service_data[index]["FacilityName"]}\"","Quantity":"\"${Quantity_con[index].text.trim()}\"","Price":"\"${price_con.text.trim()}\"","Total":"\"${total_con.text.trim()}\"","Remark":"\"${remark_con[index].text.trim()}\""});
+                                                                                      } else {
+                                                                                        Total_con[index].clear();
+                                                                                      }
+                                                                                    },
+                                                                                    keyboardType: TextInputType.number,
+                                                                                    style: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
+                                                                                    decoration: InputDecoration(label: Text("Quantity"), labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              Container(
+                                                                                width: (MediaQuery.of(context).size.width / 3) - 20,
+                                                                                // color: Colors.amber,
+                                                                                margin: EdgeInsets.only(bottom: 5),
+                                                                                child: IgnorePointer(
+                                                                                  ignoring: true,
+                                                                                  child: TextFormField(
+                                                                                    controller: price_con,
+                                                                                    keyboardType: TextInputType.number,
+                                                                                    style: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
+                                                                                    decoration: InputDecoration(labelText: "price", labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              Container(
+                                                                                width: (MediaQuery.of(context).size.width / 3) - 20,
+                                                                                // color: Colors.amber,
+                                                                                margin: EdgeInsets.only(bottom: 5),
+                                                                                child: IgnorePointer(
+                                                                                  ignoring: true,
+                                                                                  child: TextFormField(
+                                                                                    controller: Total_con[index],
+                                                                                    style: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
+                                                                                    keyboardType: TextInputType.number,
+                                                                                    decoration: InputDecoration(labelText: "Total", labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
                                                                           ),
-                                                                        ],
-                                                                      ),
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceAround,
-                                                                        children: [
                                                                           Container(
-                                                                            width:
-                                                                                (MediaQuery.of(context).size.width / 3) - 20,
-                                                                            // color: Colors.amber,
                                                                             margin:
                                                                                 EdgeInsets.only(bottom: 5),
                                                                             child:
                                                                                 IgnorePointer(
                                                                               ignoring: check.value ? false : true,
                                                                               child: TextFormField(
-                                                                                controller: Quantity_con[index],
-                                                                                onChanged: (value) {
-                                                                                  if (value.isNotEmpty && value != " " && int.parse(value) > 0) {
-                                                                                    Total_con[index].text = (int.parse(value) * service_data[index]["Amount"]).toString();
-                                                                                    // submit_data.removeAt(index);
-                                                                                    // submit_data.insert(index, {"Id":"\"${service_data[index]["Id"]}\"","Name":"\"${service_data[index]["FacilityName"]}\"","Quantity":"\"${Quantity_con[index].text.trim()}\"","Price":"\"${price_con.text.trim()}\"","Total":"\"${total_con.text.trim()}\"","Remark":"\"${remark_con[index].text.trim()}\""});
-                                                                                  } else {
-                                                                                    Total_con[index].clear();
-                                                                                  }
-                                                                                },
-                                                                                keyboardType: TextInputType.number,
+                                                                                controller: remark_con[index],
                                                                                 style: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
-                                                                                decoration: InputDecoration(label: Text("Quantity"), labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
+                                                                                decoration: InputDecoration(labelText: "remark", labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)))),
                                                                               ),
                                                                             ),
                                                                           ),
-                                                                          Container(
-                                                                            width:
-                                                                                (MediaQuery.of(context).size.width / 3) - 20,
-                                                                            // color: Colors.amber,
-                                                                            margin:
-                                                                                EdgeInsets.only(bottom: 5),
-                                                                            child:
-                                                                                IgnorePointer(
-                                                                              ignoring: true,
-                                                                              child: TextFormField(
-                                                                                controller: price_con,
-                                                                                keyboardType: TextInputType.number,
-                                                                                style: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
-                                                                                decoration: InputDecoration(labelText: "price", labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Container(
-                                                                            width:
-                                                                                (MediaQuery.of(context).size.width / 3) - 20,
-                                                                            // color: Colors.amber,
-                                                                            margin:
-                                                                                EdgeInsets.only(bottom: 5),
-                                                                            child:
-                                                                                IgnorePointer(
-                                                                              ignoring: true,
-                                                                              child: TextFormField(
-                                                                                controller: Total_con[index],
-                                                                                style: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
-                                                                                keyboardType: TextInputType.number,
-                                                                                decoration: InputDecoration(labelText: "Total", labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145))), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: const Color.fromARGB(255, 146, 145, 145)))),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      Container(
-                                                                        margin: EdgeInsets.only(
-                                                                            bottom:
-                                                                                5),
-                                                                        child:
-                                                                            IgnorePointer(
-                                                                          ignoring: check.value
-                                                                              ? false
-                                                                              : true,
-                                                                          child:
-                                                                              TextFormField(
-                                                                            controller:
-                                                                                remark_con[index],
-                                                                            style:
-                                                                                TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
-                                                                            decoration: InputDecoration(
-                                                                                labelText: "remark",
-                                                                                labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)),
-                                                                                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145))),
-                                                                                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 66, 65, 65) : const Color.fromARGB(255, 146, 145, 145)))),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.end,
-                                                                        children: [
-                                                                          Container(
-                                                                            margin:
-                                                                                EdgeInsets.symmetric(vertical: 10),
-                                                                            height:
-                                                                                50,
-                                                                            width:
-                                                                                100,
-                                                                            alignment:
-                                                                                Alignment.center,
-                                                                            color: check.value
-                                                                                ? Color(0xffC4A68B)
-                                                                                : Color.fromARGB(139, 196, 166, 139),
-                                                                            child:
-                                                                                GestureDetector(
-                                                                              onTap: () {
-                                                                                if (Quantity_con[index].text.isNotEmpty && int.parse(Quantity_con[index].text) >= 1) {
-                                                                                  try {
-                                                                                    int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
-                                                                                    submit_data[element_index] = {
-                                                                                      "\"Id\"": "\"${service_data[index]["Id"]}\"",
-                                                                                      "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
-                                                                                      "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
-                                                                                      "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
-                                                                                      "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
-                                                                                      "\"Remark\"": "\"${remark_con[index].text.trim()}\""
-                                                                                    };
-                                                                                  } catch (e) {
-                                                                                    int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
-                                                                                    submit_data[element_index] = {
-                                                                                      "\"Id\"": "\"${service_data[index]["Id"]}\"",
-                                                                                      "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
-                                                                                      "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
-                                                                                      "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
-                                                                                      "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
-                                                                                      "\"Remark\"": "\"${remark_con[index].text.trim()}\""
-                                                                                    };
-                                                                                  }
-                                                                                  // submit_data.removeAt(element_index);
+                                                                          Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.end,
+                                                                              children: [
+                                                                                if (save[index])
+                                                                                  Container(
+                                                                                      margin: EdgeInsets.symmetric(vertical: 10),
+                                                                                      height: 50,
+                                                                                      width: 100,
+                                                                                      alignment: Alignment.center,
+                                                                                      color: check.value ? Color(0xffC4A68B) : Color.fromARGB(139, 196, 166, 139),
+                                                                                      child: GestureDetector(
+                                                                                        onTap: () {
+                                                                                          if (Quantity_con[index].text.isNotEmpty && int.parse(Quantity_con[index].text) >= 1) {
+                                                                                            try {
+                                                                                              int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
+                                                                                              submit_data[element_index] = {
+                                                                                                "\"Id\"": "\"${service_data[index]["Id"]}\"",
+                                                                                                "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
+                                                                                                "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
+                                                                                                "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
+                                                                                                "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
+                                                                                                "\"Remark\"": "\"${remark_con[index].text.trim()}\""
+                                                                                              };
+                                                                                              setState(() {
+                                                                                                save.removeAt(index);
+                                                                                                save.insert(index, false);
+                                                                                              });
+                                                                                            } catch (e) {
+                                                                                              int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
+                                                                                              submit_data[element_index] = {
+                                                                                                "\"Id\"": "\"${service_data[index]["Id"]}\"",
+                                                                                                "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
+                                                                                                "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
+                                                                                                "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
+                                                                                                "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
+                                                                                                "\"Remark\"": "\"${remark_con[index].text.trim()}\""
+                                                                                              };
+                                                                                              setState(() {
+                                                                                                save.removeAt(index);
+                                                                                                save.insert(index, false);
+                                                                                              });
+                                                                                            }
+                                                                                            // submit_data.removeAt(element_index);
 
-                                                                                  // submit_data.insert(index, );
-                                                                                  print(remark_con[index].text);
-                                                                                }
-                                                                              },
-                                                                              child: Text(
-                                                                                "SAVE",
-                                                                                style: TextStyle(fontFamily: "Fontmain", color: Colors.white),
-                                                                              ),
-                                                                            ),
-                                                                          )
+                                                                                            // submit_data.insert(index, );
+                                                                                            print(remark_con[index].text);
+                                                                                          }
+                                                                                        },
+                                                                                        child: Text(
+                                                                                          "SAVE",
+                                                                                          style: TextStyle(fontFamily: "Fontmain", color: Colors.white),
+                                                                                        ),
+                                                                                      ))
+                                                                              ])
                                                                         ],
-                                                                      )
-                                                                    ],
-                                                                  ),
+                                                                      ),
+                                                                    );
+                                                                  },
                                                                 );
-                                                              },
-                                                            );
-                                                    },
-                                                  ),
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                          ),
+                                              ),
+                                            );
+                                          },
                                         );
                                       },
                                     );
@@ -672,8 +657,8 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                       Color(0xffC4A68B),
                                                   centerTitle: true,
                                                   leading: IconButton(
-                                                    icon: Icon(
-                                                        Icons.arrow_back),
+                                                    icon:
+                                                        Icon(Icons.arrow_back),
                                                     onPressed: () {
                                                       Navigator.pop(context);
                                                     },
@@ -685,10 +670,8 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                 ),
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.all(
-                                                          8.0),
-                                                  child:
-                                                      SingleChildScrollView(
+                                                      const EdgeInsets.all(8.0),
+                                                  child: SingleChildScrollView(
                                                     child: Container(
                                                       child: Column(
                                                         spacing: 10,
@@ -749,25 +732,29 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                     child:
                                                                         Column(
                                                                       crossAxisAlignment:
-                                                                          CrossAxisAlignment.end,
+                                                                          CrossAxisAlignment
+                                                                              .end,
                                                                       children: [
                                                                         if (_data[Top_index]["TotalAmount"] !=
                                                                             null)
                                                                           Text(
                                                                             "Total Amount : ₹ ${_data[Top_index]["TotalAmount"]}",
-                                                                            style: TextStyle(fontFamily: 'Fontmain', fontSize: 10),
+                                                                            style:
+                                                                                TextStyle(fontFamily: 'Fontmain', fontSize: 10),
                                                                           ),
                                                                         if (_data[Top_index]["BookingAmount"] !=
                                                                             null)
                                                                           Text(
                                                                             "Advance Amount : ₹ ${_data[Top_index]["BookingAmount"]}",
-                                                                            style: TextStyle(fontFamily: 'Fontmain', fontSize: 10),
+                                                                            style:
+                                                                                TextStyle(fontFamily: 'Fontmain', fontSize: 10),
                                                                           ),
                                                                         if (_data[Top_index]["DueAmount"] !=
                                                                             null)
                                                                           Text(
                                                                             "Due Amount : ₹ ${_data[Top_index]["DueAmount"]}",
-                                                                            style: TextStyle(fontFamily: 'Fontmain', fontSize: 10),
+                                                                            style:
+                                                                                TextStyle(fontFamily: 'Fontmain', fontSize: 10),
                                                                           ),
                                                                       ],
                                                                     ),
@@ -812,7 +799,8 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                           BorderRadius.circular(
                                                                               5),
                                                                       borderSide:
-                                                                          BorderSide(color: Colors.black))),
+                                                                          BorderSide(
+                                                                              color: Colors.black))),
                                                             ),
                                                           ),
                                                           Container(
@@ -835,78 +823,132 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                           BorderRadius.circular(
                                                                               5),
                                                                       borderSide:
-                                                                          BorderSide(color: Colors.black))),
+                                                                          BorderSide(
+                                                                              color: Colors.black))),
                                                             ),
                                                           ),
                                                           GestureDetector(
                                                             onTap: () async {
-                                                              if (amount_con.text.isNotEmpty) {
+                                                              if (amount_con
+                                                                  .text
+                                                                  .isNotEmpty) {
                                                                 Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                              setState(() {
-                                                                loder = true;
-                                                              });
-                                                              await Api.RecipitInsert(
-                                                                      Amount: amount_con
-                                                                          .text
-                                                                          .trim(),
-                                                                      Remark: Payment_remark_con
-                                                                          .text
-                                                                          .trim(),
-                                                                      Event_id: _data[Top_index]["id"]
-                                                                          .toInt()
-                                                                          .toString())
-                                                                  .then(
-                                                                (value) {
-                                                                  if (widget
-                                                                      .prev) {
-                                                                    Api.EventBookingDetailsList(
-                                                                            Is_booking: "1",
-                                                                            Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "CompleteEvent")
-                                                                        .then(
-                                                                      (value) {
-                                                                        _data
-                                                                            .clear();
-                                                                        _data =
-                                                                            value;
-                                                                        setState(
-                                                                            () {
-                                                                          loder =
-                                                                              false;
-                                                                        });
-                                                                        // print(value);
-                                                                      },
-                                                                    );
-                                                                  } else {
-                                                                    Api.EventBookingDetailsList(
-                                                                            Is_booking: "1",
-                                                                            Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "UpcomingEvent")
-                                                                        .then(
-                                                                      (value) {
-                                                                        _data
-                                                                            .clear();
-                                                                        _data =
-                                                                            value;
-                                                                        setState(
-                                                                            () {
-                                                                          loder =
-                                                                              false;
-                                                                        });
-                                                                        // print(value);
-                                                                      },
-                                                                    );
-                                                                  }
-                                                                },
-                                                              );
-                                                              amount_con
-                                                                  .clear();
-                                                              remark_con
-                                                                  .clear();
-                                          
-                                                              }else{
-                                                                Navigator.of(context).pop();
-                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("please enter amount")));
+                                                                        context)
+                                                                    .pop();
+                                                                setState(() {
+                                                                  loder = true;
+                                                                });
+                                                                await Api.RecipitInsert(
+                                                                        Amount: amount_con
+                                                                            .text
+                                                                            .trim(),
+                                                                        Remark: Payment_remark_con
+                                                                            .text
+                                                                            .trim(),
+                                                                        Event_id: _data[Top_index]["id"]
+                                                                            .toInt()
+                                                                            .toString())
+                                                                    .then(
+                                                                  (value) {
+                                                                    if (widget
+                                                                        .prev) {
+                                                                      Api.createPdf(
+                                                                        Total: _data[Top_index]
+                                                                            [
+                                                                            "TotalAmount"],
+                                                                        comp_mob_no:
+                                                                            Api.User_info["Table"][0]["MobileNo"],
+                                                                        compny_name:
+                                                                            Api.User_info["Table"][0]["OrgName"],
+                                                                        now_Date:
+                                                                            "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
+                                                                        cust_mob_no:
+                                                                            _data[Top_index]["MobileNo"],
+                                                                        cust_name:
+                                                                            _data[Top_index]["CustomerName"],
+                                                                        event_date:
+                                                                            _data[Top_index]["EventStartDate"],
+                                                                        event_name:
+                                                                            _data[Top_index]["EventName"],
+                                                                        data: [],
+                                                                        add_service:
+                                                                            false,
+                                                                        Amount:
+                                                                            amount_con.text,
+                                                                        Du_Amount:
+                                                                            _data[Top_index]["DueAmount"],
+                                                                      ).then(
+                                                                        (value) {
+                                                                          Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "CompleteEvent")
+                                                                              .then(
+                                                                            (value) {
+                                                                              _data.clear();
+
+                                                                              _data = value;
+                                                                              setState(() {
+                                                                                loder = false;
+                                                                              });
+                                                                              // print(value);
+                                                                            },
+                                                                          );
+                                                                        },
+                                                                      );
+                                                                    } else {
+                                                                      Api.createPdf(
+                                                                        Total: _data[Top_index]
+                                                                            [
+                                                                            "TotalAmount"],
+                                                                        comp_mob_no:
+                                                                            Api.User_info["Table"][0]["MobileNo"],
+                                                                        compny_name:
+                                                                            Api.User_info["Table"][0]["OrgName"],
+                                                                        now_Date:
+                                                                            "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
+                                                                        cust_mob_no:
+                                                                            _data[Top_index]["MobileNo"],
+                                                                        cust_name:
+                                                                            _data[Top_index]["CustomerName"],
+                                                                        event_date:
+                                                                            _data[Top_index]["EventStartDate"],
+                                                                        event_name:
+                                                                            _data[Top_index]["EventName"],
+                                                                        data: [],
+                                                                        add_service:
+                                                                            false,
+                                                                        Amount:
+                                                                            amount_con.text,
+                                                                        Du_Amount:
+                                                                            _data[Top_index]["DueAmount"],
+                                                                      ).then(
+                                                                        (value) {
+                                                                          Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "UpcomingEvent")
+                                                                              .then(
+                                                                            (value) {
+                                                                              _data.clear();
+
+                                                                              _data = value;
+                                                                              amount_con.clear();
+                                                                              remark_con.clear();
+                                                                              setState(() {
+                                                                                loder = false;
+                                                                              });
+                                                                              // print(value);
+                                                                            },
+                                                                          );
+                                                                        },
+                                                                      );
+                                                                    }
+                                                                  },
+                                                                );
+                                                              } else {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(SnackBar(
+                                                                        content:
+                                                                            Text("please enter amount")));
                                                               }
                                                               // Api.
                                                             },

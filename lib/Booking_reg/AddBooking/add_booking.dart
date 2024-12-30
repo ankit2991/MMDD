@@ -44,12 +44,23 @@ class _AddBookingState extends State<AddBooking> {
 
   bool loader = false;
   Future<void> _selectDate(BuildContext context, bool isStart) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
+    final DateTime? pickedDate;
+    if (isStart) {
+      pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2100),
+      );
+    } else {
+      pickedDate = await showDatePicker(
+        context: context,
+        initialDate: _startDate,
+        firstDate: _startDate ?? DateTime.now(),
+        lastDate: DateTime(2100),
+      );
+    }
+
     if (pickedDate != null) {
       setState(() {
         if (isStart) {
@@ -62,18 +73,45 @@ class _AddBookingState extends State<AddBooking> {
   }
 
   Future<void> _selectTime(BuildContext context, bool isStart) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
+    final TimeOfDay? pickedTime;
+    if (isStart) {
+      pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+    } else {
+      pickedTime = await showTimePicker(
+        context: context,
+        initialTime: _startTime ?? TimeOfDay.now(),
+      );
+    }
     if (pickedTime != null) {
-      setState(() {
-        if (isStart) {
+      if (isStart) {
+        setState(() {
           _startTime = pickedTime;
+        });
+      } else {
+        if(_startDate==_endDate){
+          if (pickedTime!.hour > _startTime!.hour ||
+            (pickedTime!.hour ==  _startTime!.hour &&
+                pickedTime!.minute >=  _startTime!.minute)) {
+          setState(() {
+            _endTime = pickedTime;
+          });
         } else {
-          _endTime = pickedTime;
+          // Show a message if an older time is picked
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Please select a valid future time'),
+            ),
+          );
         }
-      });
+        }else{
+          setState(() {
+            _endTime = pickedTime;
+          });
+        }
+      }
     }
   }
 
@@ -286,47 +324,60 @@ class _AddBookingState extends State<AddBooking> {
                       readOnly: true,
                     ),
                     const SizedBox(height: 15),
-                    TextFormField(
+                    InkWell(
                       onTap: () {
-                        _selectDate(context, false);
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please select Event End Date";
+                        if (_startDate == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  "Please select Event Start Date then Select End date")));
                         }
                       },
-                      decoration: InputDecoration(
-                        errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red)),
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.calendar_today),
-                          onPressed: () {
+                      child: IgnorePointer(
+                        ignoring: _startDate != null ? false : true,
+                        child: TextFormField(
+                          onTap: () {
                             _selectDate(context, false);
                           },
-                        ),
-                        labelText: "Event End Date",
-                        labelStyle: TextStyle(
-                          color: Color(0xe5777474),
-                          fontFamily: 'sub-tittle',
-                          fontSize: 14,
-                        ),
-                        floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0xffC4A68B), width: 2),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please select Event End Date";
+                            }
+                          },
+                          decoration: InputDecoration(
+                            errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red)),
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.calendar_today),
+                              onPressed: () {
+                                _selectDate(context, false);
+                              },
+                            ),
+                            labelText: "Event End Date",
+                            labelStyle: TextStyle(
+                              color: Color(0xe5777474),
+                              fontFamily: 'sub-tittle',
+                              fontSize: 14,
+                            ),
+                            floatingLabelStyle:
+                                TextStyle(color: Color(0xffC4A68B)),
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0xffC4A68B), width: 2),
+                            ),
+                          ),
+                          style: TextStyle(
+                            fontFamily: 'sub-tittle',
+                            fontSize: 16.0,
+                          ),
+                          controller: TextEditingController(
+                            text: _endDate != null
+                                ? "${_endDate!.toLocal()}".split(' ')[0]
+                                : '',
+                          ),
+                          readOnly: true,
                         ),
                       ),
-                      style: TextStyle(
-                        fontFamily: 'sub-tittle',
-                        fontSize: 16.0,
-                      ),
-                      controller: TextEditingController(
-                        text: _endDate != null
-                            ? "${_endDate!.toLocal()}".split(' ')[0]
-                            : '',
-                      ),
-                      readOnly: true,
                     ),
                     const SizedBox(height: 15),
                     TextFormField(
@@ -370,41 +421,54 @@ class _AddBookingState extends State<AddBooking> {
                       readOnly: true,
                     ),
                     const SizedBox(height: 15),
-                    TextFormField(
-                      onTap: () => _selectTime(context, false),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please select Event End Time";
+                    InkWell(
+                      onTap: (){
+                        if(_startDate==null&&_endDate==null){
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("please select Start Date & End Date")));
+                        }else if(_startTime==null){
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("please select Start Time")));
+
                         }
                       },
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.timer),
-                          onPressed: () {
-                            _selectTime(context, false);
+                      child: IgnorePointer(
+                           ignoring: _startDate!=null&&_endDate!=null||_startTime!=null?false:true,
+                        child: TextFormField(
+                          onTap: () => _selectTime(context, false),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please select Event End Time";
+                            }
                           },
-                        ),
-                        labelText: "Event End Time",
-                        labelStyle: TextStyle(
-                          color: Color(0xe5777474),
-                          fontFamily: 'sub-tittle',
-                          fontSize: 14,
-                        ),
-                        floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0xffC4A68B), width: 2),
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.timer),
+                              onPressed: () {
+                                _selectTime(context, false);
+                              },
+                            ),
+                            labelText: "Event End Time",
+                            labelStyle: TextStyle(
+                              color: Color(0xe5777474),
+                              fontFamily: 'sub-tittle',
+                              fontSize: 14,
+                            ),
+                            floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Color(0xffC4A68B), width: 2),
+                            ),
+                          ),
+                          style: TextStyle(
+                            fontFamily: 'sub-tittle',
+                            fontSize: 16.0,
+                          ),
+                          controller: TextEditingController(
+                            text: _endTime != null ? _endTime!.format(context) : '',
+                          ),
+                          readOnly: true,
                         ),
                       ),
-                      style: TextStyle(
-                        fontFamily: 'sub-tittle',
-                        fontSize: 16.0,
-                      ),
-                      controller: TextEditingController(
-                        text: _endTime != null ? _endTime!.format(context) : '',
-                      ),
-                      readOnly: true,
                     ),
                     const SizedBox(height: 15),
                     TextFormField(
@@ -546,7 +610,7 @@ class _AddBookingState extends State<AddBooking> {
                         minimumSize: Size(650, 50),
                       ),
                       onPressed: () {
-                        print("${_startTime!.hour}:${_startTime!.minute}");
+                        // print("${_startTime!.hour}:${_startTime!.minute}");
                         if (_formKey.currentState!.validate()) {
                           Api.CustomerRegistration(
                                   Isbooking: widget.Isbooking,

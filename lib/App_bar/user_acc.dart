@@ -128,6 +128,7 @@ class _Discount_screenState extends State<Discount_screen> {
     Api.FacilityReport().then(
       (value) {
         _data = value;
+        print(_data);
         setState(() {
           loader = false;
         });
@@ -154,12 +155,17 @@ class _Discount_screenState extends State<Discount_screen> {
                   shrinkWrap: true,
                   itemCount: _data.length,
                   itemBuilder: (context, index) {
+                    if(_data[index]["IsDiscount"]!=null){
                     bools.add(_data[index]["IsDiscount"]);
+                    }else{
+                    bools.add(false);
+
+                    }
                     ValueNotifier<bool?> check =
                         ValueNotifier(_data[index]["IsDiscount"]);
                     ValueNotifier<double?> total = ValueNotifier(0);
                     var discount_con = TextEditingController();
-                    if(_data[index]["IsDiscount"]){
+                    if(_data[index]["IsDiscount"]==true){
                       discount_con.text=_data[index]["DiscountAmount"].toString();
                       total.value= _data[index]["Amount"]-_data[index]["DiscountAmount"];
                     }
@@ -1650,8 +1656,29 @@ class BusinessCategoryPage extends StatelessWidget {
   }
 }
 
-class TermsAndConditionsPage extends StatelessWidget {
+class TermsAndConditionsPage extends StatefulWidget {
+  @override
+  State<TermsAndConditionsPage> createState() => _TermsAndConditionsPageState();
+}
+
+class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
   var terms_con = TextEditingController();
+  bool loader=false;
+ Map _data={};
+  @override
+  void initState() {
+    loader=true;
+    // TODO: implement initState
+    super.initState();
+    Api.get_Merchent_Trem_And_Condition().then((value) {
+      _data=value;
+     terms_con.text= _data["Table1"][0]["TermsAndConditions"];
+      setState(() {
+        loader=false;
+      });
+    },);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1671,58 +1698,74 @@ class TermsAndConditionsPage extends StatelessWidget {
               Navigator.pop(context);
             }),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-        child: Column(
-          children: [
-            TextField(
-              controller: terms_con,
-              // maxLength: 1000,
-              maxLines: 5,
-              decoration: InputDecoration(
-                hintText: "Write your Terms & Conditions...",
-                border: OutlineInputBorder(),
-                fillColor: Colors.white,
-                filled: true,
-              ),
-              style: TextStyle(fontFamily: 'sub-tittle'),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xffC4A68B),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0)),
-                  minimumSize: Size(550, 50),
-                ),
-                onPressed: () {
-                  if (terms_con.text.isNotEmpty) {
-                    Api.Add_Merchant_TremAndCond(
-                            TermsAndConditions: terms_con.text)
-                        .then(
-                      (value) {
-                        if (value) {
-                          Navigator.of(context).pop();
-                        }
-                      },
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content:
-                            Text("pealse enter your Trems and condition")));
-                  }
-                },
-                child: Text(
-                  'SAVE',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Fontmain',
+      body: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            child: Column(
+              children: [
+                TextField(
+                  controller: terms_con,
+                  // maxLength: 1000,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                    hintText: "Write your Terms & Conditions...",
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.white,
+                    filled: true,
                   ),
-                ))
-          ],
-        ),
+                  style: TextStyle(fontFamily: 'sub-tittle'),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffC4A68B),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0)),
+                      minimumSize: Size(550, 50),
+                    ),
+                    onPressed: () {
+                     
+                        setState(() {
+                          loader=true;
+                        });
+                        Api.Add_Merchant_TremAndCond(
+                                TermsAndConditions: terms_con.text)
+                            .then(
+                          (value) {
+                            if (value) {
+                               setState(() {
+                          loader=false;
+                        });
+                              Navigator.of(context).pop();
+                            }
+                          },
+                        );
+                      
+                    },
+                    child: Text(
+                      'SAVE',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Fontmain',
+                      ),
+                    ))
+              ],
+            ),
+          ),
+           if (loader)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: 50.0,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -1912,77 +1955,78 @@ class _PhoneDiaryState extends State<PhoneDiary> {
       ),
       body: Stack(
         children: [
-          Center(
-              child: loader
-                  ? Text(
-                      'No Data Awailable',
-                      style: TextStyle(
-                          fontFamily: 'Fontmain', color: Color(0xe5777474)),
-                    )
-                  : ListView.builder(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                      itemCount: _data.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        // return Container(
-                        //   margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-                        //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.white,boxShadow: [BoxShadow(color: const Color.fromARGB(139, 0, 0, 0),blurRadius: .5, offset: Offset(0, 0))]),
-                        //   child: ListTile(
-                        //     dense: true,
-                        //     minLeadingWidth: 20,
-                        //     leading: CircleAvatar(radius: 25,backgroundImage: AssetImage("assets/images/main/user.png"),),
-                        //     title: Text(_data[index]["CustomerName"],style: TextStyle(fontFamily: "Fontmain"),),
-                        //     subtitle: Text(_data[index]["MobileNo"],),
-                        //     trailing: GestureDetector(
-                        //       onTap: (){
-                        //         Api.launchDialer(_data[index]["MobileNo"]);
-                        //       },
-                        //       child: Icon(Icons.phone)),
-                        //   ),
-                        // );
-                        return Container(
-                          padding: EdgeInsets.all(5),
-                          margin:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: const Color.fromARGB(139, 0, 0, 0),
-                                    blurRadius: .5,
-                                    offset: Offset(0, 0))
-                              ]),
-                          child: Column(
+          loader
+              ? Center(
+                child: Text(
+                    'No Data Awailable',
+                    style: TextStyle(
+                        fontFamily: 'Fontmain', color: Color(0xe5777474)),
+                  ),
+              )
+              : ListView.builder(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  itemCount: _data.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    // return Container(
+                    //   margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                    //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.white,boxShadow: [BoxShadow(color: const Color.fromARGB(139, 0, 0, 0),blurRadius: .5, offset: Offset(0, 0))]),
+                    //   child: ListTile(
+                    //     dense: true,
+                    //     minLeadingWidth: 20,
+                    //     leading: CircleAvatar(radius: 25,backgroundImage: AssetImage("assets/images/main/user.png"),),
+                    //     title: Text(_data[index]["CustomerName"],style: TextStyle(fontFamily: "Fontmain"),),
+                    //     subtitle: Text(_data[index]["MobileNo"],),
+                    //     trailing: GestureDetector(
+                    //       onTap: (){
+                    //         Api.launchDialer(_data[index]["MobileNo"]);
+                    //       },
+                    //       child: Icon(Icons.phone)),
+                    //   ),
+                    // );
+                    return Container(
+                      padding: EdgeInsets.all(5),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: const Color.fromARGB(139, 0, 0, 0),
+                                blurRadius: .5,
+                                offset: Offset(0, 0))
+                          ]),
+                      child: Column(
+                        spacing: 10,
+                        children: [
+                          Row(
                             spacing: 10,
                             children: [
-                              Row(
-                                spacing: 10,
-                                children: [
-                                  Icon(Icons.account_box),
-                                  Text(_data[index]["CustomerName"],
-                                      style: TextStyle(fontFamily: "Fontmain"))
-                                ],
-                              ),
-                              Row(
-                                spacing: 10,
-                                children: [
-                                  GestureDetector(
-                                      onTap: () {
-                                        Api.launchDialer(
-                                            _data[index]["MobileNo"]);
-                                      },
-                                      child: Icon(Icons.phone)),
-                                  Text(_data[index]["MobileNo"],
-                                      style: TextStyle(fontFamily: "Fontmain"))
-                                ],
-                              )
+                              Icon(Icons.account_box),
+                              Text(_data[index]["CustomerName"],
+                                  style: TextStyle(fontFamily: "Fontmain"))
                             ],
                           ),
-                        );
-                      },
-                    )),
+                          Row(
+                            spacing: 10,
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    Api.launchDialer(
+                                        _data[index]["MobileNo"]);
+                                  },
+                                  child: Icon(Icons.phone)),
+                              Text(_data[index]["MobileNo"],
+                                  style: TextStyle(fontFamily: "Fontmain"))
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
           if (loader)
             Container(
               color: Colors.black.withOpacity(0.5),

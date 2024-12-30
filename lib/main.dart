@@ -24,6 +24,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:mddmerchant/show_pdf.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Api.local_dataBase();
@@ -168,7 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.white,
                       fontFamily: 'Fontmain',
                     )),
-                Text(Api.User_info["Table"][0]["AccountBalance"].toString(),
+                Text(
+                    "₹${Api.User_info["Table"][0]["AccountBalance"].toString()}",
                     style: TextStyle(
                       // fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -412,6 +417,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       context: context,
                                                       builder: (context) {
                                                         print(service_data);
+
                                                         return StatefulBuilder(
                                                           builder: (context,
                                                               setState) {
@@ -541,9 +547,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                             Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "TodayEvent").then(
                                                                                               (value) {
                                                                                                 _data = value;
-                                                                                                Api.createPdf(Total: tot.toString(), comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"], cust_name: _data[Top_index]["CustomerName"], event_date: _data[Top_index]["EventStartDate"], event_name: _data[Top_index]["EventName"], data: submit_data).then(
-                                                                                                  (value) {
+                                                                                                Api.createPdf(Total: tot.toString(), comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"], cust_name: _data[Top_index]["CustomerName"], event_date: _data[Top_index]["EventStartDate"], event_name: _data[Top_index]["EventName"], data: submit_data,add_service: true).then(
+                                                                                                  (value) async {
                                                                                                     ref(false);
+                                                                                                    // final directory = await getTemporaryDirectory();
+                                                                                                    // final file = File("${directory!.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
+                                                                                                    // await file.writeAsBytes(await value.save());
+                                                                                                    // showDialog(
+                                                                                                    //   context: context,
+                                                                                                    //   builder: (context) {
+                                                                                                    //     return Container(
+                                                                                                    //       height: double.maxFinite,
+                                                                                                    //       width: double.maxFinite,
+                                                                                                    //       color: Colors.amber,
+                                                                                                    //       margin: EdgeInsets.all(20),
+                                                                                                    //       child: SfPdfViewer.file(file),
+                                                                                                    //     );
+                                                                                                    //   },
+                                                                                                    // );
+                                                                                                    // // Navigator.of(context).push(MaterialPageRoute(builder: (context) => show_pdf(my_pdf: value),));
                                                                                                   },
                                                                                                 );
 
@@ -923,9 +945,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               });
                                                                               await Api.RecipitInsert(Amount: amount_con.text.trim(), Remark: Payment_remark_con.text.trim(), Event_id: _data[Top_index]["id"].toInt().toString()).then(
                                                                                 (value) {
-                                                                                  Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "TodayEvent").then(
+                                                                                 Api.createPdf(Total: _data[Top_index]["TotalAmount"], comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"], cust_name: _data[Top_index]["CustomerName"], event_date: _data[Top_index]["EventStartDate"], event_name: _data[Top_index]["EventName"], data: [],add_service: false,Amount: amount_con.text,Du_Amount: _data[Top_index]["DueAmount"],).then((value) {
+                                                                                    Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "TodayEvent").then(
                                                                                     (value) {
                                                                                       _data.clear();
+                                                                                      
                                                                                       _data = value;
                                                                                       setState(() {
                                                                                         loading = false;
@@ -933,6 +957,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                       // print(value);
                                                                                     },
                                                                                   );
+                                                                                 },);
                                                                                 },
                                                                               );
                                                                               amount_con.clear();
@@ -1361,7 +1386,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>payment_screen()),
+                                          builder: (context) =>
+                                              payment_screen()),
                                     );
                                   },
                                   child: Container(
