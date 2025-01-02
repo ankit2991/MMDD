@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mddmerchant/Promoss and ads/CreatePromoss_ads/create_pro_ads.dart';
 import 'package:mddmerchant/api/api.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MyImage extends StatefulWidget {
   @override
@@ -92,15 +93,17 @@ class _MyImageState extends State<MyImage> {
                                       child: CachedNetworkImage(
                                         progressIndicatorBuilder:
                                             (context, url, progress) {
-                                          return Center(child: CupertinoActivityIndicator());
+                                          return Center(
+                                              child:
+                                                  CupertinoActivityIndicator());
                                         },
                                         errorWidget: (context, url, error) {
                                           return Container(
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
-                                                    image: AssetImage(
-                                                        "assets/images/main/img.jpg"),
-                                                    )),
+                                              image: AssetImage(
+                                                  "assets/images/main/img.jpg"),
+                                            )),
                                           );
                                         },
                                         imageUrl: _Work_data[index]
@@ -134,7 +137,18 @@ class _MyImageState extends State<MyImage> {
                                             vertical: 15, horizontal: 80),
                                         child: IconButton(
                                             onPressed: () {
-                                              // Navigator.of(context).pop();
+                                              Api.downloadAndSaveImage(
+                                                      _Work_data[index]
+                                                              ["ImagePath"]
+                                                          .toString())
+                                                  .then(
+                                                (value) async {
+                                                  final result =
+                                                      await Share.shareXFiles(
+                                                          [XFile(value)],
+                                                          text: '');
+                                                },
+                                              );
                                             },
                                             icon: Container(
                                               height: 50,
@@ -183,6 +197,90 @@ class _MyImageState extends State<MyImage> {
                                       image: AssetImage(
                                           "assets/images/main/img.jpg"),
                                       fit: BoxFit.cover)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                           showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            ValueNotifier<bool>delete =ValueNotifier(false);
+                                            ValueNotifier<bool>cancel =ValueNotifier(false);
+                                            return AlertDialog(
+                                              title: Text("Are You Sure"),
+                                              actionsAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              content: Text(
+                                                  "Do you really went to delete these Item? This process cannot be undo"),
+                                              actions: [
+                                               ValueListenableBuilder(valueListenable: delete, builder: (context, value, child) {
+                                                 return  ElevatedButton(
+                                                    onPressed: () {
+                                                       delete.value=true;
+                                                      setState(() {
+                                                        loader = true;
+                                                      });
+                                                       
+                                                      Api.DeleteImgvideo(
+                                                              Id: _Work_data[
+                                                                          index]
+                                                                      ["Id"]
+                                                                  .toString())
+                                                          .then((value) {
+                                                        if (value) {
+                                                        Navigator.of(context).pop();
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(SnackBar(
+                                                                  content: Text(
+                                                                      "Item Deleted.")));
+                                                          _data.clear();
+                                                          _Work_data.clear();
+                                                          Api.AccountDocument()
+                                                              .then((value) {
+                                                            _data = value;
+                                                            for (var i = 0;
+                                                                i <
+                                                                    _data
+                                                                        .length;
+                                                                i++) {
+                                                              if (_data[i][
+                                                                      "Doctype"] ==
+                                                                  1) {
+                                                                _Work_data.add(
+                                                                    _data[i]);
+                                                              }
+                                                            }
+                                                           
+                                                            setState(() {
+                                                              loader = false;
+                                                            });
+                                                          });
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Text("Delete"),style: ButtonStyle(backgroundColor:MaterialStateProperty.all(value? Colors.white: Color(0xffC4A68B)) ,foregroundColor: WidgetStateProperty.all(value?Colors.black: Colors.white)),);
+                                             
+                                               },),
+                                              ValueListenableBuilder(valueListenable:cancel , builder: (context, value, child) {
+                                                return     ElevatedButton(
+                                                    onPressed: () {
+                                                      cancel.value=true;
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text("Cancel"),style: ButtonStyle(backgroundColor:MaterialStateProperty.all(value? Colors.white: Color(0xffC4A68B)) ,foregroundColor: WidgetStateProperty.all(value?Colors.black: Colors.white)),);
+                                             
+                                              },) ],
+                                            );
+                                          },
+                                        );
+                                    
+                                      },
+                                      icon: Icon(Icons.delete,color:  Color(0xffC4A68B)))
+                                ],
+                              ),
                             );
                           },
                           imageBuilder: (context, imageProvider) {
@@ -192,6 +290,91 @@ class _MyImageState extends State<MyImage> {
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
                                       image: imageProvider, fit: BoxFit.cover)),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                      
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            ValueNotifier<bool>delete =ValueNotifier(false);
+                                            ValueNotifier<bool>cancel =ValueNotifier(false);
+                                            return AlertDialog(
+                                              title: Text("Are You Sure"),
+                                              actionsAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              content: Text(
+                                                  "Do you really went to delete these Item? This process cannot be undo"),
+                                              actions: [
+                                               ValueListenableBuilder(valueListenable: delete, builder: (context, value, child) {
+                                                 return  ElevatedButton(
+                                                    onPressed: () {
+                                                       delete.value=true;
+                                                      setState(() {
+                                                        loader = true;
+                                                      });
+                                                       
+                                                      Api.DeleteImgvideo(
+                                                              Id: _Work_data[
+                                                                          index]
+                                                                      ["Id"]
+                                                                  .toString())
+                                                          .then((value) {
+                                                        if (value) {
+                                                        Navigator.of(context).pop();
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(SnackBar(
+                                                                  content: Text(
+                                                                      "Item Deleted.")));
+                                                          _data.clear();
+                                                          _Work_data.clear();
+                                                          Api.AccountDocument()
+                                                              .then((value) {
+                                                            _data = value;
+                                                            for (var i = 0;
+                                                                i <
+                                                                    _data
+                                                                        .length;
+                                                                i++) {
+                                                              if (_data[i][
+                                                                      "Doctype"] ==
+                                                                  1) {
+                                                                _Work_data.add(
+                                                                    _data[i]);
+                                                              }
+                                                            }
+                                                           
+                                                            setState(() {
+                                                              loader = false;
+                                                            });
+                                                          });
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Text("Delete"),style: ButtonStyle(backgroundColor:MaterialStateProperty.all(value? Colors.white: Color(0xffC4A68B)) ,foregroundColor: WidgetStateProperty.all(value?Colors.black: Colors.white)),);
+                                             
+                                               },),
+                                              ValueListenableBuilder(valueListenable:cancel , builder: (context, value, child) {
+                                                return     ElevatedButton(
+                                                    onPressed: () {
+                                                      cancel.value=true;
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text("Cancel"),style: ButtonStyle(backgroundColor:MaterialStateProperty.all(value? Colors.white: Color(0xffC4A68B)) ,foregroundColor: WidgetStateProperty.all(value?Colors.black: Colors.white)),);
+                                             
+                                              },) ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      icon: Icon(Icons.delete,color:  Color(0xffC4A68B),)),
+                                ],
+                              ),
                             );
                           },
                         ));
@@ -217,7 +400,8 @@ class _MyImageState extends State<MyImage> {
                       MemberAgreementUpload_UploadFile2: "UploadFile2",
                       DocType: "1",
                       ext: "." + value["ext"],
-                      img: value["file"],context: context)
+                      img: value["file"],
+                      context: context)
                   .then(
                 (value) {
                   setState(() {

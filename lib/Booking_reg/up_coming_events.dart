@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:mddmerchant/api/api.dart';
+import 'package:mddmerchant/show_pdf.dart';
 
 class UpComingEvents extends StatefulWidget {
   bool prev;
@@ -26,6 +27,8 @@ class _UpComingEventsState extends State<UpComingEvents> {
   List<TextEditingController> Total_con = [];
   var amount_con = TextEditingController();
   var Payment_remark_con = TextEditingController();
+  var amount_con2 = TextEditingController();
+  var Payment_remark_con2 = TextEditingController();
   bool loder = false;
   void ref(bool a) {
     setState(() {
@@ -43,7 +46,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
       Api.EventBookingDetailsList(
               Is_booking: "1",
               Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
-                  "CompleteEvent")
+                  "UpcomingEvent")
           .then(
         (value) {
           _data = value;
@@ -205,9 +208,9 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                       builder: (context) {
                                         print(service_data);
                                         List<bool> save = [];
-                                        return StatefulBuilder(
-                                          builder: (context, setState) {
-                                            return Padding(
+                                        ValueNotifier<bool>temp =ValueNotifier(true);
+                                        return ValueListenableBuilder(valueListenable: temp, builder: (context, value, child) {
+                                          return Padding(
                                               padding: EdgeInsets.only(
                                                 bottom: MediaQuery.of(context)
                                                     .viewInsets
@@ -308,9 +311,9 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                       loder =
                                                                           true;
                                                                     });
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
+                                                                    // Navigator.of(
+                                                                    //         context)
+                                                                    //     .pop();
                                                                     print(
                                                                         submit_data);
                                                                     for (var i =
@@ -361,6 +364,12 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                                 Api.createPdf(Total: tot.toString(), comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"], cust_name: _data[Top_index]["CustomerName"], event_date: _data[Top_index]["EventStartDate"], event_name: _data[Top_index]["EventName"], data: submit_data, add_service: true).then(
                                                                                   (value) {
                                                                                     ref(false);
+                                                                                    Navigator.of(context).pop();
+                                                                                                    Navigator.of(context).push(MaterialPageRoute(
+                                                                                                      builder: (context) => show_pdf(
+                                                                                                        my_pdf: value,
+                                                                                                      ),
+                                                                                                    ));
                                                                                   },
                                                                                 );
 
@@ -534,61 +543,59 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                               ),
                                                                             ),
                                                                           ),
-                                                                          Row(
-                                                                              mainAxisAlignment: MainAxisAlignment.end,
-                                                                              children: [
-                                                                                if (save[index])
-                                                                                  Container(
-                                                                                      margin: EdgeInsets.symmetric(vertical: 10),
-                                                                                      height: 50,
-                                                                                      width: 100,
-                                                                                      alignment: Alignment.center,
-                                                                                      color: check.value ? Color(0xffC4A68B) : Color.fromARGB(139, 196, 166, 139),
-                                                                                      child: GestureDetector(
-                                                                                        onTap: () {
-                                                                                          if (Quantity_con[index].text.isNotEmpty && int.parse(Quantity_con[index].text) >= 1) {
-                                                                                            try {
-                                                                                              int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
-                                                                                              submit_data[element_index] = {
-                                                                                                "\"Id\"": "\"${service_data[index]["Id"]}\"",
-                                                                                                "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
-                                                                                                "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
-                                                                                                "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
-                                                                                                "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
-                                                                                                "\"Remark\"": "\"${remark_con[index].text.trim()}\""
-                                                                                              };
-                                                                                              setState(() {
-                                                                                                save.removeAt(index);
-                                                                                                save.insert(index, false);
-                                                                                              });
-                                                                                            } catch (e) {
-                                                                                              int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
-                                                                                              submit_data[element_index] = {
-                                                                                                "\"Id\"": "\"${service_data[index]["Id"]}\"",
-                                                                                                "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
-                                                                                                "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
-                                                                                                "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
-                                                                                                "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
-                                                                                                "\"Remark\"": "\"${remark_con[index].text.trim()}\""
-                                                                                              };
-                                                                                              setState(() {
-                                                                                                save.removeAt(index);
-                                                                                                save.insert(index, false);
-                                                                                              });
-                                                                                            }
-                                                                                            // submit_data.removeAt(element_index);
+                                                                        Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                                                                                            if (save[index])
+                                                                                              Container(
+                                                                                                  margin: EdgeInsets.symmetric(vertical: 10),
+                                                                                                  height: 50,
+                                                                                                  width: 100,
+                                                                                                  alignment: Alignment.center,
+                                                                                                  color: check.value ? Color(0xffC4A68B) : Color.fromARGB(139, 196, 166, 139),
+                                                                                                  child: GestureDetector(
+                                                                                                    onTap: () {
+                                                                                                      if (Quantity_con[index].text.isNotEmpty && int.parse(Quantity_con[index].text) >= 1) {
+                                                                                                        try {
+                                                                                                          int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
+                                                                                                          submit_data[element_index] = {
+                                                                                                            "\"Id\"": "\"${service_data[index]["Id"]}\"",
+                                                                                                            "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
+                                                                                                            "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
+                                                                                                            "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
+                                                                                                            "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
+                                                                                                            "\"Remark\"": "\"${remark_con[index].text.trim()}\""
+                                                                                                          };
 
-                                                                                            // submit_data.insert(index, );
-                                                                                            print(remark_con[index].text);
-                                                                                          }
-                                                                                        },
-                                                                                        child: Text(
-                                                                                          "SAVE",
-                                                                                          style: TextStyle(fontFamily: "Fontmain", color: Colors.white),
-                                                                                        ),
-                                                                                      ))
-                                                                              ])
-                                                                        ],
+                                                                                                          save.removeAt(index);
+                                                                                                          save.insert(index, false);
+                                                                                                          temp.value = temp.value == true ? false : true;
+                                                                                                        } catch (e) {
+                                                                                                          int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
+                                                                                                          submit_data[element_index] = {
+                                                                                                            "\"Id\"": "\"${service_data[index]["Id"]}\"",
+                                                                                                            "\"Name\"": "\"${service_data[index]["FacilityName"]}\"",
+                                                                                                            "\"Quantity\"": "\"${Quantity_con[index].text.trim()}\"",
+                                                                                                            "\"Price\"": "${double.parse(price_con.text.trim()).toInt()}",
+                                                                                                            "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
+                                                                                                            "\"Remark\"": "\"${remark_con[index].text.trim()}\""
+                                                                                                          };
+
+                                                                                                          save.removeAt(index);
+                                                                                                          save.insert(index, false);
+                                                                                                          temp.value = temp.value == true ? false : true;
+                                                                                                        }
+                                                                                                        // submit_data.removeAt(element_index);
+
+                                                                                                        // submit_data.insert(index, );
+                                                                                                        print(remark_con[index].text);
+                                                                                                      }
+                                                                                                    },
+                                                                                                    child: Text(
+                                                                                                      "SAVE",
+                                                                                                      style: TextStyle(fontFamily: "Fontmain", color: Colors.white),
+                                                                                                    ),
+                                                                                                  ))
+                                                                                          ])
+                                                                                        ],
                                                                       ),
                                                                     );
                                                                   },
@@ -600,8 +607,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                 ),
                                               ),
                                             );
-                                          },
-                                        );
+                                        },);
                                       },
                                     );
                                   },
@@ -625,6 +631,8 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                     log("Add PAYMENT ");
                                     amount_con.clear();
                                     Payment_remark_con.clear();
+                                    amount_con2.clear();
+                                    Payment_remark_con2.clear();
                                     showModalBottomSheet(
                                       context: context,
                                       // enableDrag: true,
@@ -767,7 +775,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                             child:
                                                                 TextFormField(
                                                               controller:
-                                                                  amount_con,
+                                                                  amount_con2,
                                                               keyboardType:
                                                                   TextInputType
                                                                       .number,
@@ -807,7 +815,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                             child:
                                                                 TextFormField(
                                                               controller:
-                                                                  Payment_remark_con,
+                                                                  Payment_remark_con2,
                                                               decoration: InputDecoration(
                                                                   hintText:
                                                                       "Remark",
@@ -829,20 +837,20 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                           ),
                                                           GestureDetector(
                                                             onTap: () async {
-                                                              if (amount_con
+                                                              if (amount_con2
                                                                   .text
                                                                   .isNotEmpty) {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
+                                                                // Navigator.of(
+                                                                //         context)
+                                                                //     .pop();
                                                                 setState(() {
                                                                   loder = true;
                                                                 });
                                                                 await Api.RecipitInsert(
-                                                                        Amount: amount_con
+                                                                        Amount: amount_con2
                                                                             .text
                                                                             .trim(),
-                                                                        Remark: Payment_remark_con
+                                                                        Remark: Payment_remark_con2
                                                                             .text
                                                                             .trim(),
                                                                         Event_id: _data[Top_index]["id"]
@@ -852,91 +860,71 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                   (value) {
                                                                     if (widget
                                                                         .prev) {
-                                                                      Api.createPdf(
-                                                                        Total: _data[Top_index]
-                                                                            [
-                                                                            "TotalAmount"],
-                                                                        comp_mob_no:
-                                                                            Api.User_info["Table"][0]["MobileNo"],
-                                                                        compny_name:
-                                                                            Api.User_info["Table"][0]["OrgName"],
-                                                                        now_Date:
-                                                                            "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
-                                                                        cust_mob_no:
-                                                                            _data[Top_index]["MobileNo"],
-                                                                        cust_name:
-                                                                            _data[Top_index]["CustomerName"],
-                                                                        event_date:
-                                                                            _data[Top_index]["EventStartDate"],
-                                                                        event_name:
-                                                                            _data[Top_index]["EventName"],
-                                                                        data: [],
-                                                                        add_service:
-                                                                            false,
-                                                                        Amount:
-                                                                            amount_con.text,
-                                                                        Du_Amount:
-                                                                            _data[Top_index]["DueAmount"],
-                                                                      ).then(
-                                                                        (value) {
-                                                                          Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "CompleteEvent")
-                                                                              .then(
-                                                                            (value) {
-                                                                              _data.clear();
-
-                                                                              _data = value;
-                                                                              setState(() {
-                                                                                loder = false;
-                                                                              });
-                                                                              // print(value);
-                                                                            },
-                                                                          );
-                                                                        },
-                                                                      );
+                                                                       Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "UpcomingEven").then(
+                                                                                    (value) {
+                                                                                      _data.clear();
+                                                                                      _data = value;
+                                                                                      Api.createPdf(
+                                                                                        Total: _data[Top_index]["TotalAmount"],
+                                                                                        comp_mob_no: Api.User_info["Table"][0]["MobileNo"],
+                                                                                        compny_name: Api.User_info["Table"][0]["OrgName"],
+                                                                                        now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
+                                                                                        cust_mob_no: _data[Top_index]["MobileNo"],
+                                                                                        cust_name: _data[Top_index]["CustomerName"],
+                                                                                        event_date: _data[Top_index]["EventStartDate"],
+                                                                                        event_name: _data[Top_index]["EventName"],
+                                                                                        data: [],
+                                                                                        add_service: false,
+                                                                                        Amount: amount_con2.text,
+                                                                                        Du_Amount: _data[Top_index]["DueAmount"],
+                                                                                        Advance_Amount: _data[Top_index]["BookingAmount"]
+                                                                                      ).then((value) {
+                                                                                        Navigator.of(context).pop();
+                                                                                         setState(() {
+                                                                                        loder = false;
+                                                                                      });
+                                                                                        Navigator.of(context).push(MaterialPageRoute(
+                                                                                          builder: (context) => show_pdf(
+                                                                                            my_pdf: value,
+                                                                                          ),
+                                                                                        ));
+                                                                                      });
+                                                                                     
+                                                                                      // print(value);
+                                                                                    });
                                                                     } else {
-                                                                      Api.createPdf(
-                                                                        Total: _data[Top_index]
-                                                                            [
-                                                                            "TotalAmount"],
-                                                                        comp_mob_no:
-                                                                            Api.User_info["Table"][0]["MobileNo"],
-                                                                        compny_name:
-                                                                            Api.User_info["Table"][0]["OrgName"],
-                                                                        now_Date:
-                                                                            "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
-                                                                        cust_mob_no:
-                                                                            _data[Top_index]["MobileNo"],
-                                                                        cust_name:
-                                                                            _data[Top_index]["CustomerName"],
-                                                                        event_date:
-                                                                            _data[Top_index]["EventStartDate"],
-                                                                        event_name:
-                                                                            _data[Top_index]["EventName"],
-                                                                        data: [],
-                                                                        add_service:
-                                                                            false,
-                                                                        Amount:
-                                                                            amount_con.text,
-                                                                        Du_Amount:
-                                                                            _data[Top_index]["DueAmount"],
-                                                                      ).then(
-                                                                        (value) {
-                                                                          Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "UpcomingEvent")
-                                                                              .then(
-                                                                            (value) {
-                                                                              _data.clear();
-
-                                                                              _data = value;
-                                                                              amount_con.clear();
-                                                                              remark_con.clear();
-                                                                              setState(() {
-                                                                                loder = false;
-                                                                              });
-                                                                              // print(value);
-                                                                            },
-                                                                          );
-                                                                        },
-                                                                      );
+                                                                       Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "UpcomingEvent").then(
+                                                                                    (value) {
+                                                                                      _data.clear();
+                                                                                      _data = value;
+                                                                                      Api.createPdf(
+                                                                                        Total: _data[Top_index]["TotalAmount"],
+                                                                                        comp_mob_no: Api.User_info["Table"][0]["MobileNo"],
+                                                                                        compny_name: Api.User_info["Table"][0]["OrgName"],
+                                                                                        now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
+                                                                                        cust_mob_no: _data[Top_index]["MobileNo"],
+                                                                                        cust_name: _data[Top_index]["CustomerName"],
+                                                                                        event_date: _data[Top_index]["EventStartDate"],
+                                                                                        event_name: _data[Top_index]["EventName"],
+                                                                                        data: [],
+                                                                                        add_service: false,
+                                                                                        Amount: amount_con2.text,
+                                                                                        Du_Amount: _data[Top_index]["DueAmount"],
+                                                                                        Advance_Amount: _data[Top_index]["BookingAmount"]
+                                                                                      ).then((value) {
+                                                                                        Navigator.of(context).pop();
+                                                                                         setState(() {
+                                                                                        loder = false;
+                                                                                      });
+                                                                                        Navigator.of(context).push(MaterialPageRoute(
+                                                                                          builder: (context) => show_pdf(
+                                                                                            my_pdf: value,
+                                                                                          ),
+                                                                                        ));
+                                                                                      });
+                                                                                     
+                                                                                      // print(value);
+                                                                                    });
                                                                     }
                                                                   },
                                                                 );

@@ -48,11 +48,11 @@ class UserProfile extends StatelessWidget {
                 SizedBox(height: 10),
                 Text(
                   Api.User_info["Table"][0]["MemberName"],
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,fontFamily: "Fontmain"),
                 ),
                 Text(
                   Api.User_info["Table"][0]["MobileNo"],
-                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                  style: TextStyle(fontSize: 16, color: Colors.grey[700],fontFamily: "Fontmain"),
                 ),
               ],
             ),
@@ -2063,11 +2063,39 @@ class ContactPage extends StatelessWidget {
               Navigator.pop(context);
             }),
       ),
-      body: Center(
-          child: Text(
-        'No Data Awailable',
-        style: TextStyle(fontFamily: 'Fontmain', color: Color(0xe5777474)),
-      )),
+      body: Column(children: [
+        Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),boxShadow: [BoxShadow(color: const Color.fromARGB(148, 0, 0, 0),offset: Offset(0, 0),blurRadius: 5)],color: Colors.white),
+          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+          margin:EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Call Us : 18005700102",style: TextStyle(fontFamily: "Fontmain",fontSize: 15),),
+            IconButton(onPressed: (){Api.launchDialer("18005700102");
+                                        }, icon: Icon(Icons.phone))
+          ],
+        ),
+        ),
+        Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),boxShadow: [BoxShadow(color: const Color.fromARGB(148, 0, 0, 0),offset: Offset(0, 0),blurRadius: 5)],color: Colors.white),
+          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+          margin:EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                Text("Mail Us :",style: TextStyle(fontFamily: "Fontmain",fontSize: 15)),
+                Text("suport@makemydreamday.in",style: TextStyle(fontFamily: "Fontmain",fontSize: 15))
+              ],),
+            ),
+              IconButton(onPressed: (){Api.openEmail(toEmail: "suport@makemydreamday.in");}, icon: Icon(Icons.mail))
+          ],),
+        )
+      ],)
     );
   }
 }

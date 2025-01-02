@@ -83,7 +83,9 @@ List<TextEditingController> remark_con = [];
 // List<TextEditingController> price_con=[];
 List<TextEditingController> Total_con = [];
 var amount_con = TextEditingController();
+var amount_con2 = TextEditingController();
 var Payment_remark_con = TextEditingController();
+var Payment_remark_con2 = TextEditingController();
 bool service_data_loder = false;
 // var prefs;
 
@@ -417,10 +419,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       context: context,
                                                       builder: (context) {
                                                         print(service_data);
-
-                                                        return StatefulBuilder(
+                                                        ValueNotifier<bool>
+                                                            temp =
+                                                            ValueNotifier(true);
+                                                        return ValueListenableBuilder(
+                                                          valueListenable: temp,
                                                           builder: (context,
-                                                              setState) {
+                                                              value, child) {
                                                             return Padding(
                                                               padding:
                                                                   EdgeInsets
@@ -521,7 +526,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                     setState(() {
                                                                                       loading = true;
                                                                                     });
-                                                                                    Navigator.of(context).pop();
+                                                                                    // Navigator.of(context).pop();
                                                                                     print(submit_data);
                                                                                     for (var i = 0; i < submit_data.length; i++) {
                                                                                       if (submit_data[i].length <= 2) {
@@ -536,18 +541,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                         tot = double.parse(Total_con[i].text) + tot;
                                                                                       }
                                                                                     }
-                                                                                    print(tot);
+                                                                                    print(submit_data);
 
                                                                                     if (submit_data.isNotEmpty) {
                                                                                       await Api.RecipitFacilityInsert(Amount: tot.toString(), EventId: _data[Top_index]["id"].toString(), Remarks: _data[Top_index]["Remarks"].toString(), serviceAdd: submit_data).then(
                                                                                         (value) {
                                                                                           if (value) {
                                                                                             _data.clear();
-
                                                                                             Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "TodayEvent").then(
                                                                                               (value) {
                                                                                                 _data = value;
-                                                                                                Api.createPdf(Total: tot.toString(), comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"], cust_name: _data[Top_index]["CustomerName"], event_date: _data[Top_index]["EventStartDate"], event_name: _data[Top_index]["EventName"], data: submit_data,add_service: true).then(
+                                                                                                Api.createPdf(Total: tot.toString(), comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"], cust_name: _data[Top_index]["CustomerName"], event_date: _data[Top_index]["EventStartDate"], event_name: _data[Top_index]["EventName"], data: submit_data, add_service: true).then(
                                                                                                   (value) async {
                                                                                                     ref(false);
                                                                                                     // final directory = await getTemporaryDirectory();
@@ -565,7 +569,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                                     //     );
                                                                                                     //   },
                                                                                                     // );
-                                                                                                    // // Navigator.of(context).push(MaterialPageRoute(builder: (context) => show_pdf(my_pdf: value),));
+                                                                                                    Navigator.of(context).pop();
+                                                                                                    Navigator.of(context).push(MaterialPageRoute(
+                                                                                                      builder: (context) => show_pdf(
+                                                                                                        my_pdf: value,
+                                                                                                      ),
+                                                                                                    ));
                                                                                                   },
                                                                                                 );
 
@@ -724,10 +733,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                                             "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
                                                                                                             "\"Remark\"": "\"${remark_con[index].text.trim()}\""
                                                                                                           };
-                                                                                                          setState(() {
-                                                                                                            save.removeAt(index);
-                                                                                                            save.insert(index, false);
-                                                                                                          });
+
+                                                                                                          save.removeAt(index);
+                                                                                                          save.insert(index, false);
+                                                                                                          temp.value = temp.value == true ? false : true;
                                                                                                         } catch (e) {
                                                                                                           int element_index = submit_data.indexWhere((map) => map["\"Id\""] == "\"${service_data[index]["Id"]}\"");
                                                                                                           submit_data[element_index] = {
@@ -738,10 +747,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                                             "\"Total\"": "\"${double.parse(Total_con[index].text.trim()).toInt()}\"",
                                                                                                             "\"Remark\"": "\"${remark_con[index].text.trim()}\""
                                                                                                           };
-                                                                                                          setState(() {
-                                                                                                            save.removeAt(index);
-                                                                                                            save.insert(index, false);
-                                                                                                          });
+
+                                                                                                          save.removeAt(index);
+                                                                                                          save.insert(index, false);
+                                                                                                          temp.value = temp.value == true ? false : true;
                                                                                                         }
                                                                                                         // submit_data.removeAt(element_index);
 
@@ -767,6 +776,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 ),
                                                               ),
                                                             );
+                                                            ;
                                                           },
                                                         );
                                                       },
@@ -797,6 +807,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     log("Add PAYMENT ");
                                                     amount_con.clear();
                                                     Payment_remark_con.clear();
+                                                    amount_con2.clear();
+                                                    Payment_remark_con2.clear();
                                                     showModalBottomSheet(
                                                       context: context,
                                                       // enableDrag: true,
@@ -924,7 +936,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           Container(
                                                                             child:
                                                                                 TextFormField(
-                                                                              controller: amount_con,
+                                                                              controller: amount_con2,
                                                                               keyboardType: TextInputType.number,
                                                                               decoration: InputDecoration(hintText: "Amount", focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: Colors.black)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: Colors.black))),
                                                                             ),
@@ -932,32 +944,52 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           Container(
                                                                             child:
                                                                                 TextFormField(
-                                                                              controller: Payment_remark_con,
+                                                                              controller: Payment_remark_con2,
                                                                               decoration: InputDecoration(hintText: "Remark", focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: Colors.black)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: Colors.black))),
                                                                             ),
                                                                           ),
                                                                           GestureDetector(
                                                                             onTap:
                                                                                 () async {
-                                                                              Navigator.of(context).pop();
+                                                                              // Navigator.of(context).pop();
                                                                               setState(() {
                                                                                 loading = true;
                                                                               });
-                                                                              await Api.RecipitInsert(Amount: amount_con.text.trim(), Remark: Payment_remark_con.text.trim(), Event_id: _data[Top_index]["id"].toInt().toString()).then(
+                                                                              await Api.RecipitInsert(Amount: amount_con2.text.trim(), Remark: Payment_remark_con2.text.trim(), Event_id: _data[Top_index]["id"].toInt().toString()).then(
                                                                                 (value) {
-                                                                                 Api.createPdf(Total: _data[Top_index]["TotalAmount"], comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"], cust_name: _data[Top_index]["CustomerName"], event_date: _data[Top_index]["EventStartDate"], event_name: _data[Top_index]["EventName"], data: [],add_service: false,Amount: amount_con.text,Du_Amount: _data[Top_index]["DueAmount"],).then((value) {
-                                                                                    Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "TodayEvent").then(
+                                                                                  Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "TodayEvent").then(
                                                                                     (value) {
                                                                                       _data.clear();
-                                                                                      
                                                                                       _data = value;
-                                                                                      setState(() {
+                                                                                      Api.createPdf(
+                                                                                        Total: _data[Top_index]["TotalAmount"],
+                                                                                        comp_mob_no: Api.User_info["Table"][0]["MobileNo"],
+                                                                                        compny_name: Api.User_info["Table"][0]["OrgName"],
+                                                                                        now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
+                                                                                        cust_mob_no: _data[Top_index]["MobileNo"],
+                                                                                        cust_name: _data[Top_index]["CustomerName"],
+                                                                                        event_date: _data[Top_index]["EventStartDate"],
+                                                                                        event_name: _data[Top_index]["EventName"],
+                                                                                        data: [],
+                                                                                        add_service: false,
+                                                                                        Amount: amount_con2.text,
+                                                                                        Du_Amount: _data[Top_index]["DueAmount"],
+                                                                                        Advance_Amount: _data[Top_index]["BookingAmount"]
+                                                                                      ).then((value) {
+                                                                                        Navigator.of(context).pop();
+                                                                                         setState(() {
                                                                                         loading = false;
                                                                                       });
+                                                                                        Navigator.of(context).push(MaterialPageRoute(
+                                                                                          builder: (context) => show_pdf(
+                                                                                            my_pdf: value,
+                                                                                          ),
+                                                                                        ));
+                                                                                      });
+                                                                                     
                                                                                       // print(value);
                                                                                     },
                                                                                   );
-                                                                                 },);
                                                                                 },
                                                                               );
                                                                               amount_con.clear();
@@ -1443,7 +1475,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ]))),
-        if (loading)
+        if (loading||service_data_loder)
           Container(
             color: Colors.black.withOpacity(0.5),
             child: Center(

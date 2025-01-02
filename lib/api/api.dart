@@ -31,7 +31,7 @@ class Api {
   }
 
   // -------------------------------------------------------------------------------------------  (send OTP)
-  static Future<void> send_otp(String mob_no,context) async {
+  static Future<void> send_otp(String mob_no, context) async {
     // String url='https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MobileNo":'"'$mob_no'"',"ApiAdd":"MobileOTP","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MobileOtp';
     String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MobileNo":'
@@ -40,8 +40,9 @@ class Api {
     var res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
       print(res.body);
-      var data= jsonDecode(res.body);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Duplicate data")));
+      var data = jsonDecode(res.body);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Duplicate data")));
       // log("Done Send OTP API");
       // return data["Table1"][0]["OTPNo"];
     } else {
@@ -220,12 +221,13 @@ class Api {
     }
   }
 
-  static Future<Position> get_loc(context,Function loader)async {
+  static Future<Position> get_loc(context, Function loader) async {
     bool serviceEnable = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnable) {
       Geolocator.openLocationSettings();
       // Geolocator.openAppSettings();
-      ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(content: Text("turn on Location")));
+      ScaffoldMessenger.maybeOf(context)!
+          .showSnackBar(SnackBar(content: Text("turn on Location")));
       loader(false);
       return Future.error("Location services are disabled.");
     }
@@ -234,13 +236,15 @@ class Api {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         loader(false);
-         ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(content: Text("Location permissions are denied")));
+        ScaffoldMessenger.maybeOf(context)!.showSnackBar(
+            SnackBar(content: Text("Location permissions are denied")));
         return Future.error("Location permissions are denied");
       }
     }
     if (permission == LocationPermission.deniedForever) {
-       loader(false);
-       ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(content: Text("Location Permission are permanently denied")));
+      loader(false);
+      ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(
+          content: Text("Location Permission are permanently denied")));
       return Future.error(
           "Location Permission are permanently denied, we cannot request");
     }
@@ -457,7 +461,8 @@ class Api {
       {required File? img,
       required String DocType,
       required String ext,
-      required String MemberAgreementUpload_UploadFile2,context}) async {
+      required String MemberAgreementUpload_UploadFile2,
+      context}) async {
     String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/$MemberAgreementUpload_UploadFile2';
     print(
@@ -467,32 +472,46 @@ class Api {
       'Content-Type': 'application/json',
     };
     var request = http.MultipartRequest('POST', Uri.parse(url));
+     if(DocType=="4"){
     request.files.add(
+      await http.MultipartFile.fromPath(
+        "UploadDoc", // Field name expected by the API
+        img!.path,
+      ),
+    );
+    }else{
+      request.files.add(
       await http.MultipartFile.fromPath(
         "base64", // Field name expected by the API
         img!.path,
       ),
     );
+    }
+    
     request.fields["AccountId"] = "${User_info["Table"][0]["Id"].toInt()}";
+    if(DocType!="4"){
     request.fields["DocType"] = DocType;
+    }
     request.fields["fileExtention"] = ext;
     var res = await request.send();
     if (res.statusCode == 200) {
-
       log("ImageInsert Api Call.............");
       var data = await res.stream.bytesToString();
       log("ImageInsert Api DATA .............");
       print(data);
-      if(data.contains("R200")){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Duplicate pdf")));
-      }else{
-        if(ext==".pdf"){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("PDF upload Done")));
-        }else if(ext==".mp4"){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Video upload Done")));
-        }else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image upload Done")));
-
+      if (data.contains("R200")) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Duplicate pdf")));
+      } else {
+        if (ext == ".pdf") {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("PDF upload Done")));
+        } else if (ext == ".mp4") {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Video upload Done")));
+        } else {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Image upload Done")));
         }
       }
       // return data["Table1"];
@@ -578,24 +597,24 @@ class Api {
   }
 
   // ____________________________________________________________________   (add service in event )
-  static Future<bool> CustomerRegistration({
-    required String Mobile,
-    required String CName,
-    required String Email,
-    required String Remarks,
-    required String EventName,
-    required String Longitude,
-    required String Latitude,
-    required String EventAddress,
-    required String EventEndDate,
-    required String Isbooking,
-    required String EventStartDate,
-    required String EventStartTime,
-    required String EventEndTime,
-    required String TotalAmount,
-    required String BookingAmount,
-    required String DueAmount,context
-  }) async {
+  static Future<bool> CustomerRegistration(
+      {required String Mobile,
+      required String CName,
+      required String Email,
+      required String Remarks,
+      required String EventName,
+      required String Longitude,
+      required String Latitude,
+      required String EventAddress,
+      required String EventEndDate,
+      required String Isbooking,
+      required String EventStartDate,
+      required String EventStartTime,
+      required String EventEndTime,
+      required String TotalAmount,
+      required String BookingAmount,
+      required String DueAmount,
+      context}) async {
     String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"Mobile":"$Mobile","CName":"$CName","Email":"$Email","ServiceId":"0","MerchantId":'
         "\"${User_info["Table"][0]["Id"].toInt()}\""
@@ -606,8 +625,9 @@ class Api {
     if (res.statusCode == 200) {
       var data = jsonDecode(res.body);
       print(data);
-      if (data["Table"][0]["ResultCode"]=="R200") {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Duplicate User")));
+      if (data["Table"][0]["ResultCode"] == "R200") {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Duplicate User")));
         return false;
       }
       log("RecipitFacilityInsert Api Call.............");
@@ -926,8 +946,32 @@ class Api {
     }
   }
 
+  // ___________________________________________________________________    (open email)
+  static Future<void> openEmail({
+    required String toEmail,
+    String? subject,
+    String? body,
+  }) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: toEmail,
+      query: {
+        if (subject != null) 'subject': subject,
+        if (body != null) 'body': body,
+      }.entries
+          .map((entry) => '${entry.key}=${Uri.encodeComponent(entry.value)}')
+          .join('&'),
+    );
+
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri,mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $emailUri';
+    }
+  }
+
   // ____________________________________________________________   (add service pdf)
-  static Future<void> createPdf(
+  static Future<pw.Document> createPdf(
       {required String now_Date,
       required String event_name,
       required String event_date,
@@ -936,10 +980,15 @@ class Api {
       required String cust_mob_no,
       required String cust_name,
       required String Total,
-      required List<Map> data,required bool add_service,String Amount="",String Advance_Amount="",String Du_Amount=""}  ) async {
+      required List<Map> data,
+      required bool add_service,
+      String Amount = "",
+      String Advance_Amount = "",
+      String Du_Amount = ""}) async {
     // Create a PDF document
     final pdf = pw.Document();
-     final fontData = await rootBundle.load('assets/fonts/Poppins/Poppins-SemiBold.ttf');
+    final fontData =
+        await rootBundle.load('assets/fonts/Poppins/Poppins-SemiBold.ttf');
     final ttf = pw.Font.ttf(fontData);
     List<pw.TableRow> Rows = [
       pw.TableRow(
@@ -973,50 +1022,53 @@ class Api {
         ],
       ),
     ];
-if(add_service){
-  
-    for (var i = 0; i < data.length; i++) {
-      try {
-         Rows.add(pw.TableRow(
-                      children: [
-                        pw.Padding(
-                            padding: pw.EdgeInsets.symmetric(vertical: 10),
-                            child: pw.Text(
-                             "${i+1}",
-                              textAlign: pw.TextAlign.center,
-                            )),
-                        pw.Padding(
-                            padding: pw.EdgeInsets.symmetric(vertical: 10),
-                            child: pw.Text(
-                              data[i]["\"Name\""].substring(1, data[i]["\"Name\""].length - 1),
-                              textAlign: pw.TextAlign.center,
-                            )),
-                        pw.Padding(
-                            padding: pw.EdgeInsets.symmetric(vertical: 10),
-                            child: pw.Text(
-                              data[i]["\"Quantity\""].substring(1, data[i]["\"Quantity\""].length - 1),
-                              textAlign: pw.TextAlign.center,
-                            )),
-                        pw.Padding(
-                            padding: pw.EdgeInsets.symmetric(vertical: 10),
-                            child: pw.Text(
-                              data[i]["\"Price\""].substring(1, data[i]["\"Price\""].length - 1),
-                              textAlign: pw.TextAlign.center,
-                            )),
-                        pw.Padding(
-                            padding: pw.EdgeInsets.symmetric(vertical: 10),
-                            child: pw.Text(
-                              data[i]["\"Total\""].substring(1, data[i]["\"Total\""].length - 1),
-                              textAlign: pw.TextAlign.center,
-                            )),
-                      ],
-                    ),);
- 
-      } catch (e) {
-        continue;
-      }
+    if (add_service) {
+      for (var i = 0; i < data.length; i++) {
+        try {
+          Rows.add(
+            pw.TableRow(
+              children: [
+                pw.Padding(
+                    padding: pw.EdgeInsets.symmetric(vertical: 10),
+                    child: pw.Text(
+                      "${i + 1}",
+                      textAlign: pw.TextAlign.center,
+                    )),
+                pw.Padding(
+                    padding: pw.EdgeInsets.symmetric(vertical: 10),
+                    child: pw.Text(
+                      data[i]["\"Name\""]
+                          .substring(1, data[i]["\"Name\""].length - 1),
+                      textAlign: pw.TextAlign.center,
+                    )),
+                pw.Padding(
+                    padding: pw.EdgeInsets.symmetric(vertical: 10),
+                    child: pw.Text(
+                      data[i]["\"Quantity\""]
+                          .substring(1, data[i]["\"Quantity\""].length - 1),
+                      textAlign: pw.TextAlign.center,
+                    )),
+                pw.Padding(
+                    padding: pw.EdgeInsets.symmetric(vertical: 10),
+                    child: pw.Text(
+                      data[i]["\"Price\""],
+                      textAlign: pw.TextAlign.center,
+                    )),
+                pw.Padding(
+                    padding: pw.EdgeInsets.symmetric(vertical: 10),
+                    child: pw.Text(
+                      data[i]["\"Total\""]
+                          .substring(1, data[i]["\"Total\""].length - 1),
+                      textAlign: pw.TextAlign.center,
+                    )),
+              ],
+            ),
+          );
+        } catch (e) {
+          continue;
         }
-}
+      }
+    }
     // Add a page
     pdf.addPage(pw.Page(
         // pageFormat: PdfPageFormat.a4,
@@ -1110,70 +1162,104 @@ if(add_service){
                       ])),
                 ]),
                 pw.SizedBox(height: 5),
-                if(add_service==false)
-                pw.Container(
-                  alignment: pw.Alignment.centerLeft,
-                  height: 60,width: double.infinity,child: pw.Column(
-                    mainAxisAlignment: pw.MainAxisAlignment.center,
-                    children: [
+                if (add_service == false)
+                  pw.Container(
+                      alignment: pw.Alignment.centerLeft,
+                      height: 60,
+                      width: double.infinity,
+                      child: pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Row(
+                              mainAxisAlignment:
+                                  pw.MainAxisAlignment.spaceBetween,
+                              children: [
+                                pw.Text("Total Amount"),
+                                pw.Text("₹${Total}",
+                                    style: pw.TextStyle(
+                                        fontWeight: pw.FontWeight.bold,
+                                        font: ttf)),
+                              ]),
+                          pw.Row(
+                              mainAxisAlignment:
+                                  pw.MainAxisAlignment.spaceBetween,
+                              children: [
+                                pw.Text(
+                                  "Today Amount",
+                                ),
+                                pw.Text("₹${Amount}",
+                                    style: pw.TextStyle(
+                                        fontWeight: pw.FontWeight.bold,
+                                        font: ttf)),
+                              ]),
+                          pw.Row(
+                              mainAxisAlignment:
+                                  pw.MainAxisAlignment.spaceBetween,
+                              children: [
+                                pw.Text("Advance Amount"),
+                                pw.Text("${Advance_Amount}",
+                                    style: pw.TextStyle(
+                                        fontWeight: pw.FontWeight.bold,
+                                        font: ttf)),
+                              ])
+                        ],
+                      )),
+                if (add_service == false)
+                  pw.Container(
+                      margin:
+                          pw.EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      height: 40,
+                      width: double.maxFinite,
+                      alignment: pw.Alignment.center,
+                      color: PdfColors.blue,
+                      child: pw.Text("Due Amount: ₹${Du_Amount}",
+                          style: pw.TextStyle(
+                              color: PdfColors.white,
+                              fontSize: 20,
+                              font: ttf))),
+                if (add_service)
+                  pw.Table(
+                    border: pw.TableBorder.all(
+                        color: PdfColor(.5, .5, .5)), // Add border to the table
+                    // defaultColumnWidth: pw.FixedColumnWidth(20),
+                    columnWidths: {
+                      0: pw.FixedColumnWidth(100), // Fixed width for column 1
+                      1: pw.FlexColumnWidth(2), // Flexible width for column 2
+                      2: pw.FlexColumnWidth(1), // Flexible width for column 3
+                      3: pw.FlexColumnWidth(1), // Flexible width for column 3
+                      4: pw.FlexColumnWidth(1), // Flexible width for column 3
+                    },
+                    children: Rows,
+                  ),
+                if (add_service)
                   pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                    children: [pw.Text("Total Amount"),pw.Text("₹${Total}",style: pw.TextStyle(fontWeight: pw.FontWeight.bold,font: ttf)),]),
-                  pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                    children: [pw.Text("Today Amount",),pw.Text("₹${Amount}",style: pw.TextStyle(fontWeight: pw.FontWeight.bold,font: ttf)),]),
-                  pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                    children: [pw.Text("Advance Amount"),pw.Text("${Advance_Amount}",style: pw.TextStyle(fontWeight: pw.FontWeight.bold,font: ttf)),])
-                ],)),
-                if(add_service==false)
-                pw.Container(
-                  margin: pw.EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-                  height: 40,
-                  width: double.maxFinite,
-                  alignment: pw.Alignment.center,
-                  color:  PdfColors.blue,
-                  child: pw.Text("Due Amount: ₹${Du_Amount}",style: pw.TextStyle(color: PdfColors.white,fontSize: 20,font: ttf))
-                ),
-                if(add_service)
-                pw.Table(
-                  border: pw.TableBorder.all(
-                      color: PdfColor(.5, .5, .5)), // Add border to the table
-                  // defaultColumnWidth: pw.FixedColumnWidth(20),
-                  columnWidths: {
-                    0: pw.FixedColumnWidth(100), // Fixed width for column 1
-                    1: pw.FlexColumnWidth(2), // Flexible width for column 2
-                    2: pw.FlexColumnWidth(1), // Flexible width for column 3
-                    3: pw.FlexColumnWidth(1), // Flexible width for column 3
-                    4: pw.FlexColumnWidth(1), // Flexible width for column 3
-                  },
-                  children: Rows,    ),
-                if(add_service)
-                pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                    children: [
-                      pw.Text("Total",
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.Text(Total,
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                    ]),
-                
+                      children: [
+                        pw.Text("Total",
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.Text(Total,
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      ]),
+
                 pw.Text("Terms & Conditions:"),
                 pw.Text(cust_name,
                     style: pw.TextStyle(color: PdfColor(0.5, 0.5, 0.5))),
               ],
             )));
-    final directory = Directory('/storage/emulated/0/Download');
-    final file = File("${directory!.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
-    
-    await file.writeAsBytes(await pdf.save());
-    OpenFilex.open(file.path);
+    // final directory = Directory('/storage/emulated/0/Download');
+    // final file = File("${directory!.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
+
+    // await file.writeAsBytes(await pdf.save());
     log("Save done");
+    return pdf;
+    // OpenFilex.open(file.path);
   }
-   // ____________________________________________________________________   (FacilityDiscountInsert )
+
+  // ____________________________________________________________________   (FacilityDiscountInsert )
   static Future<bool> FacilityDiscountInsert(
-      {
-      required String FacilityId,
+      {required String FacilityId,
       required String DiscountAmount,
       required String IsDiscount}) async {
     String url =
@@ -1194,9 +1280,9 @@ if(add_service){
       log("Error........ RecipitFacilityInsert Api ");
       throw ("Error........ RecipitFacilityInsert Api ");
     }
-}
+  }
 
-static Future<List<dynamic>> SubscriptionList() async {
+  static Future<List<dynamic>> SubscriptionList() async {
     String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"ApiAdd":"SubscriptionList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=SubscriptionList';
     print(url);
@@ -1214,17 +1300,67 @@ static Future<List<dynamic>> SubscriptionList() async {
       throw ("Error........ SubscriptionList Api ");
     }
   }
-  static Future<Map> get_Merchent_Trem_And_Condition()async{
-      String url =
+
+  static Future<Map> get_Merchent_Trem_And_Condition() async {
+    String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MerchantId":\"${User_info["Table"][0]["Id"].toInt()}\","ApiAdd":"MerchentTNC","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MerchentTNC';
     print(url);
     var res = await http.get(Uri.parse(url));
-    if(res.statusCode==200){
+    if (res.statusCode == 200) {
       log("get_Merchent_Trem_And_Condition Api call.....");
-       var data = jsonDecode(res.body);
-       return data;
-    }else{
+      var data = jsonDecode(res.body);
+      return data;
+    } else {
       throw "Error:- get_Merchent_Trem_And_Condition";
+    }
+  }
+
+  // _____________________________________________________________
+  static Future<String> downloadAndSaveImage([String imageUrl = ""]) async {
+    try {
+      // Get the app's documents directory
+      final directory = await getTemporaryDirectory();
+      final filePath = '${directory.path}/${imageUrl.split('/').last}';
+
+      // Check if the file already exists
+      final file = File(filePath);
+      if (await file.exists()) {
+        return filePath; // Return the existing file path
+      }
+
+      // Fetch the image from the URL
+      final response = await http.get(Uri.parse(imageUrl));
+
+      // Check if the response was successful
+      if (response.statusCode == 200) {
+        // Write the image bytes to a file
+        await file.writeAsBytes(response.bodyBytes);
+        return filePath; // Return the file path
+      } else {
+        throw Exception('Failed to download image');
+      }
+    } catch (e) {
+      throw Exception('Error downloading image: $e');
+    }
+  }
+
+  // ____________________________________________________________________   (FacilityDiscountInsert )
+  static Future<bool> DeleteImgvideo({
+    required String Id,
+  }) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"ImageId":"$Id","ApiAdd":"DeleteImgvideo","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=DeleteImgvideo';
+    print(url);
+    var res = await http.get(Uri.parse(url));
+
+    if (res.statusCode == 200) {
+      log("RecipitFacilityInsert Api Call.............");
+      var data = jsonDecode(res.body);
+      print(data);
+      return true;
+    } else {
+      log("Error........ RecipitFacilityInsert Api ");
+      throw ("Error........ RecipitFacilityInsert Api ");
     }
   }
 }
