@@ -655,7 +655,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                             child: Column(
                                               children: [
                                                 AppBar(
-                                                  title: Text('Add Payment',
+                                                  title: Text('Add Payment'.tr,
                                                       style: TextStyle(
                                                           color: Colors.white,
                                                           fontFamily:
@@ -877,7 +877,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                                         add_service: false,
                                                                                         Amount: amount_con2.text,
                                                                                         Du_Amount: _data[Top_index]["DueAmount"],
-                                                                                        Advance_Amount: _data[Top_index]["BookingAmount"]
+                                                                                        Advance_Amount: _data[Top_index]["BookingAmount"]??""
                                                                                       ).then((value) {
                                                                                         Navigator.of(context).pop();
                                                                                          setState(() {
@@ -910,7 +910,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                                         add_service: false,
                                                                                         Amount: amount_con2.text,
                                                                                         Du_Amount: _data[Top_index]["DueAmount"],
-                                                                                        Advance_Amount: _data[Top_index]["BookingAmount"]
+                                                                                        Advance_Amount: _data[Top_index]["BookingAmount"]??""
                                                                                       ).then((value) {
                                                                                         Navigator.of(context).pop();
                                                                                          setState(() {
@@ -977,7 +977,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                         20,
                                     color: Color(0xffC4A68B),
                                     alignment: Alignment.center,
-                                    child: Text('ADD PAYMENT',
+                                    child: Text('ADD PAYMENT'.tr,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'Fontmain',

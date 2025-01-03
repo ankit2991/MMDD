@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -51,7 +52,7 @@ var discount_con=TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Promos & Ads',
+        title: Text('Create Promos & Ads'.tr,
             style: TextStyle(color: Colors.white, fontFamily: 'Fontmain')),
         centerTitle: true,
         backgroundColor: Color(0xffC4A68B),

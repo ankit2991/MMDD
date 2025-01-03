@@ -174,8 +174,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.white,
                       fontFamily: 'Fontmain',
                     )),
-                Text(
+                   
+               Api.User_info["Table"][0]["AccountBalance"]!=null? Text(
                     "₹${Api.User_info["Table"][0]["AccountBalance"].toString()}",
+                    style: TextStyle(
+                      // fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      fontFamily: 'Fontmain',
+                    )):Text(
+                    "₹00",
                     style: TextStyle(
                       // fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -794,7 +801,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             30,
                                                     color: Color(0xffC4A68B),
                                                     alignment: Alignment.center,
-                                                    child: Text('ADD SERVICE',
+                                                    child: Text(
+                                                        'ADD SERVICE'.tr,
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontFamily:
@@ -835,7 +843,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               children: [
                                                                 AppBar(
                                                                   title: Text(
-                                                                      'Add Payment',
+                                                                      'Add Payment'
+                                                                          .tr,
                                                                       style: TextStyle(
                                                                           color: Colors
                                                                               .white,
@@ -961,32 +970,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                     (value) {
                                                                                       _data.clear();
                                                                                       _data = value;
-                                                                                      Api.createPdf(
-                                                                                        Total: _data[Top_index]["TotalAmount"],
-                                                                                        comp_mob_no: Api.User_info["Table"][0]["MobileNo"],
-                                                                                        compny_name: Api.User_info["Table"][0]["OrgName"],
-                                                                                        now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
-                                                                                        cust_mob_no: _data[Top_index]["MobileNo"],
-                                                                                        cust_name: _data[Top_index]["CustomerName"],
-                                                                                        event_date: _data[Top_index]["EventStartDate"],
-                                                                                        event_name: _data[Top_index]["EventName"],
-                                                                                        data: [],
-                                                                                        add_service: false,
-                                                                                        Amount: amount_con2.text,
-                                                                                        Du_Amount: _data[Top_index]["DueAmount"],
-                                                                                        Advance_Amount: _data[Top_index]["BookingAmount"]
-                                                                                      ).then((value) {
+                                                                                      Api.createPdf(Total: _data[Top_index]["TotalAmount"], comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"], cust_name: _data[Top_index]["CustomerName"], event_date: _data[Top_index]["EventStartDate"], event_name: _data[Top_index]["EventName"], data: [], add_service: false, Amount: amount_con2.text, Du_Amount: _data[Top_index]["DueAmount"], Advance_Amount: _data[Top_index]["BookingAmount"] ?? "").then((value) {
                                                                                         Navigator.of(context).pop();
-                                                                                         setState(() {
-                                                                                        loading = false;
-                                                                                      });
+                                                                                        setState(() {
+                                                                                          loading = false;
+                                                                                        });
                                                                                         Navigator.of(context).push(MaterialPageRoute(
                                                                                           builder: (context) => show_pdf(
                                                                                             my_pdf: value,
                                                                                           ),
                                                                                         ));
                                                                                       });
-                                                                                     
+
                                                                                       // print(value);
                                                                                     },
                                                                                   );
@@ -1032,7 +1027,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             30,
                                                     color: Color(0xffC4A68B),
                                                     alignment: Alignment.center,
-                                                    child: Text('ADD PAYMENT',
+                                                    child: Text(
+                                                        'ADD PAYMENT'.tr,
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontFamily:
@@ -1124,13 +1120,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // ),
                                 InkWell(
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => QualityAss()),
-                                    );
-                                    // Your onTap functionality here
-                                    print("Q&A clicked!");
+                                    if (Api.H_Questions["Table1"].isEmpty) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                subscription_plan(ref: ref,)),
+                                      );
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => QualityAss()),
+                                      );
+                                      // Your onTap functionality here
+                                      print("Q&A clicked!");
+                                    }
                                   },
                                   child: Container(
                                     width: 100, // Set your desired width
@@ -1166,25 +1171,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .cover, // Optional: Adjusts how the image is fitted
                                         ),
                                         Spacer(),
-                                        Api.H_Questions.isEmpty
-                                            ? Text(
-                                                "Social Account",
+                                        Api.H_Questions.isNotEmpty
+                                            ? Api.H_Questions["Table1"].isEmpty
+                                                ? Text(
+                                                    "Social Account".tr,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontFamily: 'Fontmain',
+                                                      // fontWeight: FontWeight.w700
+                                                    ), // Slightly reduced font size
+                                                  )
+                                                : Text(
+                                                    "Q&A".tr,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontFamily: 'Fontmain',
+                                                      // fontWeight: FontWeight.w700
+                                                    ), // Slightly reduced font size
+                                                  )
+                                            : Text("Q&A".tr,
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontSize: 15,
                                                   fontFamily: 'Fontmain',
-                                                  // fontWeight: FontWeight.w700
-                                                ), // Slightly reduced font size
-                                              )
-                                            : Text(
-                                                "Q&A".tr,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontFamily: 'Fontmain',
-                                                  // fontWeight: FontWeight.w700
-                                                ), // Slightly reduced font size
-                                              ),
+                                                )),
                                       ],
                                     ),
                                   ),
@@ -1413,69 +1425,70 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              payment_screen()),
-                                    );
-                                  },
-                                  child: Container(
-                                    width: 100, // Set your desired width
-                                    height: 100, // Set your desired height
-                                    padding: EdgeInsets.all(
-                                        12), // Adds padding around the contents
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey
-                                              .withOpacity(0.3), // Shadow color
-                                          spreadRadius:
-                                              2, // Spread of the shadow
-                                          blurRadius:
-                                              2, // Blur radius of the shadow
-                                          offset: Offset(
-                                              0, 2), // Position of the shadow
-                                        ),
-                                      ],
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Spacer(),
-                                        Image.asset(
-                                          "assets/images/main/duereg.png",
-                                          width:
-                                              100, // Adjust the width as needed
-                                          height:
-                                              100, // Adjust the height as needed
-                                          fit: BoxFit
-                                              .cover, // Optional: Adjusts how the image is fitted
-                                        ),
-                                        Spacer(),
-                                        Text(
-                                          "Social Accounts",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontFamily: 'Fontmain',
-                                            // fontWeight: FontWeight.w700
-                                          ), // Slightly reduced font size
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                // InkWell(
+                                //   onTap: () {
+                                //     Navigator.push(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //           builder: (context) =>
+                                //               subscription_plan()),
+                                //     );
+                                //   },
+                                //   child: Container(
+                                //     width: 100, // Set your desired width
+                                //     height: 100, // Set your desired height
+                                //     padding: EdgeInsets.all(
+                                //         12), // Adds padding around the contents
+                                //     decoration: BoxDecoration(
+                                //       color: Colors.white,
+                                //       borderRadius: BorderRadius.circular(8),
+                                //       boxShadow: [
+                                //         BoxShadow(
+                                //           color: Colors.grey
+                                //               .withOpacity(0.3), // Shadow color
+                                //           spreadRadius:
+                                //               2, // Spread of the shadow
+                                //           blurRadius:
+                                //               2, // Blur radius of the shadow
+                                //           offset: Offset(
+                                //               0, 2), // Position of the shadow
+                                //         ),
+                                //       ],
+                                //     ),
+                                //     child: Column(
+                                //       children: [
+                                //         Spacer(),
+                                //         Image.asset(
+                                //           "assets/images/main/duereg.png",
+                                //           width:
+                                //               100, // Adjust the width as needed
+                                //           height:
+                                //               100, // Adjust the height as needed
+                                //           fit: BoxFit
+                                //               .cover, // Optional: Adjusts how the image is fitted
+                                //         ),
+                                //         Spacer(),
+                                //         Text(
+                                //           "Social Accounts".tr,
+                                //           textAlign: TextAlign.center,
+                                //           style: TextStyle(
+                                //             fontSize: 15,
+                                //             fontFamily: 'Fontmain',
+                                //             // fontWeight: FontWeight.w700
+                                //           ), // Slightly reduced font size
+                                //         ),
+                                //       ],
+                                //     ),
+                                //   ),
+                                // ),
+                            
+                             ],
                             )
                           ],
                         ),
                       ),
                     ]))),
-        if (loading||service_data_loder)
+        if (loading || service_data_loder)
           Container(
             color: Colors.black.withOpacity(0.5),
             child: Center(

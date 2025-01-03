@@ -39,10 +39,13 @@ class Api {
         ',"ApiAdd":"MobileOTP","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MobileOTP';
     var res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
-      print(res.body);
-      var data = jsonDecode(res.body);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Duplicate data")));
+      print(res.body.isNotEmpty);
+
+  if(res.body.isNotEmpty){
+        var data = jsonDecode(res.body);
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text("Duplicate data")));
+  }
       // log("Done Send OTP API");
       // return data["Table1"][0]["OTPNo"];
     } else {
@@ -520,6 +523,62 @@ class Api {
       throw ("Error........ ImageInsert Api ");
     }
   }
+  // ____________________________________________________________________   (FacilityInsert with image )
+  static Future<void> FacilityInsert(
+      {
+      // required String MerchantId,
+      required String FacilityName,
+      required String Amount,
+        required File? img,
+      required String Description,
+      required String F_SubServiceCategory,
+      required String ext,
+      context}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/FacilityInsert';
+    print(
+        "=================================================================================");
+    print(url);
+    final headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        "FacilityImg", // Field name expected by the API
+        img!.path,
+      ),
+    );
+    
+    
+    request.fields["MerchantId"] = "${User_info["Table"][0]["Id"].toInt()}";
+   
+    request.fields["FacilityName"] = FacilityName;
+    request.fields["Amount"] = Amount;
+    request.fields["Description"] = Description;
+    request.fields["F_SubServiceCategory"] = F_SubServiceCategory;    
+    request.fields["fileExtention"] = ext;
+    var res = await request.send();
+    if (res.statusCode == 200) {
+      log("ImageInsert Api Call.............");
+      var data = await res.stream.bytesToString();
+      log("ImageInsert Api DATA .............");
+      print(data);
+      if (data.contains("R200")) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Duplicate pdf")));
+      } else {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Image upload Done")));
+        
+      }
+      // return data["Table1"];
+    } else {
+      log("Error........ ImageInsert Api ");
+      throw ("Error........ ImageInsert Api ");
+    }
+  }
 
   // ____________________________________________________________________   (add service in event )
   static Future<bool> RecipitFacilityInsert(
@@ -825,6 +884,7 @@ class Api {
     required String F_SubServiceCategory,
     required String Amount,
     required String Description,
+    // required String FacilityImg,
   }) async {
     String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"FacilityName":"$FacilityName","MerchantId":\"${User_info["Table"][0]["Id"].toInt()}\","F_SubServiceCategory":"$F_SubServiceCategory","Amount":"$Amount","Description":"$Description","FacilityImg":"","ApiAdd":"FacilityInsert_nonimg","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=FacilityInsert_nonimg';
@@ -952,21 +1012,24 @@ class Api {
     String? subject,
     String? body,
   }) async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: toEmail,
-      query: {
-        if (subject != null) 'subject': subject,
-        if (body != null) 'body': body,
-      }.entries
-          .map((entry) => '${entry.key}=${Uri.encodeComponent(entry.value)}')
-          .join('&'),
-    );
+    String? encodeQueryParameters(Map<String, String> params) {
+  return params.entries
+      .map((MapEntry<String, String> e) =>
+          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+      .join('&');
+}
+ final Uri emailLaunchUri = Uri(
+    scheme: 'mailto',
+    path: toEmail,
+    query: encodeQueryParameters(<String, String>{
+      'subject': subject??"",
+    }),
+  );
 
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri,mode: LaunchMode.externalApplication);
+   if (await canLaunchUrl(emailLaunchUri)) {
+      await launchUrl(emailLaunchUri);
     } else {
-      throw 'Could not launch $emailUri';
+      throw 'Could not launch $emailLaunchUri';
     }
   }
 
@@ -1281,7 +1344,7 @@ class Api {
       throw ("Error........ RecipitFacilityInsert Api ");
     }
   }
-
+// _________________________________________________________________________________
   static Future<List<dynamic>> SubscriptionList() async {
     String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"ApiAdd":"SubscriptionList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=SubscriptionList';
@@ -1298,6 +1361,46 @@ class Api {
     } else {
       log("Error........ SubscriptionList Api ");
       throw ("Error........ SubscriptionList Api ");
+    }
+  }
+  
+// _________________________________________________________________________________
+  static Future<List<dynamic>> Packagelist() async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"ApiAdd":"Packagelist","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=Packagelist';
+    print(url);
+    var res = await http.get(Uri.parse(url));
+
+    if (res.statusCode == 200) {
+      log("Packagelist Api Call.............");
+      var data = jsonDecode(res.body);
+      // city_list = data["Table1"];
+      log("Packagelist Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ Packagelist Api ");
+      throw ("Error........ Packagelist Api ");
+    }
+  }
+
+// _________________________________________________________________________________
+  static Future<String> SubscriptionInsert({required String PaymentMode,required String SubscriberId,required String Remarks,required String Amount,required String TransctionNo,required String BankRefNo}) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MemberId":\"${User_info["Table"][0]["Id"].toInt()}\","F_LedgerDr":"-1","PaymentMode":"$PaymentMode","SubscriberId":"$SubscriberId","Remarks":"$Remarks","Amount":"$Amount","TransctionNo":"$TransctionNo","BankRefNo":"$BankRefNo","ApiAdd":"SubscriptionInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=SubscriptionInsert';
+    print(url);
+    var res = await http.get(Uri.parse(url));
+
+    if (res.statusCode == 200) {
+      log("Packagelist Api Call.............");
+      var data = jsonDecode(res.body);
+      // city_list = data["Table1"];
+      log("Packagelist Api DATA .............");
+      print(data);
+      return data["Table"][0]["ResultCode"];
+    } else {
+      log("Error........ Packagelist Api ");
+      throw ("Error........ Packagelist Api ");
     }
   }
 

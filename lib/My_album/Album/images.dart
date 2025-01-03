@@ -198,6 +198,7 @@ class _MyImageState extends State<MyImage> {
                                           "assets/images/main/img.jpg"),
                                       fit: BoxFit.cover)),
                               child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   IconButton(

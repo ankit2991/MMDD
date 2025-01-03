@@ -94,6 +94,7 @@ class _show_pdfState extends State<show_pdf> {
               final file = File(
                   "${directory!.path}/MMDD${DateTime.now().millisecondsSinceEpoch}.pdf");
                file.writeAsBytes(await widget.my_pdf.save()).then((value) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Pdf Save on your Download folder")));
                   Navigator.of(context).pop();
                   temp.value=true;
               },);

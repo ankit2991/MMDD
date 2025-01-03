@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mddmerchant/constrans.dart';
 import 'package:mddmerchant/App_bar/OurService/our_service.dart';
 import 'package:mddmerchant/main.dart';
@@ -48,11 +52,17 @@ class UserProfile extends StatelessWidget {
                 SizedBox(height: 10),
                 Text(
                   Api.User_info["Table"][0]["MemberName"],
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,fontFamily: "Fontmain"),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Fontmain"),
                 ),
                 Text(
                   Api.User_info["Table"][0]["MobileNo"],
-                  style: TextStyle(fontSize: 16, color: Colors.grey[700],fontFamily: "Fontmain"),
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[700],
+                      fontFamily: "Fontmain"),
                 ),
               ],
             ),
@@ -140,7 +150,10 @@ class _Discount_screenState extends State<Discount_screen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Discount"),
+          title: Text(
+            "Discount",
+            style: TextStyle(fontFamily: "Fontmain"),
+          ),
           elevation: 3.5,
           backgroundColor: Color(0xffC4A68B),
           foregroundColor: Colors.white,
@@ -155,19 +168,20 @@ class _Discount_screenState extends State<Discount_screen> {
                   shrinkWrap: true,
                   itemCount: _data.length,
                   itemBuilder: (context, index) {
-                    if(_data[index]["IsDiscount"]!=null){
-                    bools.add(_data[index]["IsDiscount"]);
-                    }else{
-                    bools.add(false);
-
+                    if (_data[index]["IsDiscount"] != null) {
+                      bools.add(_data[index]["IsDiscount"]);
+                    } else {
+                      bools.add(false);
                     }
                     ValueNotifier<bool?> check =
                         ValueNotifier(_data[index]["IsDiscount"]);
                     ValueNotifier<double?> total = ValueNotifier(0);
                     var discount_con = TextEditingController();
-                    if(_data[index]["IsDiscount"]==true){
-                      discount_con.text=_data[index]["DiscountAmount"].toString();
-                      total.value= _data[index]["Amount"]-_data[index]["DiscountAmount"];
+                    if (_data[index]["IsDiscount"] == true) {
+                      discount_con.text =
+                          _data[index]["DiscountAmount"].toString();
+                      total.value = _data[index]["Amount"] -
+                          _data[index]["DiscountAmount"];
                     }
                     // var tot_con=TextEditingController();
                     return Container(
@@ -252,7 +266,6 @@ class _Discount_screenState extends State<Discount_screen> {
                                             int.parse(valuee);
                                       } else {
                                         showDialog(
-                                          
                                           context: context,
                                           builder: (context) => AlertDialog(
                                             title: Text("Something went wrong"),
@@ -269,7 +282,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                               TextButton(
                                                 onPressed: () {
                                                   // Perform an action here
-                                                  discount_con.text="0.0";
+                                                  discount_con.text = "0.0";
                                                   Navigator.pop(
                                                       context); // Close dialog after action
                                                 },
@@ -305,12 +318,11 @@ class _Discount_screenState extends State<Discount_screen> {
                                   return Container(
                                     width: 100,
                                     child: TextFormField(
-                                      
                                       controller: TextEditingController(
                                           text: total.value.toString()),
                                       readOnly: true,
                                       decoration: InputDecoration(
-                                        labelText: "Net Amount",
+                                          labelText: "Net Amount",
                                           enabledBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10),
@@ -331,21 +343,36 @@ class _Discount_screenState extends State<Discount_screen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               GestureDetector(
-                                onTap: (){
-                                  
-                                  Api.FacilityDiscountInsert(DiscountAmount: discount_con.text,FacilityId: _data[index]["Id"].toString(),IsDiscount:bools[index]==true?"1":"0" ).then((value) {
-                                    if(bools[index]==true){
-                                    // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Discount Activated successfully",),backgroundColor: Colors.green,));
-                                    // }else{
-                                    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please remove extra amount",style: TextStyle(color: Colors.white),),backgroundColor: Colors.red,));
-                                    // }
-                                  }else{
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Discount Deactivated successfully"),backgroundColor: Colors.green));
-
-                                  }
-                                  },);
-                                  
+                                onTap: () {
+                                  Api.FacilityDiscountInsert(
+                                          DiscountAmount: discount_con.text,
+                                          FacilityId:
+                                              _data[index]["Id"].toString(),
+                                          IsDiscount:
+                                              bools[index] == true ? "1" : "0")
+                                      .then(
+                                    (value) {
+                                      if (bools[index] == true) {
+                                        // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                            "Discount Activated successfully",
+                                          ),
+                                          backgroundColor: Colors.green,
+                                        ));
+                                        // }else{
+                                        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please remove extra amount",style: TextStyle(color: Colors.white),),backgroundColor: Colors.red,));
+                                        // }
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    "Discount Deactivated successfully"),
+                                                backgroundColor: Colors.green));
+                                      }
+                                    },
+                                  );
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -496,9 +523,11 @@ class Account_Document extends StatelessWidget {
                       File temp = File(value ?? "");
                       Api.ImageInsert(
                           DocType: "4",
-                          MemberAgreementUpload_UploadFile2: "MemberAgreementUpload",
+                          MemberAgreementUpload_UploadFile2:
+                              "MemberAgreementUpload",
                           ext: ".pdf",
-                          img: temp,context: context);
+                          img: temp,
+                          context: context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("File not select")));
@@ -1049,28 +1078,28 @@ class BankInformationPage extends StatelessWidget {
   var acc_holder_name_con = TextEditingController();
   var acc_no_con = TextEditingController();
   var ifsc_code_con = TextEditingController();
-  bool c1 = false;
-  bool c2 = false;
-  bool c3 = false;
-  bool c4 = false;
+  // bool c1 = false;
+  // bool c2 = false;
+  // bool c3 = false;
+  // bool c4 = false;
   // bool c1=false;
   @override
   Widget build(BuildContext context) {
     if (Api.User_info["Table"][0]["Mer_bankName"] != null) {
       bnk_name_con.text = Api.User_info["Table"][0]["Mer_bankName"];
-      c1 = true;
+      // c1 = true;
     }
     if (Api.User_info["Table"][0]["Mer_bankAcc"] != null) {
       acc_no_con.text = Api.User_info["Table"][0]["Mer_bankAcc"];
-      c3 = true;
+      // c3 = true;
     }
     if (Api.User_info["Table"][0]["Mer_IFSCCode"] != null) {
       ifsc_code_con.text = Api.User_info["Table"][0]["Mer_IFSCCode"];
-      c4 = true;
+      // c4 = true;
     }
     if (Api.User_info["Table"][0]["Mer_AcHolderName"] != null) {
       acc_holder_name_con.text = Api.User_info["Table"][0]["Mer_AcHolderName"];
-      c2 = true;
+      // c2 = true;
     }
     return Scaffold(
       appBar: AppBar(
@@ -1094,154 +1123,134 @@ class BankInformationPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           child: Column(
             children: [
-              IgnorePointer(
-                ignoring: c1,
-                child: TextFormField(
-                  controller: bnk_name_con,
-                  decoration: InputDecoration(
-                    labelText: "Bank Name",
-                    labelStyle: TextStyle(
-                      color: Color(0xe5777474),
-                      fontFamily: 'sub-tittle',
-                      fontSize: 14,
-                    ),
-                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xffC4A68B), width: 2),
-                    ),
-                  ),
-                  style: TextStyle(
+              TextFormField(
+                controller: bnk_name_con,
+                decoration: InputDecoration(
+                  labelText: "Bank Name",
+                  labelStyle: TextStyle(
+                    color: Color(0xe5777474),
                     fontFamily: 'sub-tittle',
-                    fontSize: 16.0,
+                    fontSize: 14,
                   ),
-                  inputFormatters: [
-                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                  ],
+                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xffC4A68B)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                  ),
                 ),
+                style: TextStyle(
+                  fontFamily: 'sub-tittle',
+                  fontSize: 16.0,
+                ),
+                inputFormatters: [
+                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                ],
               ),
               const SizedBox(height: 15),
-              IgnorePointer(
-                ignoring: c2,
-                child: TextFormField(
-                  controller: acc_holder_name_con,
-                  decoration: InputDecoration(
-                    labelText: "Account Holder Name",
-                    labelStyle: TextStyle(
-                      color: Color(0xe5777474),
-                      fontFamily: 'sub-tittle',
-                      fontSize: 14,
-                    ),
-                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xffC4A68B), width: 2),
-                    ),
-                  ),
-                  style: TextStyle(
+              TextFormField(
+                controller: acc_holder_name_con,
+                decoration: InputDecoration(
+                  labelText: "Account Holder Name",
+                  labelStyle: TextStyle(
+                    color: Color(0xe5777474),
                     fontFamily: 'sub-tittle',
-                    fontSize: 16.0,
+                    fontSize: 14,
                   ),
-                  inputFormatters: [
-                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                  ],
+                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xffC4A68B)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                  ),
                 ),
+                style: TextStyle(
+                  fontFamily: 'sub-tittle',
+                  fontSize: 16.0,
+                ),
+                inputFormatters: [
+                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                ],
               ),
               const SizedBox(height: 15),
-              IgnorePointer(
-                ignoring: c3,
-                child: TextFormField(
-                  controller: acc_no_con,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: "Account Number",
-                    labelStyle: TextStyle(
-                      color: Color(0xe5777474),
-                      fontFamily: 'sub-tittle',
-                      fontSize: 14,
-                    ),
-                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xffC4A68B), width: 2),
-                    ),
-                  ),
-                  style: TextStyle(
+              TextFormField(
+                controller: acc_no_con,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: "Account Number",
+                  labelStyle: TextStyle(
+                    color: Color(0xe5777474),
                     fontFamily: 'sub-tittle',
-                    fontSize: 16.0,
+                    fontSize: 14,
                   ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9\s]'))
-                  ],
+                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xffC4A68B)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                  ),
                 ),
+                style: TextStyle(
+                  fontFamily: 'sub-tittle',
+                  fontSize: 16.0,
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9\s]'))
+                ],
               ),
               const SizedBox(height: 15),
-              IgnorePointer(
-                ignoring: c4,
-                child: TextFormField(
-                  controller: ifsc_code_con,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: "IFSC Code",
-                    labelStyle: TextStyle(
-                      color: Color(0xe5777474),
-                      fontFamily: 'sub-tittle',
-                      fontSize: 14,
-                    ),
-                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xffC4A68B), width: 2),
-                    ),
-                  ),
-                  style: TextStyle(
+              TextFormField(
+                controller: ifsc_code_con,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: "IFSC Code",
+                  labelStyle: TextStyle(
+                    color: Color(0xe5777474),
                     fontFamily: 'sub-tittle',
-                    fontSize: 16.0,
+                    fontSize: 14,
                   ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9\s]'))
-                  ],
+                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xffC4A68B)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                  ),
                 ),
+                style: TextStyle(
+                  fontFamily: 'sub-tittle',
+                  fontSize: 16.0,
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9\s]'))
+                ],
               ),
               const SizedBox(height: 15),
-              if (Api.User_info["Table"][0]["Mer_bankName"] == null ||
-                  Api.User_info["Table"][0]["Mer_bankAcc"] == null ||
-                  Api.User_info["Table"][0]["Mer_IFSCCode"] == null ||
-                  Api.User_info["Table"][0]["Mer_AcHolderName"] == null)
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xffC4A68B),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0)),
-                      minimumSize: Size(650, 45),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xffC4A68B),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0)),
+                    minimumSize: Size(650, 45),
+                  ),
+                  onPressed: () {
+                    Api.MerchentBankDetail(
+                        Mer_AcHolderName: acc_holder_name_con.text.trim(),
+                        Mer_IFSCCode: ifsc_code_con.text.trim(),
+                        Mer_bankName: bnk_name_con.text.trim(),
+                        Mer_bankAcc: acc_no_con.text.trim());
+                    // Api.downloadPdf("https://tourism.gov.in/sites/default/files/2019-04/dummy-pdf_2.pdf", "abc.pdf");
+                  },
+                  child: Text(
+                    'SAVE',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Fontmain',
                     ),
-                    onPressed: () {
-                      Api.MerchentBankDetail(
-                          Mer_AcHolderName: acc_holder_name_con.text.trim(),
-                          Mer_IFSCCode: ifsc_code_con.text.trim(),
-                          Mer_bankName: bnk_name_con.text.trim(),
-                          Mer_bankAcc: acc_no_con.text.trim());
-                      // Api.downloadPdf("https://tourism.gov.in/sites/default/files/2019-04/dummy-pdf_2.pdf", "abc.pdf");
-                    },
-                    child: Text(
-                      'SAVE',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Fontmain',
-                      ),
-                    ))
+                  ))
             ],
           ),
         ),
@@ -1353,39 +1362,116 @@ class _MyServicesPageState extends State<MyServicesPage> {
                   shrinkWrap: true,
                   itemCount: _data.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.all(10),
-                      height: 80,
-                      // color: Colors.amber,
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 1,
-                              color: const Color.fromARGB(146, 0, 0, 0),
-                            )
-                          ]),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _data[index]["FacilityName"],
-                            style: TextStyle(
-                                fontFamily: "Fontmain",
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            _data[index]["Amount"].toString(),
-                            style: TextStyle(
-                                fontFamily: "Fontmain",
-                                fontWeight: FontWeight.normal),
+                    return Api.User_info["Table"][0]["IsEcom"] == true
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              tileColor:
+                                  const Color.fromARGB(255, 235, 233, 233),
+                              leading: GestureDetector(
+                                onTap: (){
+                                  showDialog(context: context, builder: (context) {
+                                    return Container(height: 300,width: 300,child:  CachedNetworkImage(
+                                  imageUrl: _data[index]["FacilityImg"],
+                                  errorWidget: (context, url, error) {
+                                    return Container(
+                                      height: 80,
+                                      width: 80,
+                                      color: Colors.red,
+                                    );
+                                  },
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) {
+                                    return CupertinoActivityIndicator();
+                                  },
+                                  imageBuilder: (context, imageProvider) {
+                                    return Container(
+                                     
+                                      decoration: BoxDecoration(
+                                          // color: Colors.amber,
+                                          borderRadius: BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              )),
+                                    );
+                                  },
+                                ),);
+                                  },);
+                                },
+                                child: CachedNetworkImage(
+                                  imageUrl: _data[index]["FacilityImg"],
+                                  errorWidget: (context, url, error) {
+                                    return Container(
+                                      height: 80,
+                                      width: 80,
+                                      color: Colors.red,
+                                    );
+                                  },
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) {
+                                    return CupertinoActivityIndicator();
+                                  },
+                                  imageBuilder: (context, imageProvider) {
+                                    return Container(
+                                      height: 80,
+                                      width: 80,
+                                      decoration: BoxDecoration(
+                                          color: Colors.amber,
+                                          borderRadius: BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover)),
+                                    );
+                                  },
+                                ),
+                              ),
+                              title: Text(
+                                _data[index]["FacilityName"],
+                                style: TextStyle(
+                                    fontFamily: "Fontmain",
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                _data[index]["Amount"].toString(),
+                                style: TextStyle(
+                                    fontFamily: "Fontmain",
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ),
                           )
-                        ],
-                      ),
-                    );
+                        : Container(
+                            margin: EdgeInsets.all(10),
+                            height: 80,
+                            // color: Colors.amber,
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 1,
+                                    color: const Color.fromARGB(146, 0, 0, 0),
+                                  )
+                                ]),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _data[index]["FacilityName"],
+                                  style: TextStyle(
+                                      fontFamily: "Fontmain",
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  _data[index]["Amount"].toString(),
+                                  style: TextStyle(
+                                      fontFamily: "Fontmain",
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ],
+                            ),
+                          );
                   },
                 ),
           if (loader)
@@ -1451,6 +1537,8 @@ class _AddServiceState extends State<AddService> {
     );
   }
 
+  File? _image;
+  String ext="";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1477,8 +1565,33 @@ class _AddServiceState extends State<AddService> {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           child: Column(
+            spacing: 15,
             children: [
-              const SizedBox(height: 15),
+              // const SizedBox(height: 15),
+              if (Api.User_info["Table"][0]["IsEcom"] == true)
+                GestureDetector(
+                  onTap: () {
+                    Api.pickImage(source: ImageSource.gallery, img: true).then(
+                      (value) {
+                        setState(() {
+                          _image = value["file"];
+                          ext = value["ext"];
+                        });
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 200,
+                    width: 600,
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        image: DecorationImage(
+                            image: _image != null
+                                ? FileImage(_image!)
+                                : AssetImage("assets/images/main/img.jpg"),
+                            fit: BoxFit.fill)),
+                  ),
+                ),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
                 // iconSize: 20,
@@ -1554,7 +1667,7 @@ class _AddServiceState extends State<AddService> {
                   // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
                 ],
               ),
-              const SizedBox(height: 15),
+              // const SizedBox(height: 15),
               TextFormField(
                 controller: service_con,
                 decoration: InputDecoration(
@@ -1580,7 +1693,7 @@ class _AddServiceState extends State<AddService> {
                   // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
                 ],
               ),
-              const SizedBox(height: 15),
+              // const SizedBox(height: 15),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xffC4A68B),
@@ -1588,21 +1701,38 @@ class _AddServiceState extends State<AddService> {
                         borderRadius: BorderRadius.circular(0)),
                     minimumSize: Size(650, 45),
                   ),
-                  onPressed: () {
-                    Api.FacilityInsert_nonimg(
-                            Amount: amount_con.text.trim(),
-                            Description: service_con.text.trim(),
-                            F_SubServiceCategory:
-                                selectted_service_id.toString(),
-                            FacilityName: service_name_con.text.trim())
-                        .then(
-                      (value) {
-                        if (value) {
-                          widget.refresh();
-                          Navigator.of(context).pop();
-                        }
-                      },
-                    );
+                  onPressed: () async {
+                    if (Api.User_info["Table"][0]["IsEcom"] == true) {
+                      // List<int> fileBytes = await _image!.readAsBytes();
+                      // String base64File = base64Encode(fileBytes);
+                      Api.FacilityInsert(
+                        Amount: amount_con.text.trim(),
+                        Description: service_con.text.trim(),
+                        F_SubServiceCategory: selectted_service_id.toString(),
+                        FacilityName: service_name_con.text.trim(),
+                        ext: "."+ext ?? "",
+                        img: _image,
+                        context: context,
+                      ).then((value) {
+                         widget.refresh();
+                            Navigator.of(context).pop();
+                      },);
+                    } else {
+                      Api.FacilityInsert_nonimg(
+                        Amount: amount_con.text.trim(),
+                        Description: service_con.text.trim(),
+                        F_SubServiceCategory: selectted_service_id.toString(),
+                        FacilityName: service_name_con.text.trim(),
+                        // FacilityImg: base64File
+                      ).then(
+                        (value) {
+                          if (value) {
+                            widget.refresh();
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      );
+                    }
                   },
                   child: Text(
                     'SAVE',
@@ -1663,20 +1793,22 @@ class TermsAndConditionsPage extends StatefulWidget {
 
 class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
   var terms_con = TextEditingController();
-  bool loader=false;
- Map _data={};
+  bool loader = false;
+  Map _data = {};
   @override
   void initState() {
-    loader=true;
+    loader = true;
     // TODO: implement initState
     super.initState();
-    Api.get_Merchent_Trem_And_Condition().then((value) {
-      _data=value;
-     terms_con.text= _data["Table1"][0]["TermsAndConditions"];
-      setState(() {
-        loader=false;
-      });
-    },);
+    Api.get_Merchent_Trem_And_Condition().then(
+      (value) {
+        _data = value;
+        terms_con.text = _data["Table1"][0]["TermsAndConditions"];
+        setState(() {
+          loader = false;
+        });
+      },
+    );
   }
 
   @override
@@ -1727,23 +1859,21 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                       minimumSize: Size(550, 50),
                     ),
                     onPressed: () {
-                     
-                        setState(() {
-                          loader=true;
-                        });
-                        Api.Add_Merchant_TremAndCond(
-                                TermsAndConditions: terms_con.text)
-                            .then(
-                          (value) {
-                            if (value) {
-                               setState(() {
-                          loader=false;
-                        });
-                              Navigator.of(context).pop();
-                            }
-                          },
-                        );
-                      
+                      setState(() {
+                        loader = true;
+                      });
+                      Api.Add_Merchant_TremAndCond(
+                              TermsAndConditions: terms_con.text)
+                          .then(
+                        (value) {
+                          if (value) {
+                            setState(() {
+                              loader = false;
+                            });
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      );
                     },
                     child: Text(
                       'SAVE',
@@ -1755,7 +1885,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
               ],
             ),
           ),
-           if (loader)
+          if (loader)
             Container(
               color: Colors.black.withOpacity(0.5),
               child: Center(
@@ -1957,15 +2087,14 @@ class _PhoneDiaryState extends State<PhoneDiary> {
         children: [
           loader
               ? Center(
-                child: Text(
+                  child: Text(
                     'No Data Awailable',
                     style: TextStyle(
                         fontFamily: 'Fontmain', color: Color(0xe5777474)),
                   ),
-              )
+                )
               : ListView.builder(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   itemCount: _data.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
@@ -1987,8 +2116,7 @@ class _PhoneDiaryState extends State<PhoneDiary> {
                     // );
                     return Container(
                       padding: EdgeInsets.all(5),
-                      margin:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
@@ -2014,8 +2142,7 @@ class _PhoneDiaryState extends State<PhoneDiary> {
                             children: [
                               GestureDetector(
                                   onTap: () {
-                                    Api.launchDialer(
-                                        _data[index]["MobileNo"]);
+                                    Api.launchDialer(_data[index]["MobileNo"]);
                                   },
                                   child: Icon(Icons.phone)),
                               Text(_data[index]["MobileNo"],
@@ -2047,56 +2174,92 @@ class ContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Contact Us',
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Fontmain',
-          ),
-        ),
-        backgroundColor: Color(0xffC4A68B),
-        centerTitle: true,
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-      ),
-      body: Column(children: [
-        Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),boxShadow: [BoxShadow(color: const Color.fromARGB(148, 0, 0, 0),offset: Offset(0, 0),blurRadius: 5)],color: Colors.white),
-          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-          margin:EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Call Us : 18005700102",style: TextStyle(fontFamily: "Fontmain",fontSize: 15),),
-            IconButton(onPressed: (){Api.launchDialer("18005700102");
-                                        }, icon: Icon(Icons.phone))
-          ],
-        ),
-        ),
-        Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),boxShadow: [BoxShadow(color: const Color.fromARGB(148, 0, 0, 0),offset: Offset(0, 0),blurRadius: 5)],color: Colors.white),
-          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-          margin:EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                Text("Mail Us :",style: TextStyle(fontFamily: "Fontmain",fontSize: 15)),
-                Text("suport@makemydreamday.in",style: TextStyle(fontFamily: "Fontmain",fontSize: 15))
-              ],),
+        appBar: AppBar(
+          title: Text(
+            'Contact Us',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Fontmain',
             ),
-              IconButton(onPressed: (){Api.openEmail(toEmail: "suport@makemydreamday.in");}, icon: Icon(Icons.mail))
-          ],),
-        )
-      ],)
-    );
+          ),
+          backgroundColor: Color(0xffC4A68B),
+          centerTitle: true,
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ),
+        body: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: const Color.fromARGB(148, 0, 0, 0),
+                        offset: Offset(0, 0),
+                        blurRadius: 5)
+                  ],
+                  color: Colors.white),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Call Us : 18005700102",
+                    style: TextStyle(fontFamily: "Fontmain", fontSize: 15),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        Api.launchDialer("18005700102");
+                      },
+                      icon: Icon(Icons.phone))
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: const Color.fromARGB(148, 0, 0, 0),
+                        offset: Offset(0, 0),
+                        blurRadius: 5)
+                  ],
+                  color: Colors.white),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Mail Us :",
+                            style: TextStyle(
+                                fontFamily: "Fontmain", fontSize: 15)),
+                        Text("suport@makemydreamday.in",
+                            style:
+                                TextStyle(fontFamily: "Fontmain", fontSize: 15))
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        Api.openEmail(
+                            toEmail: "suport@makemydreamday.in",
+                            body: "",
+                            subject: "");
+                      },
+                      icon: Icon(Icons.mail))
+                ],
+              ),
+            )
+          ],
+        ));
   }
 }
 
@@ -2197,7 +2360,8 @@ class _LogOutPageState extends State<LogOutPage> {
                                   bool check_user =
                                       await Api.mob_check(mob_con.text.trim());
                                   if (!check_user) {
-                                    await Api.send_otp(mob_con.text.trim(),context);
+                                    await Api.send_otp(
+                                        mob_con.text.trim(), context);
                                     // await Api.send_otp(mob_con.text.trim());
                                     Navigator.push(
                                         context,

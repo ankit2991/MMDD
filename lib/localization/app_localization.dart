@@ -21,8 +21,13 @@ class AppTranslations extends Translations {
           'Videos':'Videos',
           'My Booking':'My Booking',
           'Questions':'Questions',
-          'Add Booking':'Add Booking'
-          
+          'Add Booking':'Add Booking',
+          'Social Accounts':'Social Account',
+          'Subscription Plan':'Subscription Plan',
+          'GET STARTED':'GET STARTED',
+          'Create Promos & Ads':'Create Promos & Ads',
+          'ADD SERVICE':'ADD SERVICE',
+          'ADD PAYMENT':'ADD PAYMENT',
         },
         'hi_IN': {
           'Album': 'मेरे एल्बम',
@@ -37,7 +42,13 @@ class AppTranslations extends Translations {
           'Videos':'वीडियो',
           'My Booking':'मेरी बुकिंग',
           'Questions':'प्रश्न',
-          'Add Booking':'बुकिंग जोड़ें'
+          'Add Booking':'बुकिंग जोड़ें',
+          'Social Accounts':'सामाजिक खाता',
+          'Subscription Plan':'सदस्यता योजना',
+          'GET STARTED':'शुरू करें',
+          'Create Promos & Ads':'प्रोमो और विज्ञापन बनाएं',
+          'ADD SERVICE':'सेवा जोड़ें',
+          'ADD PAYMENT':'भुगतान जोड़ें'
          
         },
       };
