@@ -368,10 +368,8 @@ class _MpinPageState extends State<MpinPage> {
                                               },
                                             );
                                           } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content:
-                                                        Text("invalid M-pin")));
+                                            
+                                            Api.snack_bar(context: context, message: "invalid M-pin");
                                             n1.clear();
                                             n2.clear();
                                             n3.clear();
@@ -483,8 +481,7 @@ class _MpinPageState extends State<MpinPage> {
                                     },
                                   );
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("invalid M-pin")));
+                                Api.snack_bar(context: context, message: "invalid M-pin");
                                   n1.clear();
                                   n2.clear();
                                   n3.clear();
@@ -496,9 +493,7 @@ class _MpinPageState extends State<MpinPage> {
                                   loader = false;
                                 });
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text("please enter M-Pin")));
+                              Api.snack_bar(context: context, message: "please enter M-Pin");
                               }
                               // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisTration()));
                             },

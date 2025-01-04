@@ -26,9 +26,7 @@ class _QualityAssState extends State<QualityAss> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(Api.H_Questions.isEmpty){
-      
-    }
+    if (Api.H_Questions.isEmpty) {}
     // loader = true;
     // Api.Service_Question_List().then(
     //   (value) {
@@ -64,7 +62,10 @@ class _QualityAssState extends State<QualityAss> {
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               child: loader
                   ? Center(
-                      child: Text("No Data Available",style: TextStyle(fontFamily: 'Fontmain'),),
+                      child: Text(
+                        "No Data Available",
+                        style: TextStyle(fontFamily: 'Fontmain'),
+                      ),
                     )
                   : ListView.builder(
                       itemCount: Api.H_Questions["Table1"].length,
@@ -101,9 +102,13 @@ class _QualityAssState extends State<QualityAss> {
                                             ["Question"]
                                         .runes
                                         .toList()),
-                                    style:Api.prefs.getInt("is_Hindi")==0?TextStyle(fontSize: 15,fontFamily: 'Fontmain'): TextStyle(
-                                        fontFamily: "hindi-font",
-                                        fontSize: 20)),
+                                    style: Api.prefs.getInt("is_Hindi") == 0
+                                        ? TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'Fontmain')
+                                        : TextStyle(
+                                            fontFamily: "hindi-font",
+                                            fontSize: 20)),
                                 if (Api.H_Questions["Table1"][index]
                                         ["QuestionType"] ==
                                     "Signal Optional")
@@ -111,8 +116,14 @@ class _QualityAssState extends State<QualityAss> {
                                     padding: EdgeInsets.only(bottom: 20),
                                     // color: Colors.blue,
                                     child: GridView.builder(
-                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 3,crossAxisSpacing: 0,mainAxisSpacing: 7,),
-                                      
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: 3,
+                                        crossAxisSpacing: 0,
+                                        mainAxisSpacing: 7,
+                                      ),
+
                                       // itemExtent: 30,
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
@@ -123,10 +134,10 @@ class _QualityAssState extends State<QualityAss> {
                                                 ["Option" + "${index1 + 1}"] !=
                                             null) {
                                           return RadioListTile<String>(
-                                        
                                             contentPadding: EdgeInsets.zero,
-                                            visualDensity: VisualDensity(horizontal: -2, vertical: -4),    
-                                                                                     
+                                            visualDensity: VisualDensity(
+                                                horizontal: -2, vertical: -4),
+
                                             title: Text(
                                                 utf8.decode(Api
                                                     .H_Questions["Table1"]
@@ -134,9 +145,16 @@ class _QualityAssState extends State<QualityAss> {
                                                             "${index1 + 1}"]
                                                     .runes
                                                     .toList()),
-                                                style:Api.prefs.getInt("is_Hindi")==0?TextStyle(fontSize: 11,fontFamily: 'Fontmain'): TextStyle(
-                                                    fontFamily: "hindi-font",
-                                                    fontSize: 15)),
+                                                style: Api.prefs.getInt(
+                                                            "is_Hindi") ==
+                                                        0
+                                                    ? TextStyle(
+                                                        fontSize: 11,
+                                                        fontFamily: 'Fontmain')
+                                                    : TextStyle(
+                                                        fontFamily:
+                                                            "hindi-font",
+                                                        fontSize: 15)),
                                             value: utf8.decode(Api
                                                 .H_Questions["Table1"][index]
                                                     ["Option" + "${index1 + 1}"]
@@ -144,7 +162,7 @@ class _QualityAssState extends State<QualityAss> {
                                                 .toList()),
                                             // style: GoogleFonts.notoSansDevanagari(fontSize: 20),
                                             groupValue: op_ans[index],
-                                          
+
                                             onChanged: (value) {
                                               print(index1);
                                               setState(() {
@@ -201,7 +219,13 @@ class _QualityAssState extends State<QualityAss> {
                                         ["QuestionType"] ==
                                     "Multipal Optional")
                                   GridView.builder(
-                                    gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 2,crossAxisSpacing: 0,mainAxisSpacing: 5,),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 2,
+                                      crossAxisSpacing: 0,
+                                      mainAxisSpacing: 5,
+                                    ),
                                     physics: NeverScrollableScrollPhysics(),
                                     itemCount: Api.H_Questions["Table1"].length,
                                     shrinkWrap: true,
@@ -213,14 +237,23 @@ class _QualityAssState extends State<QualityAss> {
                                               ["Option" + "${index2 + 1}"] !=
                                           null) {
                                         return CheckboxListTile(
-                                          title: Text(utf8.decode((Api
-                                                          .H_Questions["Table1"]
-                                                      [index]
-                                                  ["Option" + "${index2 + 1}"])
-                                              .runes
-                                              .toList()),style: Api.prefs.getInt("is_Hindi")==0?TextStyle(fontSize: 10,fontFamily: 'Fontmain'): TextStyle(
-                                                    fontFamily: "hindi-font",
-                                                    fontSize: 10)),
+                                          title: Text(
+                                              utf8.decode(
+                                                  (Api.H_Questions["Table1"]
+                                                              [index]
+                                                          ["Option" +
+                                                              "${index2 + 1}"])
+                                                      .runes
+                                                      .toList()),
+                                              style: Api.prefs
+                                                          .getInt("is_Hindi") ==
+                                                      0
+                                                  ? TextStyle(
+                                                      fontSize: 10,
+                                                      fontFamily: 'Fontmain')
+                                                  : TextStyle(
+                                                      fontFamily: "hindi-font",
+                                                      fontSize: 10)),
                                           value: check_box_ans_bool[index]
                                               [index2],
                                           onChanged: (bool? value) {
@@ -252,10 +285,9 @@ class _QualityAssState extends State<QualityAss> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     GestureDetector(
-                                      onTap: () async{
+                                      onTap: () async {
                                         setState(() {
-                                        loader=true;
-                                          
+                                          loader = true;
                                         });
                                         print(op_ans_index[index]);
                                         print(op_ans[index]);
@@ -266,7 +298,7 @@ class _QualityAssState extends State<QualityAss> {
                                                 ["QuestionType"] ==
                                             "Signal Optional") {
                                           if (op_ans_index[index] == 0) {
-                                          await  Api.MerchantAnswareInsert(
+                                            await Api.MerchantAnswareInsert(
                                                 Question: utf8.decode(Api
                                                     .H_Questions["Table1"]
                                                         [index]["Question"]
@@ -277,7 +309,7 @@ class _QualityAssState extends State<QualityAss> {
                                                 Answer1: op_ans[index]);
                                           }
                                           if (op_ans_index[index] == 1) {
-                                          await  Api.MerchantAnswareInsert(
+                                            await Api.MerchantAnswareInsert(
                                                 Question: utf8.decode(Api
                                                     .H_Questions["Table1"]
                                                         [index]["Question"]
@@ -288,7 +320,7 @@ class _QualityAssState extends State<QualityAss> {
                                                 Answer2: op_ans[index]);
                                           }
                                           if (op_ans_index[index] == 2) {
-                                          await  Api.MerchantAnswareInsert(
+                                            await Api.MerchantAnswareInsert(
                                                 Question: utf8.decode(Api
                                                     .H_Questions["Table1"]
                                                         [index]["Question"]
@@ -299,7 +331,7 @@ class _QualityAssState extends State<QualityAss> {
                                                 Answer3: op_ans[index]);
                                           }
                                           if (op_ans_index[index] == 3) {
-                                          await  Api.MerchantAnswareInsert(
+                                            await Api.MerchantAnswareInsert(
                                                 Question: utf8.decode(Api
                                                     .H_Questions["Table1"]
                                                         [index]["Question"]
@@ -310,7 +342,7 @@ class _QualityAssState extends State<QualityAss> {
                                                 Answer4: op_ans[index]);
                                           }
                                           if (op_ans_index[index] == 4) {
-                                           await Api.MerchantAnswareInsert(
+                                            await Api.MerchantAnswareInsert(
                                                 Question: utf8.decode(Api
                                                     .H_Questions["Table1"]
                                                         [index]["Question"]
@@ -321,7 +353,7 @@ class _QualityAssState extends State<QualityAss> {
                                                 Answer5: op_ans[index]);
                                           }
                                           if (op_ans_index[index] == 5) {
-                                           await Api.MerchantAnswareInsert(
+                                            await Api.MerchantAnswareInsert(
                                                 Question: utf8.decode(Api
                                                     .H_Questions["Table1"]
                                                         [index]["Question"]
@@ -332,7 +364,7 @@ class _QualityAssState extends State<QualityAss> {
                                                 Answer6: op_ans[index]);
                                           }
                                           if (op_ans_index[index] == 6) {
-                                          await  Api.MerchantAnswareInsert(
+                                            await Api.MerchantAnswareInsert(
                                                 Question: utf8.decode(Api
                                                     .H_Questions["Table1"]
                                                         [index]["Question"]
@@ -345,30 +377,10 @@ class _QualityAssState extends State<QualityAss> {
                                           print(op_ans);
                                         }
 
-                                            if (Api.H_Questions["Table1"][index]
-                                                    ["QuestionType"] ==
-                                                "Multipal Optional") {
-                                                await  Api.MerchantAnswareInsert(
-                                                    Question: utf8.decode(Api
-                                                        .H_Questions["Table1"]
-                                                            [index]["Question"]
-                                                        .runes
-                                                        .toList()),
-                                                    Q_id: Api.H_Questions["Table1"]
-                                                        [index]["Id"],
-                                                        Answer1: check_box_ans[index][0],
-                                                        Answer2: check_box_ans[index][1],
-                                                        Answer3: check_box_ans[index][2],
-                                                        Answer4: check_box_ans[index][3],
-                                                        Answer5: check_box_ans[index][4],
-                                                        Answer6: check_box_ans[index][5],
-                                                        Answer7: check_box_ans[index][6],
-                                                  );
-                                                }
                                         if (Api.H_Questions["Table1"][index]
                                                 ["QuestionType"] ==
-                                            "Input Type") {
-                                         await  Api.MerchantAnswareInsert(
+                                            "Multipal Optional") {
+                                          await Api.MerchantAnswareInsert(
                                             Question: utf8.decode(Api
                                                 .H_Questions["Table1"][index]
                                                     ["Question"]
@@ -376,11 +388,31 @@ class _QualityAssState extends State<QualityAss> {
                                                 .toList()),
                                             Q_id: Api.H_Questions["Table1"]
                                                 [index]["Id"],
-                                                Answer1: Text_answer[index],
+                                            Answer1: check_box_ans[index][0],
+                                            Answer2: check_box_ans[index][1],
+                                            Answer3: check_box_ans[index][2],
+                                            Answer4: check_box_ans[index][3],
+                                            Answer5: check_box_ans[index][4],
+                                            Answer6: check_box_ans[index][5],
+                                            Answer7: check_box_ans[index][6],
+                                          );
+                                        }
+                                        if (Api.H_Questions["Table1"][index]
+                                                ["QuestionType"] ==
+                                            "Input Type") {
+                                          await Api.MerchantAnswareInsert(
+                                            Question: utf8.decode(Api
+                                                .H_Questions["Table1"][index]
+                                                    ["Question"]
+                                                .runes
+                                                .toList()),
+                                            Q_id: Api.H_Questions["Table1"]
+                                                [index]["Id"],
+                                            Answer1: Text_answer[index],
                                           );
                                         }
                                         setState(() {
-                                          loader=false;
+                                          loader = false;
                                         });
                                       },
                                       child: Container(

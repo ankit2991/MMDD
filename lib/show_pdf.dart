@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mddmerchant/api/api.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:share_plus/share_plus.dart';
@@ -94,7 +95,8 @@ class _show_pdfState extends State<show_pdf> {
               final file = File(
                   "${directory!.path}/MMDD${DateTime.now().millisecondsSinceEpoch}.pdf");
                file.writeAsBytes(await widget.my_pdf.save()).then((value) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Pdf Save on your Download folder")));
+               
+                Api.snack_bar(context: context, message: "Pdf Save on your Download folder");
                   Navigator.of(context).pop();
                   temp.value=true;
               },);

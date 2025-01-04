@@ -50,6 +50,7 @@ class UserProfile extends StatelessWidget {
                   child: Icon(Icons.person, size: 50, color: Colors.white),
                 ),
                 SizedBox(height: 10),
+                 
                 Text(
                   Api.User_info["Table"][0]["MemberName"],
                   style: TextStyle(
@@ -57,6 +58,7 @@ class UserProfile extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontFamily: "Fontmain"),
                 ),
+              
                 Text(
                   Api.User_info["Table"][0]["MobileNo"],
                   style: TextStyle(
@@ -64,6 +66,22 @@ class UserProfile extends StatelessWidget {
                       color: Colors.grey[700],
                       fontFamily: "Fontmain"),
                 ),
+                  Api.User_info["Table"][0]["AccountBalance"]!=null? Text(
+                    "Wallet ₹${Api.User_info["Table"][0]["AccountBalance"].toString()}",
+                    style: TextStyle(
+                      fontSize: 16,
+                      // fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                      fontFamily: 'Fontmain',
+                    )):Text(
+                    "Wallet ₹00",
+                    style: TextStyle(
+                      fontSize: 16,
+                      // fontWeight: FontWeight.w700,
+                      color: Colors.grey[700],
+                      fontFamily: 'Fontmain',
+                    )),
+                
               ],
             ),
           ),
@@ -354,22 +372,10 @@ class _Discount_screenState extends State<Discount_screen> {
                                     (value) {
                                       if (bools[index] == true) {
                                         // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                            "Discount Activated successfully",
-                                          ),
-                                          backgroundColor: Colors.green,
-                                        ));
-                                        // }else{
-                                        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please remove extra amount",style: TextStyle(color: Colors.white),),backgroundColor: Colors.red,));
-                                        // }
+                                        Api.snack_bar(context: context, message: "Discount Activated successfully");
+                                      
                                       } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    "Discount Deactivated successfully"),
-                                                backgroundColor: Colors.green));
+                                        Api.snack_bar(context: context, message: "Discount Deactivated successfully");
                                       }
                                     },
                                   );
@@ -488,10 +494,7 @@ class Account_Document extends StatelessWidget {
               onTap: () {
                 Api.moveFileToLocalStorage().then(
                   (value) {
-                    Get.snackbar("success", "check your download folder",
-                        backgroundColor:
-                            const Color.fromARGB(103, 33, 149, 243),
-                        colorText: Colors.black);
+                  Api.snack_bar(context: context, message: "check your download folder");
                   },
                 );
               },
@@ -529,8 +532,7 @@ class Account_Document extends StatelessWidget {
                           img: temp,
                           context: context);
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("File not select")));
+                      Api.snack_bar(context: context, message: "File not select");
                     }
                   },
                 );
@@ -1045,17 +1047,12 @@ class RegistrationInformationPage extends StatelessWidget {
                             if (value) {
                               Navigator.of(context).pop();
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Error :- ")));
+                              Api.snack_bar(context: context, message: "Something Went Wrong");
                             }
                           },
                         );
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                          "fill all fields ",
-                          style: TextStyle(color: Colors.red),
-                        )));
+                        Api.snack_bar(context: context, message: "fill all fields");
                       }
                     },
                     child: Text(
@@ -2384,16 +2381,10 @@ class _LogOutPageState extends State<LogOutPage> {
                                   loader = false;
                                 });
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            "Please enter proper phone number")));
+                                    Api.snack_bar(context: context, message: "Please enter proper phone number");
                               }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content:
-                                          Text("Please enter phone number")));
+                              Api.snack_bar(context: context, message: "Please enter phone number");
                             }
                           },
                           style: ElevatedButton.styleFrom(

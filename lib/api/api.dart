@@ -3,6 +3,7 @@ import "dart:developer";
 import "dart:io";
 import "dart:ui";
 import 'dart:ui' as ui;
+import "package:another_flushbar/flushbar.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
@@ -29,7 +30,40 @@ class Api {
   static Future<void> local_dataBase() async {
     prefs = await SharedPreferences.getInstance();
   }
-
+static Future<void> snack_bar({required context,required String message})async{
+  Flushbar(
+  // message:message,
+  backgroundColor: Colors.transparent,
+  borderRadius: BorderRadius.circular(20),
+  messageText: Container(
+          alignment: Alignment.center,
+    color: Colors.transparent,
+    child: IntrinsicWidth(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+        decoration: BoxDecoration(color: const Color.fromARGB(255, 255, 255, 255),borderRadius: BorderRadius.circular(10)),
+        alignment: Alignment.center,
+        child: Row(
+          spacing: 10,
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center ,
+          children: [
+            CircleAvatar(child: Image.asset("assets/logo/app logo.png",height: 23,),radius: 13,backgroundColor: Colors.black,),
+            Text(message,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w600),),
+          ],
+        ),
+      ),
+    ),
+  ),
+  duration: Duration(seconds: 3),
+  // margin: EdgeInsets.symmetric(horizontal: double.maxFinite),
+  
+  // icon: ,
+  animationDuration: Duration(milliseconds: 500),
+  // leftBarIndicatorColor: Colors.blue,
+  flushbarPosition: FlushbarPosition.TOP, // Position from top
+).show(context);
+}
   // -------------------------------------------------------------------------------------------  (send OTP)
   static Future<void> send_otp(String mob_no, context) async {
     // String url='https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MobileNo":'"'$mob_no'"',"ApiAdd":"MobileOTP","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MobileOtp';
@@ -229,8 +263,7 @@ class Api {
     if (!serviceEnable) {
       Geolocator.openLocationSettings();
       // Geolocator.openAppSettings();
-      ScaffoldMessenger.maybeOf(context)!
-          .showSnackBar(SnackBar(content: Text("turn on Location")));
+          Api.snack_bar(context: context, message: "turn on Location");
       loader(false);
       return Future.error("Location services are disabled.");
     }
@@ -239,15 +272,13 @@ class Api {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         loader(false);
-        ScaffoldMessenger.maybeOf(context)!.showSnackBar(
-            SnackBar(content: Text("Location permissions are denied")));
+          snack_bar(context: context, message: "Location permissions are denied");
         return Future.error("Location permissions are denied");
       }
     }
     if (permission == LocationPermission.deniedForever) {
       loader(false);
-      ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(
-          content: Text("Location Permission are permanently denied")));
+         snack_bar(context: context, message: "Location Permission are permanently denied");
       return Future.error(
           "Location Permission are permanently denied, we cannot request");
     }
@@ -503,18 +534,14 @@ class Api {
       log("ImageInsert Api DATA .............");
       print(data);
       if (data.contains("R200")) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Duplicate pdf")));
+            snack_bar(context: context, message: "Duplicate pdf");
       } else {
-        if (ext == ".pdf") {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("PDF upload Done")));
+        if (ext == ".pdf") {    
+          snack_bar(context: context, message: "PDF Upload Done");
         } else if (ext == ".mp4") {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Video upload Done")));
+          snack_bar(context: context, message: "Video Upload Done");
         } else {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Image upload Done")));
+          snack_bar(context: context, message: "Image Upload Done");
         }
       }
       // return data["Table1"];
@@ -566,11 +593,9 @@ class Api {
       log("ImageInsert Api DATA .............");
       print(data);
       if (data.contains("R200")) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Duplicate pdf")));
+            snack_bar(context: context, message: "Duplicate pdf");
       } else {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Image upload Done")));
+        snack_bar(context: context, message: "Image Upload Done");
         
       }
       // return data["Table1"];
@@ -685,8 +710,7 @@ class Api {
       var data = jsonDecode(res.body);
       print(data);
       if (data["Table"][0]["ResultCode"] == "R200") {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Duplicate User")));
+        snack_bar(context: context, message: "Duplicate User");
         return false;
       }
       log("RecipitFacilityInsert Api Call.............");

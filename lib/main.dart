@@ -14,7 +14,7 @@ import 'package:mddmerchant/Q&A/quality_assurance.dart';
 import 'package:mddmerchant/Booking_reg/booking_regi.dart';
 import 'package:mddmerchant/App_bar/user_acc.dart';
 import 'package:mddmerchant/localization/app_localization.dart';
-import 'package:mddmerchant/screen/payment.dart';
+import 'package:mddmerchant/screen/subdcription_plan.dart';
 
 // import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mddmerchant/screen/spalashscreen.dart';
@@ -161,36 +161,13 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: mainColor,
           automaticallyImplyLeading: false,
           elevation: 2.0,
-          title: Container(
-            height: 45,
-            // color: Colors.amber,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(Api.User_info["Table"][0]["MemberName"],
-                    style: TextStyle(
-                      // fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      fontFamily: 'Fontmain',
-                    )),
-                   
-               Api.User_info["Table"][0]["AccountBalance"]!=null? Text(
-                    "₹${Api.User_info["Table"][0]["AccountBalance"].toString()}",
-                    style: TextStyle(
-                      // fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      fontFamily: 'Fontmain',
-                    )):Text(
-                    "₹00",
-                    style: TextStyle(
-                      // fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      fontFamily: 'Fontmain',
-                    )),
-              ],
-            ),
-          ),
+          // centerTitle: true,
+          title: Text(Api.User_info["Table"][0]["MemberName"],
+              style: TextStyle(
+                // fontWeight: FontWeight.w700,
+                color: Colors.white,
+                fontFamily: 'Fontmain',
+              )),
           // centerTitle: true,
           actions: [
             IconButton(
@@ -595,7 +572,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                       setState(() {
                                                                                         loading = false;
                                                                                       });
-                                                                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("palce select services")));
+                                                                                   
+                                                                                      Api.snack_bar(context: context, message: "palce select services");
                                                                                     }
                                                                                   },
                                                                                   child: Container(
@@ -1499,6 +1477,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
       ]),
+   
     );
   }
 }

@@ -672,8 +672,7 @@ bool loader=false;
                                   log("Done");
                                 }
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text("Wrong pin")));
+                                Api.snack_bar(context: context, message: "Wrong pin");
                               }
                               setState(() {
                                 loader=false;

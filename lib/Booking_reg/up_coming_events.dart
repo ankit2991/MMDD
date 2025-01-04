@@ -385,10 +385,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                         loder =
                                                                             false;
                                                                       });
-                                                                      ScaffoldMessenger.of(
-                                                                              context)
-                                                                          .showSnackBar(
-                                                                              SnackBar(content: Text("palce select services")));
+                                                                      Api.snack_bar(context: context, message: "palce select services");
                                                                     }
                                                                   },
                                                                   child:
@@ -932,11 +929,8 @@ class _UpComingEventsState extends State<UpComingEvents> {
                                                                 Navigator.of(
                                                                         context)
                                                                     .pop();
-                                                                ScaffoldMessenger.of(
-                                                                        context)
-                                                                    .showSnackBar(SnackBar(
-                                                                        content:
-                                                                            Text("please enter amount")));
+                                                              
+                                                                Api.snack_bar(context: context, message: "please enter amount");
                                                               }
                                                               // Api.
                                                             },

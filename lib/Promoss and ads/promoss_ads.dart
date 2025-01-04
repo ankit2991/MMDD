@@ -262,12 +262,7 @@ class _PromissAdsState extends State<PromissAds> {
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    SnackBar(
-                                                                        content:
-                                                                            Text("Item Deleted.")));
+                                                             Api.snack_bar(context: context, message: "Item Deleted");
                                                             _data.clear();
                                                             _Work_data.clear();
                                                             Api.AccountDocument()
@@ -393,12 +388,7 @@ class _PromissAdsState extends State<PromissAds> {
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    SnackBar(
-                                                                        content:
-                                                                            Text("Item Deleted.")));
+                                                             Api.snack_bar(context: context, message: "Item Deleted");
                                                             _data.clear();
                                                             _Work_data.clear();
                                                             Api.AccountDocument()

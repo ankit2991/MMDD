@@ -160,7 +160,7 @@ class _BusiNessCareState extends State<BusiNessCare> {
       appBar: AppBar(
         elevation: 3.4,
         title: Text(
-          'Busines Category',
+          'Business Category',
           style: TextStyle(color: Colors.white, fontFamily: 'Fontmain'),
         ),
         backgroundColor: Color(0xffC4A68B),
@@ -232,9 +232,9 @@ class _BusiNessCareState extends State<BusiNessCare> {
           Api.ServiceEnquiryInsert(mobile:Api.User_info["Table"][0]["MobileNo"],personName:Api.User_info["Table"][0]["MemberName"],serviceName: select_category).then((value) {
                             if (value) {
                               Navigator.of(context).pop(); 
-                               Get.snackbar("Done", "Send enquiry",);                             
+                               Api.snack_bar(context: context, message: "Send enquiry");                           
                             }else{
-                              Get.snackbar("Error", "Somthing wrong",backgroundColor: Colors.red,colorText: Colors.white);
+                              Api.snack_bar(context: context, message: "Somthing went wrong");
                             }
                           },);
             
@@ -425,9 +425,10 @@ class send_enquiry extends StatelessWidget {
                           Api.ServiceEnquiryInsert(mobile:Api.User_info["Table"][0]["MobileNo"],personName:Api.User_info["Table"][0]["MemberName"],serviceName: service_name).then((value) {
                             if (value) {
                               Navigator.of(context).pop(); 
-                               Get.snackbar("Done", "Send enquiry",);                             
+                             
+                               Api.snack_bar(context: context, message: "Send enquiry");                            
                             }else{
-                              Get.snackbar("Error", "Somthing wrong",backgroundColor: Colors.red,colorText: Colors.white);
+                              Api.snack_bar(context: context, message: "Somthing went wrong");
                             }
                           },);
                       },

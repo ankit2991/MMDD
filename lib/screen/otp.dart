@@ -412,10 +412,7 @@ class _OtpPageState extends State<OtpPage> {
                                                             )));
                                               }
                                             } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                      content:
-                                                          Text("invalid OTP")));
+                                              Api.snack_bar(context: context, message: "invalid OTP");
                                               n1.clear();
                                               n2.clear();
                                               n3.clear();
@@ -426,10 +423,7 @@ class _OtpPageState extends State<OtpPage> {
                                               log("wrong");
                                             }
                                           } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content:
-                                                        Text("invalid OTP")));
+                                            Api.snack_bar(context: context, message: "invalid OTP");
                                           }
                                         }
                                         setState(() {
@@ -538,8 +532,7 @@ class _OtpPageState extends State<OtpPage> {
                                                 )));
                                   }
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("invalid OTP")));
+                                  Api.snack_bar(context: context, message: "invalid OTP");
                                   n1.clear();
                                   n2.clear();
                                   n3.clear();
@@ -549,8 +542,7 @@ class _OtpPageState extends State<OtpPage> {
                                   log("wrong");
                                 }
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text("invalid OTP")));
+                              Api.snack_bar(context: context, message: "invalid OTP");
                               }
                               setState(() {
                                 loader = false;

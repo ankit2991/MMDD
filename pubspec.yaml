@@ -31,6 +31,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   pdf: ^3.11.1
   syncfusion_flutter_pdfviewer: ^28.1.36
+  another_flushbar: ^1.12.30
   # google_fonts: ^6.2.1
 
 dev_dependencies:
@@ -54,6 +55,7 @@ flutter:
     - assets/images/main/
     - assets/images/myalbum/
     - assets/images/register/
+    - assets/logo/
 
   fonts:
     - family: Fontmain

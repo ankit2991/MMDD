@@ -699,7 +699,7 @@ class _CheckboxExampleState extends State<RegisTration> {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => LogOutPage()));                    
                         }else{
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error :- ")));
+                          Api.snack_bar(context: context, message: "Something Went Wrong");
                         }
                           }
                         }

@@ -231,8 +231,7 @@ class _MyVideoState extends State<MyVideo> {
                                                           Api.DeleteImgvideo(Id: _Work_data[index]["Id"].toString()).then((value) {
                                                             if (value) {
                                                               Navigator.of(context).pop();
-                                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                                      SnackBar(content:Text("Item Deleted.")));
+                                                               Api.snack_bar(context: context, message: "Item Deleted");
                                                               _data.clear();
                                                               _Work_data.clear();
                                                               controllers.clear();

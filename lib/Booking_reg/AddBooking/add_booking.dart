@@ -100,11 +100,7 @@ class _AddBookingState extends State<AddBooking> {
           });
         } else {
           // Show a message if an older time is picked
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Please select a valid future time'),
-            ),
-          );
+            Api.snack_bar(context: context, message: "Please select a valid future time");
         }
         }else{
           setState(() {
@@ -327,9 +323,7 @@ class _AddBookingState extends State<AddBooking> {
                     InkWell(
                       onTap: () {
                         if (_startDate == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  "Please select Event Start Date then Select End date")));
+                          Api.snack_bar(context: context, message: "Please select Event Start Date then Select End date");
                         }
                       },
                       child: IgnorePointer(
@@ -424,10 +418,10 @@ class _AddBookingState extends State<AddBooking> {
                     InkWell(
                       onTap: (){
                         if(_startDate==null&&_endDate==null){
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("please select Start Date & End Date")));
+                          
+                            Api.snack_bar(context: context, message: "please select Start Date & End Date");
                         }else if(_startTime==null){
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("please select Start Time")));
-
+                            Api.snack_bar(context: context, message: "please select Start Time");
                         }
                       },
                       child: IgnorePointer(

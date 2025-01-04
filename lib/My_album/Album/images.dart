@@ -230,12 +230,8 @@ class _MyImageState extends State<MyImage> {
                                                                   .toString())
                                                           .then((value) {
                                                         if (value) {
-                                                        Navigator.of(context).pop();
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(SnackBar(
-                                                                  content: Text(
-                                                                      "Item Deleted.")));
+                                                        Navigator.of(context).pop();;
+                                                         Api.snack_bar(context: context, message: "Item Deleted");
                                                           _data.clear();
                                                           _Work_data.clear();
                                                           Api.AccountDocument()
@@ -326,11 +322,7 @@ class _MyImageState extends State<MyImage> {
                                                           .then((value) {
                                                         if (value) {
                                                         Navigator.of(context).pop();
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(SnackBar(
-                                                                  content: Text(
-                                                                      "Item Deleted.")));
+                                                           Api.snack_bar(context: context, message: "Item Deleted");
                                                           _data.clear();
                                                           _Work_data.clear();
                                                           Api.AccountDocument()
