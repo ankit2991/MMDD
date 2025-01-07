@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:mddmerchant/App_bar/user_acc.dart';
 import 'package:mddmerchant/api/api.dart';
 import 'package:mddmerchant/main.dart';
+import 'package:mddmerchant/screen/terms_and_condation.dart';
 
 class RegisTration extends StatefulWidget {
   String Mob;
@@ -645,6 +646,9 @@ class _CheckboxExampleState extends State<RegisTration> {
                           onChanged: (bool? value) {
                             setState(() {
                               isChecked = value!;
+                              if (isChecked) {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => read_TermsAndConditation(),));                                
+                              }
                             });
                           },
                           activeColor: Color(0xffC4A68B),

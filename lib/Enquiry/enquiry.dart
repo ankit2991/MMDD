@@ -62,44 +62,49 @@ class _MyEnquiryState extends State<MyEnquiry> {
             itemCount: _data.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-            return Container(
-              padding: EdgeInsets.all(5),
-             margin: EdgeInsets.symmetric(vertical: 5),
-            //  height: 100,          
-             decoration: BoxDecoration(
-               color: Colors.white,
-               borderRadius: BorderRadius.circular(10),
-               boxShadow: [BoxShadow(blurRadius: 0.5,color: const Color.fromARGB(134, 0, 0, 0),offset: Offset(1, 1))]
-             ),
-             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+            return GestureDetector(
+              onTap: (){
+                // Navigator.of(context).push(route)
+              },
+              child: Container(
+                padding: EdgeInsets.all(5),
+               margin: EdgeInsets.symmetric(vertical: 5),
+              //  height: 100,          
+               decoration: BoxDecoration(
+                 color: Colors.white,
+                 borderRadius: BorderRadius.circular(10),
+                 boxShadow: [BoxShadow(blurRadius: 0.5,color: const Color.fromARGB(134, 0, 0, 0),offset: Offset(1, 1))]
+               ),
+               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                Text(_data[index]["EventStartDate"],style: TextStyle(fontFamily: 'Fontmain'),),
-              ],),
-              Text(_data[index]["CustomerName"],style: TextStyle(fontFamily: 'Fontmain'),),
-              Text(_data[index]["EventName"],style: TextStyle(fontFamily: 'Fontmain'),),
-              Text(_data[index]["MobileNo"],style: TextStyle(fontFamily: 'Fontmain'),),
-              Row(
-                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        if(_data[index]["TotalAmount"]!=null&& _data[index]["TotalAmount"]!="0")
-                          Text("Total Amount : ₹ ${_data[index]["TotalAmount"]}",style: TextStyle(fontFamily: 'Fontmain',fontSize: 10),),
-                        if(_data[index]["BookingAmount"]!=null&& _data[index]["TotalAmount"]!="0")
-                          Text("Advance Amount : ₹ ${_data[index]["BookingAmount"]}",style: TextStyle(fontFamily: 'Fontmain',fontSize: 10),),
-                        if(_data[index]["DueAmount"]!=null&& _data[index]["TotalAmount"]!="0")
-                          Text("Due Amount : ₹ ${_data[index]["DueAmount"]}",style: TextStyle(fontFamily: 'Fontmain',fontSize: 10),),
-                      ],
-                    ),
-                  )
-              ],)
-             ],),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                  Text(_data[index]["EventStartDate"],style: TextStyle(fontFamily: 'Fontmain'),),
+                ],),
+                Text(_data[index]["CustomerName"],style: TextStyle(fontFamily: 'Fontmain'),),
+                Text(_data[index]["EventName"],style: TextStyle(fontFamily: 'Fontmain'),),
+                Text(_data[index]["MobileNo"],style: TextStyle(fontFamily: 'Fontmain'),),
+                Row(
+                   mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          if(_data[index]["TotalAmount"]!=null&& _data[index]["TotalAmount"]!="0")
+                            Text("Total Amount : ₹ ${_data[index]["TotalAmount"]}",style: TextStyle(fontFamily: 'Fontmain',fontSize: 10),),
+                          if(_data[index]["BookingAmount"]!=null&& _data[index]["TotalAmount"]!="0")
+                            Text("Advance Amount : ₹ ${_data[index]["BookingAmount"]}",style: TextStyle(fontFamily: 'Fontmain',fontSize: 10),),
+                          if(_data[index]["DueAmount"]!=null&& _data[index]["TotalAmount"]!="0")
+                            Text("Due Amount : ₹ ${_data[index]["DueAmount"]}",style: TextStyle(fontFamily: 'Fontmain',fontSize: 10),),
+                        ],
+                      ),
+                    )
+                ],)
+               ],),
+              ),
             );
          
           },),

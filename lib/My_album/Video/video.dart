@@ -335,7 +335,9 @@ class _MyVideoState extends State<MyVideo> {
         onPressed: () {
           Api.pickImage(img: false, source: ImageSource.gallery).then(
             (value) {
-              Api.ImageInsert(
+               final int fileSize = value["file"]!.lengthSync(); 
+               if (fileSize / (1024 * 1024)<=2) {
+                      Api.ImageInsert(
                       DocType: "2",
                       ext: "." + value["ext"],
                       img: value["file"],
@@ -369,7 +371,11 @@ class _MyVideoState extends State<MyVideo> {
                   });
                 },
               );
-            },
+        
+               }else{
+                Api.snack_bar(context: context, message: "video size too large on 2 MB");
+               }
+             },
           );
         },
         child: Icon(Icons.add, color: Colors.white),

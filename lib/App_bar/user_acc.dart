@@ -895,15 +895,15 @@ class RegistrationInformationPage extends StatelessWidget {
     bool c1 = false;
     bool c2 = false;
     bool c3 = false;
-    if (Api.User_info["Table"][0].containsKey("FassiLicNo")) {
+    if (Api.User_info["Table"][0]["FassiLicNo"]!=null) {
       fss_con.text = Api.User_info["Table"][0]["FassiLicNo"];
       c3 = true;
     }
-    if (Api.User_info["Table"][0].containsKey("nigamlicanceNo")) {
+    if (Api.User_info["Table"][0]["nigamlicanceNo"]!=null) {
       other_lic_con.text = Api.User_info["Table"][0]["nigamlicanceNo"];
       c2 = true;
     }
-    if (Api.User_info["Table"][0].containsKey("GSTNo")) {
+    if (Api.User_info["Table"][0]["GSTNo"]!=null) {
       gst_no_con.text = Api.User_info["Table"][0]["GSTNo"];
       c1 = true;
     }
@@ -1023,10 +1023,9 @@ class RegistrationInformationPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              if (Api.User_info["Table"][0].containsKey("FassiLicNo") != true ||
-                  Api.User_info["Table"][0].containsKey("GSTNo") != true ||
-                  Api.User_info["Table"][0].containsKey("RegNo") != true &&
-                      Api.User_info["Table"][0]["RegNo"] != null)
+              if (Api.User_info["Table"][0]["FassiLicNo"] == null ||
+                  Api.User_info["Table"][0]["GSTNo"] == null ||                  
+                      Api.User_info["Table"][0]["RegNo"] == null)
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffC4A68B),
@@ -1201,7 +1200,8 @@ class BankInformationPage extends StatelessWidget {
               const SizedBox(height: 15),
               TextFormField(
                 controller: ifsc_code_con,
-                keyboardType: TextInputType.number,
+                // keyboardType: TextInputType.number,
+                maxLength: 16,
                 decoration: InputDecoration(
                   labelText: "IFSC Code",
                   labelStyle: TextStyle(
@@ -1221,9 +1221,9 @@ class BankInformationPage extends StatelessWidget {
                   fontFamily: 'sub-tittle',
                   fontSize: 16.0,
                 ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9\s]'))
-                ],
+                // inputFormatters: [
+                //   FilteringTextInputFormatter.allow(RegExp(r'[0-9\s]'))
+                // ],
               ),
               const SizedBox(height: 15),
               ElevatedButton(
@@ -1800,7 +1800,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
     Api.get_Merchent_Trem_And_Condition().then(
       (value) {
         _data = value;
-        terms_con.text = _data["Table1"][0]["TermsAndConditions"];
+        terms_con.text = _data["Table1"][0]["TermsAndConditions"]??"";
         setState(() {
           loader = false;
         });
