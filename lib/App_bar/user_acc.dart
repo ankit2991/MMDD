@@ -50,7 +50,6 @@ class UserProfile extends StatelessWidget {
                   child: Icon(Icons.person, size: 50, color: Colors.white),
                 ),
                 SizedBox(height: 10),
-                 
                 Text(
                   Api.User_info["Table"][0]["MemberName"],
                   style: TextStyle(
@@ -58,7 +57,6 @@ class UserProfile extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontFamily: "Fontmain"),
                 ),
-              
                 Text(
                   Api.User_info["Table"][0]["MobileNo"],
                   style: TextStyle(
@@ -66,22 +64,22 @@ class UserProfile extends StatelessWidget {
                       color: Colors.grey[700],
                       fontFamily: "Fontmain"),
                 ),
-                  Api.User_info["Table"][0]["AccountBalance"]!=null? Text(
-                    "Wallet ₹${Api.User_info["Table"][0]["AccountBalance"].toString()}",
-                    style: TextStyle(
-                      fontSize: 16,
-                      // fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                      fontFamily: 'Fontmain',
-                    )):Text(
-                    "Wallet ₹00",
-                    style: TextStyle(
-                      fontSize: 16,
-                      // fontWeight: FontWeight.w700,
-                      color: Colors.grey[700],
-                      fontFamily: 'Fontmain',
-                    )),
-                
+                Api.User_info["Table"][0]["AccountBalance"] != null
+                    ? Text(
+                        "Wallet ₹${Api.User_info["Table"][0]["AccountBalance"].toString()}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          // fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                          fontFamily: 'Fontmain',
+                        ))
+                    : Text("Wallet ₹00",
+                        style: TextStyle(
+                          fontSize: 16,
+                          // fontWeight: FontWeight.w700,
+                          color: Colors.grey[700],
+                          fontFamily: 'Fontmain',
+                        )),
               ],
             ),
           ),
@@ -191,16 +189,82 @@ class _Discount_screenState extends State<Discount_screen> {
                     } else {
                       bools.add(false);
                     }
+                    ValueNotifier<bool?> date_ref = ValueNotifier(false);
                     ValueNotifier<bool?> check =
                         ValueNotifier(_data[index]["IsDiscount"]);
                     ValueNotifier<double?> total = ValueNotifier(0);
                     var discount_con = TextEditingController();
+                      DateTime? _startDate;
+                    DateTime? _endDate;
                     if (_data[index]["IsDiscount"] == true) {
                       discount_con.text =
                           _data[index]["DiscountAmount"].toString();
                       total.value = _data[index]["Amount"] -
                           _data[index]["DiscountAmount"];
+                    if(_data[index]["DisStartDate"]!=null){
+                      _startDate = DateTime.parse(_data[index]["DisStartDate"]);
                     }
+                    if(_data[index]["DisEndDate"]!=null){
+                      _endDate = DateTime.parse(_data[index]["DisEndDate"]);
+                      if(_endDate.isBefore(DateTime.now())){
+                         Api.FacilityDiscountInsert(
+                                DiscountStartDate: "${_startDate!.toLocal()}".split(' ')[0],
+                                DiscountEndDate: "${_endDate!.toLocal()}".split(' ')[0],
+                                      DiscountAmount: discount_con.text,
+                                      FacilityId: _data[index]["Id"].toString(),
+                                      IsDiscount:"0")
+                                  .then(
+                                (value) {
+                                  if (bools[index] == true) {
+                                    // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
+                                    Api.snack_bar(
+                                        context: context,
+                                        message:
+                                            "Discount Activated successfully");
+                                  } else {
+                                    Api.snack_bar(
+                                        context: context,
+                                        message:
+                                            "Discount Deactivated successfully");
+                                  }
+                                },
+                              );
+                      }
+                    }
+                    }
+                  
+                    Future<void> _selectDate(
+                        BuildContext context, bool isStart) async {
+                      final DateTime? pickedDate;
+                      if (isStart) {
+                        pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2100),
+                        );
+                      } else {
+                        pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: _startDate,
+                          firstDate: _startDate ?? DateTime.now(),
+                          lastDate: DateTime(2100),
+                        );
+                      }
+
+                      if (pickedDate != null) {
+                        if (isStart) {
+                          _startDate = pickedDate;
+                          date_ref.value =
+                              date_ref.value == true ? false : true;
+                        } else {
+                          _endDate = pickedDate;
+                          date_ref.value =
+                              date_ref.value == true ? false : true;
+                        }
+                      }
+                    }
+
                     // var tot_con=TextEditingController();
                     return Container(
                       margin: EdgeInsets.all(10),
@@ -357,45 +421,174 @@ class _Discount_screenState extends State<Discount_screen> {
                               )
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Api.FacilityDiscountInsert(
-                                          DiscountAmount: discount_con.text,
-                                          FacilityId:
-                                              _data[index]["Id"].toString(),
-                                          IsDiscount:
-                                              bools[index] == true ? "1" : "0")
-                                      .then(
-                                    (value) {
-                                      if (bools[index] == true) {
-                                        // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
-                                        Api.snack_bar(context: context, message: "Discount Activated successfully");
-                                      
-                                      } else {
-                                        Api.snack_bar(context: context, message: "Discount Deactivated successfully");
-                                      }
-                                    },
-                                  );
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffC4A68B),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                  child: Text(
-                                    "Save",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: "Fontmain"),
+                          ValueListenableBuilder(
+                            valueListenable: date_ref,
+                            builder: (context, value, child) {
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Container(
+                                    width: (MediaQuery.of(context).size.width /
+                                            2) -
+                                        30,
+                                    child: TextFormField(
+                                      onTap: () {
+                                        _selectDate(context, true);
+                                      },
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Please select Discount Start Date";
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                        errorBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.red)),
+                                        suffixIcon: IconButton(
+                                          icon: Icon(Icons.calendar_today),
+                                          onPressed: () {
+                                            _selectDate(context, true);
+                                          },
+                                        ),
+                                        labelText: "Start Discount Date",
+                                        labelStyle: TextStyle(
+                                          color: Color(0xe5777474),
+                                          fontFamily: 'sub-tittle',
+                                          fontSize: 14,
+                                        ),
+                                        floatingLabelStyle:
+                                            TextStyle(color: Color(0xffC4A68B)),
+                                        border: OutlineInputBorder(),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xffC4A68B),
+                                              width: 2),
+                                        ),
+                                      ),
+                                      style: TextStyle(
+                                        fontFamily: 'sub-tittle',
+                                        fontSize: 12.0,
+                                      ),
+                                      controller: TextEditingController(
+                                        text: _startDate != null
+                                            ? "${_startDate!.toLocal()}"
+                                                .split(' ')[0]
+                                            : '',
+                                      ),
+                                      readOnly: true,
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
+                                  Container(
+                                    width: (MediaQuery.of(context).size.width /
+                                            2) -
+                                        30,
+                                    child: TextFormField(
+                                      onTap: () {
+                                        if (_startDate != null) {
+                                        _selectDate(context, false);
+                                        } else {
+                                          Api.snack_bar(
+                                              context: context,
+                                              message:
+                                                  "Please Select Start Date");
+                                        }
+                                      },
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Please select Discount Start Date";
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                        errorBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.red)),
+                                        suffixIcon: IconButton(
+                                          icon: Icon(Icons.calendar_today),
+                                          onPressed: () {
+                                             if (_startDate != null) {
+                                        _selectDate(context, false);
+                                        } else {
+                                          Api.snack_bar(
+                                              context: context,
+                                              message:
+                                                  "Please Select Start Date");
+                                        }
+                                         
+                                          },
+                                        ),
+                                        labelText: "End Discount Date",
+                                        labelStyle: TextStyle(
+                                          color: Color(0xe5777474),
+                                          fontFamily: 'sub-tittle',
+                                          fontSize: 14,
+                                        ),
+                                        floatingLabelStyle:
+                                            TextStyle(color: Color(0xffC4A68B)),
+                                        border: OutlineInputBorder(),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xffC4A68B),
+                                              width: 2),
+                                        ),
+                                      ),
+                                      style: TextStyle(
+                                        fontFamily: 'sub-tittle',
+                                        fontSize: 12.0,
+                                      ),
+                                      controller: TextEditingController(
+                                        text: _endDate != null
+                                            ? "${_endDate!.toLocal()}"
+                                                .split(' ')[0]
+                                            : '',
+                                      ),
+                                      readOnly: true,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Api.FacilityDiscountInsert(
+                                DiscountStartDate: "${_startDate!.toLocal()}".split(' ')[0],
+                                DiscountEndDate: "${_endDate!.toLocal()}".split(' ')[0],
+                                      DiscountAmount: discount_con.text,
+                                      FacilityId: _data[index]["Id"].toString(),
+                                      IsDiscount:
+                                          bools[index] == true ? "1" : "0")
+                                  .then(
+                                (value) {
+                                  if (bools[index] == true) {
+                                    // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
+                                    Api.snack_bar(
+                                        context: context,
+                                        message:
+                                            "Discount Activated successfully");
+                                  } else {
+                                    Api.snack_bar(
+                                        context: context,
+                                        message:
+                                            "Discount Deactivated successfully");
+                                  }
+                                },
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Color(0xffC4A68B),
+                                  borderRadius: BorderRadius.circular(10)),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              child: Text(
+                                "Save",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Fontmain"),
+                              ),
+                            ),
                           )
                         ],
                       ),
@@ -494,7 +687,9 @@ class Account_Document extends StatelessWidget {
               onTap: () {
                 Api.moveFileToLocalStorage().then(
                   (value) {
-                  Api.snack_bar(context: context, message: "check your download folder");
+                    Api.snack_bar(
+                        context: context,
+                        message: "check your download folder");
                   },
                 );
               },
@@ -532,7 +727,8 @@ class Account_Document extends StatelessWidget {
                           img: temp,
                           context: context);
                     } else {
-                      Api.snack_bar(context: context, message: "File not select");
+                      Api.snack_bar(
+                          context: context, message: "File not select");
                     }
                   },
                 );
@@ -583,6 +779,11 @@ class BasicInformationPage extends StatelessWidget {
       TextEditingController(text: Api.User_info["Table"][0]["AreaName"]);
   var address_con =
       TextEditingController(text: Api.User_info["Table"][0]["OrgAddress"]);
+
+  var Template_con =
+      TextEditingController(text: Api.User_info["Table"][0]["AdsTemplate"].toString());
+  var Balance_con =
+      TextEditingController(text: Api.User_info["Table"][0]["SmsBalance"].toString());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -878,6 +1079,68 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
+           
+            
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: Template_con,
+                  decoration: InputDecoration(
+                    labelText: "Ads Template",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
+                    fontFamily: 'sub-tittle',
+                    fontSize: 16.0,
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
+                ),
+              ),
+           
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: Balance_con,
+                  decoration: InputDecoration(
+                    labelText: "Balance",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
+                    fontFamily: 'sub-tittle',
+                    fontSize: 16.0,
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
+                ),
+              ),
+           
             ],
           ),
         ),
@@ -886,24 +1149,36 @@ class BasicInformationPage extends StatelessWidget {
   }
 }
 
-class RegistrationInformationPage extends StatelessWidget {
+class RegistrationInformationPage extends StatefulWidget {
+  @override
+  State<RegistrationInformationPage> createState() =>
+      _RegistrationInformationPageState();
+}
+
+class _RegistrationInformationPageState
+    extends State<RegistrationInformationPage> {
   var gst_no_con = TextEditingController();
+
   var other_lic_con = TextEditingController();
+
   var fss_con = TextEditingController();
+
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     bool c1 = false;
     bool c2 = false;
     bool c3 = false;
-    if (Api.User_info["Table"][0]["FassiLicNo"]!=null) {
+    if (Api.User_info["Table"][0]["FassiLicNo"] != null) {
       fss_con.text = Api.User_info["Table"][0]["FassiLicNo"];
       c3 = true;
     }
-    if (Api.User_info["Table"][0]["nigamlicanceNo"]!=null) {
+    if (Api.User_info["Table"][0]["nigamlicanceNo"] != null) {
       other_lic_con.text = Api.User_info["Table"][0]["nigamlicanceNo"];
       c2 = true;
     }
-    if (Api.User_info["Table"][0]["GSTNo"]!=null) {
+    if (Api.User_info["Table"][0]["GSTNo"] != null) {
       gst_no_con.text = Api.User_info["Table"][0]["GSTNo"];
       c1 = true;
     }
@@ -928,142 +1203,178 @@ class RegistrationInformationPage extends StatelessWidget {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-          child: Column(
-            children: [
-              IgnorePointer(
-                ignoring: c1,
-                child: TextFormField(
-                  controller: gst_no_con,
-                  decoration: InputDecoration(
-                    labelText: "GST No",
-                    labelStyle: TextStyle(
-                      color: Color(0xe5777474),
-                      fontFamily: 'sub-tittle',
-                      fontSize: 14,
-                    ),
-                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xffC4A68B), width: 2),
-                    ),
-                  ),
-                  style: TextStyle(
-                    fontFamily: 'sub-tittle',
-                    fontSize: 16.0,
-                  ),
-                  inputFormatters: [
-                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                  ],
-                ),
-              ),
-              const SizedBox(height: 15),
-              IgnorePointer(
-                ignoring: c2,
-                child: TextFormField(
-                  controller: other_lic_con,
-                  decoration: InputDecoration(
-                    labelText: "Other License",
-                    labelStyle: TextStyle(
-                      color: Color(0xe5777474),
-                      fontFamily: 'sub-tittle',
-                      fontSize: 14,
-                    ),
-                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xffC4A68B), width: 2),
-                    ),
-                  ),
-                  style: TextStyle(
-                    fontFamily: 'sub-tittle',
-                    fontSize: 16.0,
-                  ),
-                  inputFormatters: [
-                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                  ],
-                ),
-              ),
-              const SizedBox(height: 15),
-              IgnorePointer(
-                ignoring: c3,
-                child: TextFormField(
-                  controller: fss_con,
-                  decoration: InputDecoration(
-                    labelText: "FSSAI",
-                    labelStyle: TextStyle(
-                      color: Color(0xe5777474),
-                      fontFamily: 'sub-tittle',
-                      fontSize: 14,
-                    ),
-                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xffC4A68B), width: 2),
-                    ),
-                  ),
-                  style: TextStyle(
-                    fontFamily: 'sub-tittle',
-                    fontSize: 16.0,
-                  ),
-                  inputFormatters: [
-                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                  ],
-                ),
-              ),
-              const SizedBox(height: 15),
-              if (Api.User_info["Table"][0]["FassiLicNo"] == null ||
-                  Api.User_info["Table"][0]["GSTNo"] == null ||                  
-                      Api.User_info["Table"][0]["RegNo"] == null)
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xffC4A68B),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0)),
-                      minimumSize: Size(550, 45),
-                    ),
-                    onPressed: () {
-                      if (fss_con.text.isNotEmpty &&
-                          gst_no_con.text.isNotEmpty &&
-                          other_lic_con.text.isNotEmpty) {
-                        Api.MerchentLicanceDetail(
-                                FassiLicNo: fss_con.text.trim(),
-                                Gst: gst_no_con.text.trim(),
-                                nigamlicanceNo: other_lic_con.text.trim())
-                            .then(
-                          (value) {
-                            if (value) {
-                              Navigator.of(context).pop();
-                            } else {
-                              Api.snack_bar(context: context, message: "Something Went Wrong");
-                            }
-                          },
-                        );
-                      } else {
-                        Api.snack_bar(context: context, message: "fill all fields");
-                      }
-                    },
-                    child: Text(
-                      'SAVE',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Fontmain',
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              child: Column(
+                children: [
+                  IgnorePointer(
+                    ignoring: c1,
+                    child: TextFormField(
+                      controller: gst_no_con,
+                      decoration: InputDecoration(
+                        labelText: "GST No",
+                        labelStyle: TextStyle(
+                          color: Color(0xe5777474),
+                          fontFamily: 'sub-tittle',
+                          fontSize: 14,
+                        ),
+                        floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xffC4A68B)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xffC4A68B), width: 2),
+                        ),
                       ),
-                    ))
-            ],
+                      style: TextStyle(
+                        fontFamily: 'sub-tittle',
+                        fontSize: 16.0,
+                      ),
+                      inputFormatters: [
+                        // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  IgnorePointer(
+                    ignoring: c2,
+                    child: TextFormField(
+                      controller: other_lic_con,
+                      decoration: InputDecoration(
+                        labelText: "Other License",
+                        labelStyle: TextStyle(
+                          color: Color(0xe5777474),
+                          fontFamily: 'sub-tittle',
+                          fontSize: 14,
+                        ),
+                        floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xffC4A68B)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xffC4A68B), width: 2),
+                        ),
+                      ),
+                      style: TextStyle(
+                        fontFamily: 'sub-tittle',
+                        fontSize: 16.0,
+                      ),
+                      inputFormatters: [
+                        // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  IgnorePointer(
+                    ignoring: c3,
+                    child: TextFormField(
+                      controller: fss_con,
+                      decoration: InputDecoration(
+                        labelText: "FSSAI",
+                        labelStyle: TextStyle(
+                          color: Color(0xe5777474),
+                          fontFamily: 'sub-tittle',
+                          fontSize: 14,
+                        ),
+                        floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xffC4A68B)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xffC4A68B), width: 2),
+                        ),
+                      ),
+                      style: TextStyle(
+                        fontFamily: 'sub-tittle',
+                        fontSize: 16.0,
+                      ),
+                      inputFormatters: [
+                        // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  if (Api.User_info["Table"][0]["FassiLicNo"] == null ||
+                      Api.User_info["Table"][0]["GSTNo"] == null ||
+                      Api.User_info["Table"][0]["RegNo"] == null)
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xffC4A68B),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0)),
+                          minimumSize: Size(550, 45),
+                        ),
+                        onPressed: () {
+                          if (fss_con.text.isNotEmpty &&
+                                  gst_no_con.text.isNotEmpty
+                              // &&other_lic_con.text.isNotEmpty
+                              ) {
+                            setState(() {
+                              loading = true;
+                            });
+                            Api.MerchentLicanceDetail(
+                                    FassiLicNo: fss_con.text.trim(),
+                                    Gst: gst_no_con.text.trim(),
+                                    nigamlicanceNo: other_lic_con.text.trim())
+                                .then(
+                              (value) {
+                                if (value) {
+                                  setState(() {
+                                    loading = false;
+                                  });
+
+                                  Api.Mpin_check(
+                                          mob_no: Api.prefs
+                                                  .getString("mobile_no") ??
+                                              "",
+                                          Mpin:
+                                              Api.prefs.getString("mpin") ?? "")
+                                      .then(
+                                    (value) {},
+                                  );
+                                  Navigator.of(context).pop();
+                                  Api.snack_bar(
+                                      context: context, message: "Save");
+                                } else {
+                                  Api.snack_bar(
+                                      context: context,
+                                      message: "Something Went Wrong");
+                                }
+                              },
+                            );
+                          } else {
+                            Api.snack_bar(
+                                context: context, message: "fill all fields");
+                          }
+                        },
+                        child: Text(
+                          'SAVE',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Fontmain',
+                          ),
+                        ))
+                ],
+              ),
+            ),
           ),
-        ),
+          if (loading)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: 50.0,
+                ),
+              ),
+            )
+        ],
       ),
     );
   }
@@ -1366,34 +1677,42 @@ class _MyServicesPageState extends State<MyServicesPage> {
                               tileColor:
                                   const Color.fromARGB(255, 235, 233, 233),
                               leading: GestureDetector(
-                                onTap: (){
-                                  showDialog(context: context, builder: (context) {
-                                    return Container(height: 300,width: 300,child:  CachedNetworkImage(
-                                  imageUrl: _data[index]["FacilityImg"],
-                                  errorWidget: (context, url, error) {
-                                    return Container(
-                                      height: 80,
-                                      width: 80,
-                                      color: Colors.red,
-                                    );
-                                  },
-                                  progressIndicatorBuilder:
-                                      (context, url, progress) {
-                                    return CupertinoActivityIndicator();
-                                  },
-                                  imageBuilder: (context, imageProvider) {
-                                    return Container(
-                                     
-                                      decoration: BoxDecoration(
-                                          // color: Colors.amber,
-                                          borderRadius: BorderRadius.circular(10),
-                                          image: DecorationImage(
-                                              image: imageProvider,
-                                              )),
-                                    );
-                                  },
-                                ),);
-                                  },);
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Container(
+                                        height: 300,
+                                        width: 300,
+                                        child: CachedNetworkImage(
+                                          imageUrl: _data[index]["FacilityImg"],
+                                          errorWidget: (context, url, error) {
+                                            return Container(
+                                              height: 80,
+                                              width: 80,
+                                              color: Colors.red,
+                                            );
+                                          },
+                                          progressIndicatorBuilder:
+                                              (context, url, progress) {
+                                            return CupertinoActivityIndicator();
+                                          },
+                                          imageBuilder:
+                                              (context, imageProvider) {
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                  // color: Colors.amber,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  image: DecorationImage(
+                                                    image: imageProvider,
+                                                  )),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  );
                                 },
                                 child: CachedNetworkImage(
                                   imageUrl: _data[index]["FacilityImg"],
@@ -1414,7 +1733,8 @@ class _MyServicesPageState extends State<MyServicesPage> {
                                       width: 80,
                                       decoration: BoxDecoration(
                                           color: Colors.amber,
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           image: DecorationImage(
                                               image: imageProvider,
                                               fit: BoxFit.cover)),
@@ -1535,7 +1855,7 @@ class _AddServiceState extends State<AddService> {
   }
 
   File? _image;
-  String ext="";
+  String ext = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1707,13 +2027,15 @@ class _AddServiceState extends State<AddService> {
                         Description: service_con.text.trim(),
                         F_SubServiceCategory: selectted_service_id.toString(),
                         FacilityName: service_name_con.text.trim(),
-                        ext: "."+ext ?? "",
+                        ext: "." + ext ?? "",
                         img: _image,
                         context: context,
-                      ).then((value) {
-                         widget.refresh();
-                            Navigator.of(context).pop();
-                      },);
+                      ).then(
+                        (value) {
+                          widget.refresh();
+                          Navigator.of(context).pop();
+                        },
+                      );
                     } else {
                       Api.FacilityInsert_nonimg(
                         Amount: amount_con.text.trim(),
@@ -1800,7 +2122,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
     Api.get_Merchent_Trem_And_Condition().then(
       (value) {
         _data = value;
-        terms_con.text = _data["Table1"][0]["TermsAndConditions"]??"";
+        terms_con.text = _data["Table1"][0]["TermsAndConditions"] ?? "";
         setState(() {
           loader = false;
         });
@@ -1832,10 +2154,18 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextField(
+                
+                    Container(child: Column(children: [
+                      TextField(
                   controller: terms_con,
                   // maxLength: 1000,
+                  // onChanged: (value) {
+                  //   setState(() {
+                      
+                  //   });
+                  // },
                   maxLines: 5,
                   decoration: InputDecoration(
                     hintText: "Write your Terms & Conditions...",
@@ -1879,6 +2209,9 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                         fontFamily: 'Fontmain',
                       ),
                     ))
+                    ],),),
+                     Text(loader?"":_data["Table1"][0]["TermsAndConditions"] ?? "" ),
+                    
               ],
             ),
           ),
@@ -2381,10 +2714,15 @@ class _LogOutPageState extends State<LogOutPage> {
                                   loader = false;
                                 });
                               } else {
-                                    Api.snack_bar(context: context, message: "Please enter proper phone number");
+                                Api.snack_bar(
+                                    context: context,
+                                    message:
+                                        "Please enter proper phone number");
                               }
                             } else {
-                              Api.snack_bar(context: context, message: "Please enter phone number");
+                              Api.snack_bar(
+                                  context: context,
+                                  message: "Please enter phone number");
                             }
                           },
                           style: ElevatedButton.styleFrom(

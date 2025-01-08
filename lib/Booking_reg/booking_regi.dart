@@ -154,7 +154,7 @@ class _MyBokingState extends State<MyBoking> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "1",refresh: refresh,)),
+              MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "1",refresh: refresh,data: {},update: false,)),
             );
           },
           label: Text(

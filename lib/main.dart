@@ -139,9 +139,12 @@ class _HomeScreenState extends State<HomeScreen> {
             _data = value;
             Api.Service_Question_List().then(
               (value) {
+                Api.get_Merchent_Trem_And_Condition().then((value) {
+                  
                 setState(() {
                   loading = false;
                 });
+                },);
               },
             );
 
@@ -1098,7 +1101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // ),
                                 InkWell(
                                   onTap: () {
-                                    if (Api.H_Questions["Table1"].isEmpty) {
+                                    if (Api.User_info["Table"][0]["IsQuestionSubmited"]) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1150,7 +1153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         Spacer(),
                                         Api.H_Questions.isNotEmpty
-                                            ? Api.H_Questions["Table1"].isEmpty
+                                            ? Api.User_info["Table"][0]["IsQuestionSubmited"]
                                                 ? Text(
                                                     "Social Account".tr,
                                                     textAlign: TextAlign.center,

@@ -94,11 +94,12 @@ class _show_pdfState extends State<show_pdf> {
               final directory = Directory('/storage/emulated/0/Download');
               final file = File(
                   "${directory!.path}/MMDD${DateTime.now().millisecondsSinceEpoch}.pdf");
-               file.writeAsBytes(await widget.my_pdf.save()).then((value) {
-               
-                Api.snack_bar(context: context, message: "Pdf Save on your Download folder");
-                  Navigator.of(context).pop();
+               file.writeAsBytes(await widget.my_pdf.save()).then((value) {               
+                Api.snack_bar(context: context, message: "Pdf Save on your Download folder").then((value) {
+                  // Navigator.of(context).pop();
                   temp.value=true;
+                  
+                },);
               },);
             },
             child: Container(

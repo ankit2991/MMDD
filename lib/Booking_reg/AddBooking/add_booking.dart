@@ -10,7 +10,13 @@ class AddBooking extends StatefulWidget {
   @override
   String Isbooking;
   Function refresh;
-  AddBooking({required String this.Isbooking, required this.refresh});
+  bool update;
+  Map data;
+  AddBooking(
+      {required String this.Isbooking,
+      required this.refresh,
+      required this.update,
+      required this.data});
   _AddBookingState createState() => _AddBookingState();
 }
 
@@ -40,6 +46,33 @@ class _AddBookingState extends State<AddBooking> {
     setState(() {
       loader = a;
     });
+  }
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.update) {
+      name_con.text = widget.data["CustomerName"];
+      mob_con.text = widget.data["MobileNo"];
+      _startDate = DateTime.parse(widget.data["EventStartDate"]);
+      _endDate = DateTime.parse(widget.data["EventEndDate"]);
+      List<String> Start_time = widget.data["EventStartTime"].split(":");
+      _startTime = TimeOfDay(
+        hour: int.parse(Start_time[0]),
+        minute: int.parse(Start_time[1]),
+      );
+      List<String> End_time = widget.data["EventEndTime"].split(":");
+      _endTime = TimeOfDay(
+        hour: int.parse(End_time[0]),
+        minute: int.parse(End_time[1]),
+      );
+      selectedItem = widget.data["EventName"];
+
+// Omob_con.text=widget.data["CustomerName"];
+// event_address_con.text=widget.data["CustomerName"];
+      remark_con.text = widget.data["Remarks"];
+      eventLocation_con.text = widget.data["CustomerName"];
+    }
   }
 
   bool loader = false;
@@ -91,18 +124,19 @@ class _AddBookingState extends State<AddBooking> {
           _startTime = pickedTime;
         });
       } else {
-        if(_startDate==_endDate){
+        if (_startDate == _endDate) {
           if (pickedTime!.hour > _startTime!.hour ||
-            (pickedTime!.hour ==  _startTime!.hour &&
-                pickedTime!.minute >=  _startTime!.minute)) {
-          setState(() {
-            _endTime = pickedTime;
-          });
+              (pickedTime!.hour == _startTime!.hour &&
+                  pickedTime!.minute >= _startTime!.minute)) {
+            setState(() {
+              _endTime = pickedTime;
+            });
+          } else {
+            // Show a message if an older time is picked
+            Api.snack_bar(
+                context: context, message: "Please select a valid future time");
+          }
         } else {
-          // Show a message if an older time is picked
-            Api.snack_bar(context: context, message: "Please select a valid future time");
-        }
-        }else{
           setState(() {
             _endTime = pickedTime;
           });
@@ -140,78 +174,91 @@ class _AddBookingState extends State<AddBooking> {
                 child: Column(
                   children: [
                     // Other fields omitted for brevity...
-                    TextFormField(
-                      controller: name_con,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter your name";
-                        }
-                      },
-                      decoration: InputDecoration(
-                        errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red)),
-                        labelText: "Name",
-                        labelStyle: TextStyle(
-                          color: Color(0xe5777474),
-                          fontFamily: 'sub-tittle',
-                          fontSize: 14,
+                    IgnorePointer(
+                      ignoring: widget.update,
+                      child: TextFormField(
+                        controller: name_con,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter your name";
+                          }
+                        },
+                        decoration: InputDecoration(
+                          errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red)),
+                          labelText: "Name",
+                          labelStyle: TextStyle(
+                            color: Color(0xe5777474),
+                            fontFamily: 'sub-tittle',
+                            fontSize: 14,
+                          ),
+                          floatingLabelStyle:
+                              TextStyle(color: Color(0xffC4A68B)),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xffC4A68B)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Color(0xffC4A68B), width: 2),
+                          ),
                         ),
-                        floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffC4A68B)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0xffC4A68B), width: 2),
-                        ),
+                        style: TextStyle(
+                            fontFamily: 'sub-tittle',
+                            fontSize: 16.0,
+                            color: widget.update
+                                ? Color(0xe5777474)
+                                : Colors.black),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-Z\s]'))
+                        ],
                       ),
-                      style: TextStyle(
-                        fontFamily: 'sub-tittle',
-                        fontSize: 16.0,
-                      ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                      ],
                     ),
                     const SizedBox(height: 15),
-                    TextFormField(
-                      controller: mob_con,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter your Mobile Number";
-                        }
-                      },
-                      keyboardType: TextInputType.number,
-                      maxLength: 10,
-                      decoration: InputDecoration(
-                        errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red)),
-                        labelText: "Mobile Number",
-                        labelStyle: TextStyle(
-                          color: Color(0xe5777474),
-                          fontFamily: 'sub-tittle',
-                          fontSize: 14,
+                    IgnorePointer(
+                      ignoring: widget.update,
+                      child: TextFormField(
+                        controller: mob_con,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter your Mobile Number";
+                          }
+                        },
+                        keyboardType: TextInputType.number,
+                        maxLength: 10,
+                        decoration: InputDecoration(
+                          errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red)),
+                          labelText: "Mobile Number",
+                          labelStyle: TextStyle(
+                            color: Color(0xe5777474),
+                            fontFamily: 'sub-tittle',
+                            fontSize: 14,
+                          ),
+                          // Default label color
+                          floatingLabelStyle:
+                              TextStyle(color: Color(0xffC4A68B)),
+                          // Label color when focused
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.grey), // Default border color
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color(0xffC4A68B),
+                                width: 2), // Border color when focused
+                          ),
                         ),
-                        // Default label color
-                        floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                        // Label color when focused
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.grey), // Default border color
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color(0xffC4A68B),
-                              width: 2), // Border color when focused
-                        ),
+                        style: TextStyle(
+                            fontFamily: 'sub-tittle',
+                            fontSize: 16.0,
+                            color: widget.update
+                                ? Color(0xe5777474)
+                                : Colors.black),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly // Only numbers
+                        ],
                       ),
-                      style: TextStyle(
-                        fontFamily: 'sub-tittle',
-                        fontSize: 16.0,
-                      ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly // Only numbers
-                      ],
                     ),
                     const SizedBox(height: 15),
                     TextFormField(
@@ -254,25 +301,35 @@ class _AddBookingState extends State<AddBooking> {
                       ],
                     ),
                     const SizedBox(height: 15),
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: 'Event Category',
-                        border: OutlineInputBorder(),
+                    IgnorePointer(
+                      ignoring: widget.update,
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: 'Event Category',
+                          border: OutlineInputBorder(),
+                        ),
+                        value: selectedItem,
+                        items: event_cate.map((item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: TextStyle(
+                                  color: widget.update
+                                      ? Color(0xe5777474)
+                                      : Colors.black),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedItem = value;
+                          });
+                        },
+                        validator: (value) => value == null
+                            ? 'Please select Event Category'
+                            : null,
                       ),
-                      value: selectedItem,
-                      items: event_cate.map((item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedItem = value;
-                        });
-                      },
-                      validator: (value) =>
-                          value == null ? 'Please select Event Category' : null,
                     ),
                     SizedBox(
                       height: 15,
@@ -323,7 +380,10 @@ class _AddBookingState extends State<AddBooking> {
                     InkWell(
                       onTap: () {
                         if (_startDate == null) {
-                          Api.snack_bar(context: context, message: "Please select Event Start Date then Select End date");
+                          Api.snack_bar(
+                              context: context,
+                              message:
+                                  "Please select Event Start Date then Select End date");
                         }
                       },
                       child: IgnorePointer(
@@ -416,16 +476,22 @@ class _AddBookingState extends State<AddBooking> {
                     ),
                     const SizedBox(height: 15),
                     InkWell(
-                      onTap: (){
-                        if(_startDate==null&&_endDate==null){
-                          
-                            Api.snack_bar(context: context, message: "please select Start Date & End Date");
-                        }else if(_startTime==null){
-                            Api.snack_bar(context: context, message: "please select Start Time");
+                      onTap: () {
+                        if (_startDate == null && _endDate == null) {
+                          Api.snack_bar(
+                              context: context,
+                              message: "please select Start Date & End Date");
+                        } else if (_startTime == null) {
+                          Api.snack_bar(
+                              context: context,
+                              message: "please select Start Time");
                         }
                       },
                       child: IgnorePointer(
-                           ignoring: _startDate!=null&&_endDate!=null||_startTime!=null?false:true,
+                        ignoring: _startDate != null && _endDate != null ||
+                                _startTime != null
+                            ? false
+                            : true,
                         child: TextFormField(
                           onTap: () => _selectTime(context, false),
                           validator: (value) {
@@ -446,11 +512,12 @@ class _AddBookingState extends State<AddBooking> {
                               fontFamily: 'sub-tittle',
                               fontSize: 14,
                             ),
-                            floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                            floatingLabelStyle:
+                                TextStyle(color: Color(0xffC4A68B)),
                             border: OutlineInputBorder(),
                             focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Color(0xffC4A68B), width: 2),
+                              borderSide: BorderSide(
+                                  color: Color(0xffC4A68B), width: 2),
                             ),
                           ),
                           style: TextStyle(
@@ -458,7 +525,9 @@ class _AddBookingState extends State<AddBooking> {
                             fontSize: 16.0,
                           ),
                           controller: TextEditingController(
-                            text: _endTime != null ? _endTime!.format(context) : '',
+                            text: _endTime != null
+                                ? _endTime!.format(context)
+                                : '',
                           ),
                           readOnly: true,
                         ),
@@ -596,61 +665,152 @@ class _AddBookingState extends State<AddBooking> {
                     SizedBox(
                       height: 15,
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xffC4A68B),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0)),
-                        minimumSize: Size(650, 50),
-                      ),
-                      onPressed: () {
-                        // print("${_startTime!.hour}:${_startTime!.minute}");
-                        if (_formKey.currentState!.validate()) {
-                          Api.CustomerRegistration(
-                                  Isbooking: widget.Isbooking,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if(widget.update)
+                        GestureDetector(
+                          onTap: (){
+                               if (_formKey.currentState!.validate()) {
+                              if (widget.update) {
+                                Api.EventBooking(
+                                  IsBooking: "0",
                                   BookingAmount: "",
-                                  CName: name_con.text,
                                   DueAmount: "",
-                                  Email: "",
-                                  EventAddress: event_address_con.text,
                                   EventEndDate:
                                       "${_endDate!.toLocal()}".split(' ')[0],
                                   EventStartDate:
                                       "${_startDate!.toLocal()}".split(' ')[0],
-                                  EventStartTime:
-                                      "${_startTime!.hour}:${_startTime!.minute}",
+                                  EventId: widget.data["id"].toInt().toString(),
                                   EventEndTime:
                                       "${_endTime!.hour}:${_endTime!.minute}",
-                                  EventName: selectedItem ?? "",
-                                  Latitude: lett ?? "",
-                                  Longitude: lott ?? "",
-                                  Mobile: mob_con.text,
-                                  Remarks: remark_con.text,
+                                  EventStartTime:
+                                      "${_startTime!.hour}:${_startTime!.minute}",
                                   TotalAmount: "",
-                                  context: context)
-                              .then(
-                            (value) {
-                              if (value) {
-                                widget.refresh();
-                                Navigator.of(context).pop();
-                              } else {
-                                name_con.clear();
-                                mob_con.clear();
-                                Omob_con.clear();
-                                event_address_con.clear();
-                                remark_con.clear();
-                                eventLocation_con.clear();
-                              }
-                            },
-                          );
-                        }
-                        // Handle booking confirmation
-                      },
-                      child: Text(
-                        'CONFIRM BOOKING',
-                        style: TextStyle(
-                            color: Colors.white, fontFamily: 'Fontmain'),
-                      ),
+                                  Remarks: remark_con.text,
+                                ).then(
+                                (value) {
+                                  if (value) {
+                                    widget.refresh();
+                                    Navigator.of(context).pop();
+                                  } else {
+                                    name_con.clear();
+                                    mob_con.clear();
+                                    Omob_con.clear();
+                                    event_address_con.clear();
+                                    remark_con.clear();
+                                    eventLocation_con.clear();
+                                  }
+                                },
+                              );
+                            }
+                          }},
+                          child: Container(
+                            margin: EdgeInsets.only(right: 5),
+                            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                            alignment: Alignment.center,
+                            width: (MediaQuery.of(context).size.width/2)-20,
+                            decoration: BoxDecoration(color: Color(0xffC4A68B),),
+                          
+                          
+                            child: Text(
+                              'Save',
+                              style: TextStyle(
+                                  color: Colors.white, fontFamily: 'Fontmain'),
+                            ),
+                          ),
+                        ),
+                    
+                        GestureDetector(
+                          onTap: (){
+                                if (_formKey.currentState!.validate()) {
+                              if (widget.update) {
+                                Api.EventBooking(
+                                  IsBooking: "1",
+                                  BookingAmount: "",
+                                  DueAmount: "",
+                                  EventEndDate:
+                                      "${_endDate!.toLocal()}".split(' ')[0],
+                                  EventStartDate:
+                                      "${_startDate!.toLocal()}".split(' ')[0],
+                                  EventId: widget.data["id"].toInt().toString(),
+                                  EventEndTime:
+                                      "${_endTime!.hour}:${_endTime!.minute}",
+                                  EventStartTime:
+                                      "${_startTime!.hour}:${_startTime!.minute}",
+                                  TotalAmount: "",
+                                  Remarks: remark_con.text,
+                                ).then(
+                                (value) {
+                                  if (value) {
+                                    widget.refresh();
+                                    Navigator.of(context).pop();
+                                  } else {
+                                    name_con.clear();
+                                    mob_con.clear();
+                                    Omob_con.clear();
+                                    event_address_con.clear();
+                                    remark_con.clear();
+                                    eventLocation_con.clear();
+                                  }
+                                },
+                              );
+                              }else{
+                              Api.CustomerRegistration(
+                                      Isbooking: widget.Isbooking,
+                                      BookingAmount: "",
+                                      CName: name_con.text,
+                                      DueAmount: "",
+                                      Email: "",
+                                      EventAddress: event_address_con.text,
+                                      EventEndDate:
+                                          "${_endDate!.toLocal()}".split(' ')[0],
+                                      EventStartDate:
+                                          "${_startDate!.toLocal()}".split(' ')[0],
+                                      EventStartTime:
+                                          "${_startTime!.hour}:${_startTime!.minute}",
+                                      EventEndTime:
+                                          "${_endTime!.hour}:${_endTime!.minute}",
+                                      EventName: selectedItem ?? "",
+                                      Latitude: lett ?? "",
+                                      Longitude: lott ?? "",
+                                      Mobile: mob_con.text,
+                                      Remarks: remark_con.text,
+                                      TotalAmount: "",
+                                      context: context)
+                                  .then(
+                                (value) {
+                                  if (value) {
+                                    widget.refresh();
+                                    Navigator.of(context).pop();
+                                  } else {
+                                    name_con.clear();
+                                    mob_con.clear();
+                                    Omob_con.clear();
+                                    event_address_con.clear();
+                                    remark_con.clear();
+                                    eventLocation_con.clear();
+                                  }
+                                },
+                              );
+                            }}
+                         
+                          },
+                          child: Container(
+                             padding: EdgeInsets.symmetric(vertical: 10,horizontal: 4),
+                            alignment: Alignment.center,
+                            width: (MediaQuery.of(context).size.width/2)-20,
+                            decoration: BoxDecoration(color: Color(0xffC4A68B),),
+                          
+                            child: Text(
+                              'CONFIRM BOOKING',
+                              style: TextStyle(
+                                  color: Colors.white, fontFamily: 'Fontmain'),
+                            ),
+                          ),
+                        ),
+                    
+                      ],
                     ),
                   ],
                 ),

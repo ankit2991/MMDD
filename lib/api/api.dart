@@ -25,6 +25,7 @@ class Api {
   static List<dynamic> city_list = [];
   static var User_info;
   static Map<String, dynamic> H_Questions = {};
+  static Map TermsAndConditions ={};
   static late SharedPreferences prefs;
   static bool loading = false;
   static Future<void> local_dataBase() async {
@@ -263,7 +264,8 @@ static Future<void> snack_bar({required context,required String message})async{
     if (!serviceEnable) {
       Geolocator.openLocationSettings();
       // Geolocator.openAppSettings();
-          Api.snack_bar(context: context, message: "turn on Location");
+          // Api.snack_bar(context: context, message: "turn on Location");
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("turn on Location")));
       loader(false);
       return Future.error("Location services are disabled.");
     }
@@ -272,13 +274,15 @@ static Future<void> snack_bar({required context,required String message})async{
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         loader(false);
-          snack_bar(context: context, message: "Location permissions are denied");
+          // snack_bar(context: context, message: "Location permissions are denied");
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Location permissions are denied")));
         return Future.error("Location permissions are denied");
       }
     }
     if (permission == LocationPermission.deniedForever) {
       loader(false);
-         snack_bar(context: context, message: "Location Permission are permanently denied");
+        //  snack_bar(context: context, message: "Location Permission are permanently denied");
+         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Location Permission are permanently denied")));
       return Future.error(
           "Location Permission are permanently denied, we cannot request");
     }
@@ -1074,7 +1078,10 @@ static Future<void> snack_bar({required context,required String message})async{
       String Advance_Amount = "",
       String Du_Amount = ""}) async {
     // Create a PDF document
-    final pdf = pw.Document();
+
+      final pd = pw.Document();
+ 
+      final pdf = pw.Document();
     final fontData =
         await rootBundle.load('assets/fonts/Poppins/Poppins-SemiBold.ttf');
     final ttf = pw.Font.ttf(fontData);
@@ -1161,7 +1168,7 @@ static Future<void> snack_bar({required context,required String message})async{
     pdf.addPage(pw.Page(
         // pageFormat: PdfPageFormat.a4,
         margin: pw.EdgeInsets.only(top: 20, left: 10, right: 10),
-        build: (pw.Context context) => pw.Column(
+        build: (pw.Context context) => pw.Stack(children: [pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 // Left Corner Heading
@@ -1335,7 +1342,21 @@ static Future<void> snack_bar({required context,required String message})async{
                 pw.Text(cust_name,
                     style: pw.TextStyle(color: PdfColor(0.5, 0.5, 0.5))),
               ],
-            )));
+            ),
+             pw.Positioned(
+              bottom: 0, // Position text at the bottom
+              left: 0,
+              right: 0,
+              child: pw.Text(
+                'Terms & Conditions : ${TermsAndConditions["Table1"][0]["TermsAndConditions"]}' ?? "",
+                textAlign: pw.TextAlign.center,
+                style: pw.TextStyle(fontSize: 12),
+              ),
+            ),
+            ]
+            )
+            )
+            );
     // final directory = Directory('/storage/emulated/0/Download');
     // final file = File("${directory!.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
 
@@ -1343,15 +1364,19 @@ static Future<void> snack_bar({required context,required String message})async{
     log("Save done");
     return pdf;
     // OpenFilex.open(file.path);
+  
+
   }
 
   // ____________________________________________________________________   (FacilityDiscountInsert )
   static Future<bool> FacilityDiscountInsert(
       {required String FacilityId,
       required String DiscountAmount,
+      required String DiscountStartDate,
+      required String DiscountEndDate,
       required String IsDiscount}) async {
     String url =
-        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"FacilityId":"$FacilityId","IsDiscount":"$IsDiscount","DiscountAmount":"$DiscountAmount","ApiAdd":"FacilityDiscountInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=FacilityDiscountInsert';
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"DiscountStartDate":"2025-01-01","DiscountEndDate":"2025-01-31","FacilityId":"$FacilityId","IsDiscount":"$IsDiscount","DiscountAmount":"$DiscountAmount","ApiAdd":"FacilityDiscountInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=FacilityDiscountInsert';
     print(url);
     var res = await http.get(Uri.parse(url));
 
@@ -1437,6 +1462,8 @@ static Future<void> snack_bar({required context,required String message})async{
     if (res.statusCode == 200) {
       log("get_Merchent_Trem_And_Condition Api call.....");
       var data = jsonDecode(res.body);
+      TermsAndConditions.clear();
+      TermsAndConditions=data;
       return data;
     } else {
       throw "Error:- get_Merchent_Trem_And_Condition";
@@ -1491,4 +1518,33 @@ static Future<void> snack_bar({required context,required String message})async{
       throw ("Error........ RecipitFacilityInsert Api ");
     }
   }
+  // ____________________________________________________________________   (EventBooking )
+  static Future<bool> EventBooking(
+      {required String EventStartDate,
+      required String EventEndDate,
+      required String EventStartTime,
+      required String EventEndTime,
+      required String TotalAmount,
+      required String DueAmount,
+      required String BookingAmount,
+      required String IsBooking,
+      required String EventId,
+      required String Remarks,
+      }) async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"EventStartDate":"$EventStartDate","EventEndDate":"$EventEndDate","EventStartTime":"$EventStartTime","EventEndTime":"$EventEndTime","TotalAmount":"$TotalAmount","DueAmount":"$DueAmount","BookingAmount":"$BookingAmount","IsBooking":"$IsBooking","EventId":"$EventId","F_VoucherTypeMaster":"1","Remarks":"$Remarks","ApiAdd":"EventBooking","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=EventBooking';
+    print(url);
+    var res = await http.get(Uri.parse(url));
+
+    if (res.statusCode == 200) {
+      log("EventBooking Api Call.............");
+
+      return true;
+
+    } else {
+      log("Error........ EventBooking Api ");
+      throw ("Error........ EventBooking Api ");
+    }
+  }
+
 }

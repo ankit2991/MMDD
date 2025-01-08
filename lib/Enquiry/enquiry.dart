@@ -51,6 +51,7 @@ class _MyEnquiryState extends State<MyEnquiry> {
           iconSize: 30.0, // Adjust the size of the icon
         ),
       ),
+    
       body: 
       
       Stack(
@@ -64,7 +65,10 @@ class _MyEnquiryState extends State<MyEnquiry> {
             itemBuilder: (context, index) {
             return GestureDetector(
               onTap: (){
-                // Navigator.of(context).push(route)
+                 Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "0",refresh: refresh,update: true,data: _data[index],)),
+          );
               },
               child: Container(
                 padding: EdgeInsets.all(5),
@@ -124,7 +128,7 @@ class _MyEnquiryState extends State<MyEnquiry> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "0",refresh: refresh,)),
+            MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "0",refresh: refresh,update: false,data: {},)),
           );
         },
         child: Icon(Icons.add, color: Colors.white),

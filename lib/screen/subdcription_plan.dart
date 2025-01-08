@@ -54,7 +54,7 @@ class _subscription_planState extends State<subscription_plan> {
   }
 
   void buttom_sheet({required String SubscriptionName,required String SubscriptionCharge,required String SubscriberId,required bool sub}){
-       if(Api.User_info["Table"][0]["F_SubscriberMaster"]!=null&&sub==true){
+       if(Api.User_info["Table"][0]["F_SubscriberMaster"]!=null&&sub==true&&Api.User_info["Table"][0]["F_SubscriberMaster"]!=0){
       SubscriptionCharge= ((double.parse(SubscriptionCharge)-Api.User_info["Table"][0]["SubscriptionAmount"])+Api.User_info["Table"][0]["AccountBalance"]).toString();
        }
        showModalBottomSheet(
@@ -295,7 +295,7 @@ class _subscription_planState extends State<subscription_plan> {
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                         child: Text(
-                         Api.User_info["Table"][0]["F_SubscriberMaster"]!=null?"Upgrade": "GET STARTED".tr,
+                         Api.User_info["Table"][0]["F_SubscriberMaster"]!=null&&Api.User_info["Table"][0]["F_SubscriberMaster"]!=0?"Upgrade": "GET STARTED".tr,
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),

@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:mddmerchant/api/api.dart';
+import 'package:mddmerchant/main.dart';
 
 class QualityAss extends StatefulWidget {
   @override
@@ -39,6 +40,10 @@ class _QualityAssState extends State<QualityAss> {
 
   @override
   Widget build(BuildContext context) {
+    if (Api.H_Questions["Table1"].isEmpty) {
+      loader = false;
+      Navigator.pop(context);
+    }
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -377,40 +382,6 @@ class _QualityAssState extends State<QualityAss> {
                                           print(op_ans);
                                         }
 
-                                        if (Api.H_Questions["Table1"][index]
-                                                ["QuestionType"] ==
-                                            "Multipal Optional") {
-                                          await Api.MerchantAnswareInsert(
-                                            Question: utf8.decode(Api
-                                                .H_Questions["Table1"][index]
-                                                    ["Question"]
-                                                .runes
-                                                .toList()),
-                                            Q_id: Api.H_Questions["Table1"]
-                                                [index]["Id"],
-                                            Answer1: check_box_ans[index][0],
-                                            Answer2: check_box_ans[index][1],
-                                            Answer3: check_box_ans[index][2],
-                                            Answer4: check_box_ans[index][3],
-                                            Answer5: check_box_ans[index][4],
-                                            Answer6: check_box_ans[index][5],
-                                            Answer7: check_box_ans[index][6],
-                                          );
-                                        }
-                                        if (Api.H_Questions["Table1"][index]
-                                                ["QuestionType"] ==
-                                            "Input Type") {
-                                          await Api.MerchantAnswareInsert(
-                                            Question: utf8.decode(Api
-                                                .H_Questions["Table1"][index]
-                                                    ["Question"]
-                                                .runes
-                                                .toList()),
-                                            Q_id: Api.H_Questions["Table1"]
-                                                [index]["Id"],
-                                            Answer1: Text_answer[index],
-                                          );
-                                        }
                                         setState(() {
                                           loader = false;
                                         });
