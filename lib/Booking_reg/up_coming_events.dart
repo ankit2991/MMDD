@@ -46,7 +46,7 @@ class _UpComingEventsState extends State<UpComingEvents> {
       Api.EventBookingDetailsList(
               Is_booking: "1",
               Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
-                  "UpcomingEvent")
+                  "DueEvent")
           .then(
         (value) {
           _data = value;

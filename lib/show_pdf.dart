@@ -95,8 +95,8 @@ class _show_pdfState extends State<show_pdf> {
               final file = File(
                   "${directory!.path}/MMDD${DateTime.now().millisecondsSinceEpoch}.pdf");
                file.writeAsBytes(await widget.my_pdf.save()).then((value) {               
-                Api.snack_bar(context: context, message: "Pdf Save on your Download folder").then((value) {
-                  // Navigator.of(context).pop();
+                Api.snack_bar2(context: context, message: "Pdf Save on your Download folder").then((value) {
+                  Navigator.of(context).pop();
                   temp.value=true;
                   
                 },);

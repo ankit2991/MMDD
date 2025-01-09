@@ -116,6 +116,19 @@ class _MyImageState extends State<MyImage> {
                                       ),
                                     ),
                                   ),
+                                  // TextButton(onPressed: (){}, child: ),
+                                  Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: IconButton(
+                                            onPressed: () {
+                                             Api.UpdateProfileImg(img:_Work_data[index]["ImagePath"] ).then((value) {
+                                                Api.Mpin_check(mob_no: Api.prefs.getString("mobile_no")??"", Mpin: Api.prefs.getString("mpin")??"");
+                                             },);
+                                            },
+                                            icon:Text("set as profile",style: TextStyle(color: Colors.white,fontSize: 25),)),
+                                      )),
                                   Align(
                                       alignment: Alignment.topRight,
                                       child: Padding(

@@ -360,16 +360,20 @@ class _MpinPageState extends State<MpinPage> {
                                                 print(
                                                     Api.prefs.getBool('login'));
                                                 // Get.offAll(HomeScreen);
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            HomeScreen()));
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          HomeScreen()), // The new page to display
+                                                  (Route<dynamic> route) =>
+                                                      false, // Remove all previous routes
+                                                );
                                               },
                                             );
                                           } else {
-                                            
-                                            Api.snack_bar(context: context, message: "invalid M-pin");
+                                            Api.snack_bar(
+                                                context: context,
+                                                message: "invalid M-pin");
                                             n1.clear();
                                             n2.clear();
                                             n3.clear();
@@ -424,7 +428,8 @@ class _MpinPageState extends State<MpinPage> {
                                         setState(() {
                                           loader = true;
                                         });
-                                        await Api.send_otp(widget.mob_no,context);
+                                        await Api.send_otp(
+                                            widget.mob_no, context);
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -452,7 +457,12 @@ class _MpinPageState extends State<MpinPage> {
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
-                              if (n1.text.isNotEmpty && n2.text.isNotEmpty && n3.text.isNotEmpty&&n4.text.isNotEmpty&&n5.text.isNotEmpty&&n6.text.isNotEmpty) {
+                              if (n1.text.isNotEmpty &&
+                                  n2.text.isNotEmpty &&
+                                  n3.text.isNotEmpty &&
+                                  n4.text.isNotEmpty &&
+                                  n5.text.isNotEmpty &&
+                                  n6.text.isNotEmpty) {
                                 setState(() {
                                   loader = true;
                                 });
@@ -470,7 +480,14 @@ class _MpinPageState extends State<MpinPage> {
                                       Api.prefs.setBool('login', true).then(
                                         (value) {
                                           print(Api.prefs.getBool('login'));
-                                          Get.offAll(HomeScreen());
+                                          Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          HomeScreen()), // The new page to display
+                                                  (Route<dynamic> route) =>
+                                                      false, // Remove all previous routes
+                                                );
                                           // Navigator.push(
                                           //     context,
                                           //     MaterialPageRoute(
@@ -481,7 +498,9 @@ class _MpinPageState extends State<MpinPage> {
                                     },
                                   );
                                 } else {
-                                Api.snack_bar(context: context, message: "invalid M-pin");
+                                  Api.snack_bar(
+                                      context: context,
+                                      message: "invalid M-pin");
                                   n1.clear();
                                   n2.clear();
                                   n3.clear();
@@ -493,7 +512,9 @@ class _MpinPageState extends State<MpinPage> {
                                   loader = false;
                                 });
                               } else {
-                              Api.snack_bar(context: context, message: "please enter M-Pin");
+                                Api.snack_bar(
+                                    context: context,
+                                    message: "please enter M-Pin");
                               }
                               // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisTration()));
                             },

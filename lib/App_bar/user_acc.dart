@@ -18,8 +18,15 @@ import "../api/api.dart";
 import 'dart:io';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class UserProfile extends StatelessWidget {
+class UserProfile extends StatefulWidget {
   @override
+  State<UserProfile> createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
+  @override
+    File ?_profile;
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -43,11 +50,24 @@ class UserProfile extends StatelessWidget {
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: mainColor,
-                  // Profile picture placeholder
-                  child: Icon(Icons.person, size: 50, color: Colors.white),
+                GestureDetector(
+                  onTap: (){
+                  //   Api.pickImage(img: true, source: ImageSource.gallery).then((value) {
+                  //   setState(() {
+                  //   _profile=value["file"];
+                  //     // Api.UpdateProfileImg(img: _profile!);
+                  //   });
+                  // },);
+                  },
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: mainColor,
+                    // backgroundImage:_profile==null? AssetImage(""):Image.file(_profile!),
+                    // Profile picture placeholder
+                    child:Api.User_info["Table"][0]["profileImage"]!=null?Image.network(fit: BoxFit.cover,Api.User_info["Table"][0]["profileImage"],errorBuilder: (context, error, stackTrace) {
+                      return Icon(Icons.person, size: 50, color: Colors.white);
+                    },) :Icon(Icons.person, size: 50, color: Colors.white),
+                  ),
                 ),
                 SizedBox(height: 10),
                 Text(
@@ -194,45 +214,47 @@ class _Discount_screenState extends State<Discount_screen> {
                         ValueNotifier(_data[index]["IsDiscount"]);
                     ValueNotifier<double?> total = ValueNotifier(0);
                     var discount_con = TextEditingController();
-                      DateTime? _startDate;
+                    DateTime? _startDate;
                     DateTime? _endDate;
                     if (_data[index]["IsDiscount"] == true) {
                       discount_con.text =
                           _data[index]["DiscountAmount"].toString();
                       total.value = _data[index]["Amount"] -
                           _data[index]["DiscountAmount"];
-                    if(_data[index]["DisStartDate"]!=null){
-                      _startDate = DateTime.parse(_data[index]["DisStartDate"]);
-                    }
-                    if(_data[index]["DisEndDate"]!=null){
-                      _endDate = DateTime.parse(_data[index]["DisEndDate"]);
-                      if(_endDate.isBefore(DateTime.now())){
-                         Api.FacilityDiscountInsert(
-                                DiscountStartDate: "${_startDate!.toLocal()}".split(' ')[0],
-                                DiscountEndDate: "${_endDate!.toLocal()}".split(' ')[0],
-                                      DiscountAmount: discount_con.text,
-                                      FacilityId: _data[index]["Id"].toString(),
-                                      IsDiscount:"0")
-                                  .then(
-                                (value) {
-                                  if (bools[index] == true) {
-                                    // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
-                                    Api.snack_bar(
-                                        context: context,
-                                        message:
-                                            "Discount Activated successfully");
-                                  } else {
-                                    Api.snack_bar(
-                                        context: context,
-                                        message:
-                                            "Discount Deactivated successfully");
-                                  }
-                                },
-                              );
+                      if (_data[index]["DisStartDate"] != null) {
+                        _startDate =
+                            DateTime.parse(_data[index]["DisStartDate"]);
+                      }
+                      if (_data[index]["DisEndDate"] != null) {
+                        _endDate = DateTime.parse(_data[index]["DisEndDate"]);
+                        if (_endDate.isBefore(DateTime.now())) {
+                          Api.FacilityDiscountInsert(
+                                  DiscountStartDate:
+                                      "${_startDate!.toLocal()}".split(' ')[0],
+                                  DiscountEndDate:
+                                      "${_endDate!.toLocal()}".split(' ')[0],
+                                  DiscountAmount: discount_con.text,
+                                  FacilityId: _data[index]["Id"].toString(),
+                                  IsDiscount: "0")
+                              .then(
+                            (value) {
+                              if (bools[index] == true) {
+                                // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
+                                Api.snack_bar(
+                                    context: context,
+                                    message: "Discount Activated successfully");
+                              } else {
+                                Api.snack_bar(
+                                    context: context,
+                                    message:
+                                        "Discount Deactivated successfully");
+                              }
+                            },
+                          );
+                        }
                       }
                     }
-                    }
-                  
+
                     Future<void> _selectDate(
                         BuildContext context, bool isStart) async {
                       final DateTime? pickedDate;
@@ -486,7 +508,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                     child: TextFormField(
                                       onTap: () {
                                         if (_startDate != null) {
-                                        _selectDate(context, false);
+                                          _selectDate(context, false);
                                         } else {
                                           Api.snack_bar(
                                               context: context,
@@ -506,15 +528,14 @@ class _Discount_screenState extends State<Discount_screen> {
                                         suffixIcon: IconButton(
                                           icon: Icon(Icons.calendar_today),
                                           onPressed: () {
-                                             if (_startDate != null) {
-                                        _selectDate(context, false);
-                                        } else {
-                                          Api.snack_bar(
-                                              context: context,
-                                              message:
-                                                  "Please Select Start Date");
-                                        }
-                                         
+                                            if (_startDate != null) {
+                                              _selectDate(context, false);
+                                            } else {
+                                              Api.snack_bar(
+                                                  context: context,
+                                                  message:
+                                                      "Please Select Start Date");
+                                            }
                                           },
                                         ),
                                         labelText: "End Discount Date",
@@ -552,8 +573,11 @@ class _Discount_screenState extends State<Discount_screen> {
                           GestureDetector(
                             onTap: () {
                               Api.FacilityDiscountInsert(
-                                DiscountStartDate: "${_startDate!.toLocal()}".split(' ')[0],
-                                DiscountEndDate: "${_endDate!.toLocal()}".split(' ')[0],
+                                      DiscountStartDate:
+                                          "${_startDate!.toLocal()}"
+                                              .split(' ')[0],
+                                      DiscountEndDate: "${_endDate!.toLocal()}"
+                                          .split(' ')[0],
                                       DiscountAmount: discount_con.text,
                                       FacilityId: _data[index]["Id"].toString(),
                                       IsDiscount:
@@ -647,6 +671,12 @@ class ProfileOption extends StatelessWidget {
             await Api.prefs.setBool('login', false).then(
               (value) {
                 print(Api.prefs.getBool('login'));
+                // Navigator.pushAndRemoveUntil(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => page), // The new page to display
+                //   (Route<dynamic> route) => false, // Remove all previous routes
+                // );
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => page),
@@ -761,29 +791,29 @@ class Account_Document extends StatelessWidget {
 
 // Example pages
 class BasicInformationPage extends StatelessWidget {
-  var nam_con =
-      TextEditingController(text: Api.User_info["Table"][0]["MemberName"]);
+  var nam_con = TextEditingController(
+      text: Api.User_info["Table"][0]["MemberName"] ?? "");
   var B_nam_con =
-      TextEditingController(text: Api.User_info["Table"][0]["OrgName"]);
+      TextEditingController(text: Api.User_info["Table"][0]["OrgName"] ?? "");
   var mob_con =
-      TextEditingController(text: Api.User_info["Table"][0]["MobileNo"]);
-  var alt_mob_con =
-      TextEditingController(text: Api.User_info["Table"][0]["OtherMobileNo"]);
+      TextEditingController(text: Api.User_info["Table"][0]["MobileNo"] ?? "");
+  var alt_mob_con = TextEditingController(
+      text: Api.User_info["Table"][0]["OtherMobileNo"] ?? "");
   var email_con =
-      TextEditingController(text: Api.User_info["Table"][0]["EmailId"]);
+      TextEditingController(text: Api.User_info["Table"][0]["EmailId"] ?? "");
   var state_con =
-      TextEditingController(text: Api.User_info["Table"][0]["StateName"]);
+      TextEditingController(text: Api.User_info["Table"][0]["StateName"] ?? "");
   var city_con =
-      TextEditingController(text: Api.User_info["Table"][0]["CityName"]);
+      TextEditingController(text: Api.User_info["Table"][0]["CityName"] ?? "");
   var loc_con =
-      TextEditingController(text: Api.User_info["Table"][0]["AreaName"]);
-  var address_con =
-      TextEditingController(text: Api.User_info["Table"][0]["OrgAddress"]);
+      TextEditingController(text: Api.User_info["Table"][0]["AreaName"] ?? "");
+  var address_con = TextEditingController(
+      text: Api.User_info["Table"][0]["OrgAddress"] ?? "");
 
-  var Template_con =
-      TextEditingController(text: Api.User_info["Table"][0]["AdsTemplate"].toString());
-  var Balance_con =
-      TextEditingController(text: Api.User_info["Table"][0]["SmsBalance"].toString());
+  var Template_con = TextEditingController(
+      text: Api.User_info["Table"][0]["AdsTemplate"].toString());
+  var Balance_con = TextEditingController(
+      text: Api.User_info["Table"][0]["SmsBalance"].toString());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1079,8 +1109,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-           
-            
               IgnorePointer(
                 ignoring: true,
                 child: TextFormField(
@@ -1110,7 +1138,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-           
               IgnorePointer(
                 ignoring: true,
                 child: TextFormField(
@@ -1140,7 +1167,6 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-           
             ],
           ),
         ),
@@ -1484,7 +1510,8 @@ class BankInformationPage extends StatelessWidget {
               const SizedBox(height: 15),
               TextFormField(
                 controller: acc_no_con,
-                keyboardType: TextInputType.number,
+                // keyboardType: TextInputType.number,
+                maxLength: 20,
                 decoration: InputDecoration(
                   labelText: "Account Number",
                   labelStyle: TextStyle(
@@ -1512,7 +1539,8 @@ class BankInformationPage extends StatelessWidget {
               TextFormField(
                 controller: ifsc_code_con,
                 // keyboardType: TextInputType.number,
-                maxLength: 16,
+                maxLength: 11,
+                
                 decoration: InputDecoration(
                   labelText: "IFSC Code",
                   labelStyle: TextStyle(
@@ -2156,62 +2184,66 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                
-                    Container(child: Column(children: [
+                Container(
+                  child: Column(
+                    children: [
                       TextField(
-                  controller: terms_con,
-                  // maxLength: 1000,
-                  // onChanged: (value) {
-                  //   setState(() {
-                      
-                  //   });
-                  // },
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                    hintText: "Write your Terms & Conditions...",
-                    border: OutlineInputBorder(),
-                    fillColor: Colors.white,
-                    filled: true,
-                  ),
-                  style: TextStyle(fontFamily: 'sub-tittle'),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xffC4A68B),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0)),
-                      minimumSize: Size(550, 50),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        loader = true;
-                      });
-                      Api.Add_Merchant_TremAndCond(
-                              TermsAndConditions: terms_con.text)
-                          .then(
-                        (value) {
-                          if (value) {
-                            setState(() {
-                              loader = false;
-                            });
-                            Navigator.of(context).pop();
-                          }
-                        },
-                      );
-                    },
-                    child: Text(
-                      'SAVE',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Fontmain',
+                        controller: terms_con,
+                        // maxLength: 1000,
+                        // onChanged: (value) {
+                        //   setState(() {
+
+                        //   });
+                        // },
+                        maxLines: 5,
+                        decoration: InputDecoration(
+                          hintText: "Write your Terms & Conditions...",
+                          border: OutlineInputBorder(),
+                          fillColor: Colors.white,
+                          filled: true,
+                        ),
+                        style: TextStyle(fontFamily: 'sub-tittle'),
                       ),
-                    ))
-                    ],),),
-                     Text(loader?"":_data["Table1"][0]["TermsAndConditions"] ?? "" ),
-                    
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xffC4A68B),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0)),
+                            minimumSize: Size(550, 50),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              loader = true;
+                            });
+                            Api.Add_Merchant_TremAndCond(
+                                    TermsAndConditions: terms_con.text)
+                                .then(
+                              (value) {
+                                if (value) {
+                                  setState(() {
+                                    loader = false;
+                                  });
+                                  Navigator.of(context).pop();
+                                }
+                              },
+                            );
+                          },
+                          child: Text(
+                            'SAVE',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Fontmain',
+                            ),
+                          ))
+                    ],
+                  ),
+                ),
+                Text(loader
+                    ? ""
+                    : _data["Table1"][0]["TermsAndConditions"] ?? ""),
               ],
             ),
           ),
@@ -2282,22 +2314,18 @@ class _ReviewPageState extends State<ReviewPage> {
                   style: TextStyle(
                       fontFamily: 'Fontmain', color: Color(0xe5777474)),
                 ))
-              : ListView.builder(
-                  padding: EdgeInsets.symmetric(vertical: 3.5, horizontal: 5),
-                  itemCount: _data.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Container(
+              : _data.isEmpty
+                  ? Container(
+                      height: 120,
                       padding: EdgeInsets.all(5),
-                      // height: 50,
-
-                      decoration:
-                          BoxDecoration(color: Colors.white, boxShadow: [
-                        BoxShadow(
-                            color: const Color.fromARGB(146, 0, 0, 0),
-                            blurRadius: 3,
-                            offset: Offset(0, 0))
-                      ]),
+                      decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          boxShadow: [
+                            BoxShadow(
+                                color: const Color.fromARGB(146, 0, 0, 0),
+                                blurRadius: 3,
+                                offset: Offset(0, 0))
+                          ]),
                       margin: EdgeInsets.all(10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -2315,11 +2343,11 @@ class _ReviewPageState extends State<ReviewPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  _data[index]["CustomerName"],
+                                  "CustomerName",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 RatingBar.builder(
-                                  initialRating: _data[index]["Rating"],
+                                  initialRating: 5,
                                   // minRating: 1,
                                   direction: Axis.horizontal,
                                   allowHalfRating: true,
@@ -2341,20 +2369,92 @@ class _ReviewPageState extends State<ReviewPage> {
                                 ),
                               ],
                             ),
-                            subtitle: Text(_data[index]["CustomerRemark"],
+                            subtitle: Text("CustomerRemark",
                                 style: TextStyle(
                                     color:
                                         const Color.fromARGB(255, 61, 61, 61))),
                           ),
-                          Text(_data[index]["MembarRemark"],
+                          Text("MembarRemark",
                               style: TextStyle(
                                   color:
                                       const Color.fromARGB(255, 151, 151, 151)))
                         ],
                       ),
-                    );
-                  },
-                ),
+                    )
+                  : ListView.builder(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3.5, horizontal: 5),
+                      itemCount: _data.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          padding: EdgeInsets.all(5),
+                          decoration:
+                              BoxDecoration(color: Colors.white, boxShadow: [
+                            BoxShadow(
+                                color: const Color.fromARGB(146, 0, 0, 0),
+                                blurRadius: 3,
+                                offset: Offset(0, 0))
+                          ]),
+                          margin: EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                minLeadingWidth: 20,
+                                contentPadding: EdgeInsets.all(5),
+                                // enabled: ,
+                                horizontalTitleGap: 10,
+                                leading: Icon(
+                                  Icons.account_box_outlined,
+                                  size: 40,
+                                ),
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      _data[index]["CustomerName"],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    RatingBar.builder(
+                                      initialRating: _data[index]["Rating"],
+                                      // minRating: 1,
+                                      direction: Axis.horizontal,
+                                      allowHalfRating: true,
+                                      itemCount: 5,
+                                      itemSize: 20,
+                                      itemPadding:
+                                          EdgeInsets.symmetric(horizontal: 1.0),
+                                      itemBuilder: (context, _) => Icon(
+                                        Icons.star,
+                                        color: const Color.fromARGB(
+                                            255, 7, 255, 255),
+                                      ),
+                                      onRatingUpdate: (rating) {
+                                        // setState(() {
+                                        //   // _rating = rating;
+                                        // });
+                                        print("Selected rating: $rating");
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                subtitle: Text(_data[index]["CustomerRemark"],
+                                    style: TextStyle(
+                                        color: const Color.fromARGB(
+                                            255, 61, 61, 61))),
+                              ),
+                              Text(_data[index]["MembarRemark"],
+                                  style: TextStyle(
+                                      color: const Color.fromARGB(
+                                          255, 151, 151, 151)))
+                            ],
+                          ),
+                        );
+                      },
+                    ),
           if (loader)
             Container(
               color: Colors.black.withOpacity(0.5),

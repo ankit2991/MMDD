@@ -700,8 +700,16 @@ class _CheckboxExampleState extends State<RegisTration> {
                 
                         );
                         if (result=="R100") {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => LogOutPage()));                    
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) => LogOutPage())); 
+                           Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          LogOutPage()), // The new page to display
+                                                  (Route<dynamic> route) =>
+                                                      false, // Remove all previous routes
+                                                );                   
                         }else{
                           Api.snack_bar(context: context, message: "Something Went Wrong");
                         }

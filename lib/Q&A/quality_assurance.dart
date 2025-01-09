@@ -10,6 +10,8 @@ import 'package:mddmerchant/api/api.dart';
 import 'package:mddmerchant/main.dart';
 
 class QualityAss extends StatefulWidget {
+  Function ref;
+ QualityAss({required this.ref});
   @override
   State<QualityAss> createState() => _QualityAssState();
 }
@@ -27,7 +29,7 @@ class _QualityAssState extends State<QualityAss> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (Api.H_Questions.isEmpty) {}
+    // if (Api.H_Questions.isEmpty) {}
     // loader = true;
     // Api.Service_Question_List().then(
     //   (value) {
@@ -43,6 +45,7 @@ class _QualityAssState extends State<QualityAss> {
     if (Api.H_Questions["Table1"].isEmpty) {
       loader = false;
       Navigator.pop(context);
+      widget.ref(false);
     }
     return Scaffold(
         appBar: AppBar(

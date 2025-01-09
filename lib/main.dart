@@ -1101,7 +1101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // ),
                                 InkWell(
                                   onTap: () {
-                                    if (Api.User_info["Table"][0]["IsQuestionSubmited"]) {
+                                    if (((Api.User_info["Table"][0]["IsQuestionSubmited"]!=null) || (Api.User_info["Table"][0]["IsQuestionSubmited"]==true))) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1109,10 +1109,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 subscription_plan(ref: ref,)),
                                       );
                                     } else {
+                                      // Navigator.of(context).push(co)
+                                    //    Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //       builder: (context) => MyAlbum()),
+                                    // );
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => QualityAss()),
+                                            builder: (context) => QualityAss(ref: ref,)),
                                       );
                                       // Your onTap functionality here
                                       print("Q&A clicked!");
@@ -1153,7 +1159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         Spacer(),
                                         Api.H_Questions.isNotEmpty
-                                            ? Api.User_info["Table"][0]["IsQuestionSubmited"]
+                                            ? ((Api.User_info["Table"][0]["IsQuestionSubmited"]!=null) || (Api.User_info["Table"][0]["IsQuestionSubmited"]==true))
                                                 ? Text(
                                                     "Social Account".tr,
                                                     textAlign: TextAlign.center,

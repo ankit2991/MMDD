@@ -71,7 +71,7 @@ class _AddBookingState extends State<AddBooking> {
 // Omob_con.text=widget.data["CustomerName"];
 // event_address_con.text=widget.data["CustomerName"];
       remark_con.text = widget.data["Remarks"];
-      eventLocation_con.text = widget.data["CustomerName"];
+      // eventLocation_con.text = widget.data["CustomerName"];
     }
   }
 
@@ -803,7 +803,7 @@ class _AddBookingState extends State<AddBooking> {
                             decoration: BoxDecoration(color: Color(0xffC4A68B),),
                           
                             child: Text(
-                              'CONFIRM BOOKING',
+                              widget.update?'CONFIRM BOOKING':"SUBMIT",
                               style: TextStyle(
                                   color: Colors.white, fontFamily: 'Fontmain'),
                             ),
