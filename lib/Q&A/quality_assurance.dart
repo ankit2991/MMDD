@@ -11,7 +11,7 @@ import 'package:mddmerchant/main.dart';
 
 class QualityAss extends StatefulWidget {
   Function ref;
- QualityAss({required this.ref});
+  QualityAss({required this.ref});
   @override
   State<QualityAss> createState() => _QualityAssState();
 }
@@ -43,9 +43,16 @@ class _QualityAssState extends State<QualityAss> {
   @override
   Widget build(BuildContext context) {
     if (Api.H_Questions["Table1"].isEmpty) {
-      loader = false;
-      Navigator.pop(context);
-      widget.ref(false);
+      Api.Mpin_check(
+              mob_no: Api.prefs.getString("mobile_no") ?? "",
+              Mpin: Api.prefs.getString("mpin") ?? "")
+          .then(
+        (value) {
+          loader = false;
+          Navigator.pop(context);
+          widget.ref(false);
+        },
+      );
     }
     return Scaffold(
         appBar: AppBar(
@@ -235,7 +242,7 @@ class _QualityAssState extends State<QualityAss> {
                                       mainAxisSpacing: 5,
                                     ),
                                     physics: NeverScrollableScrollPhysics(),
-                                    itemCount: Api.H_Questions["Table1"].length,
+                                    itemCount: 7,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index2) {
                                       // check_box_ans[index].removeAt(index2);
@@ -305,89 +312,224 @@ class _QualityAssState extends State<QualityAss> {
                                         if (Api.H_Questions["Table1"][index]
                                                 ["QuestionType"] ==
                                             "Signal Optional") {
-                                          if (op_ans_index[index] == 0) {
-                                            await Api.MerchantAnswareInsert(
-                                                Question: utf8.decode(Api
-                                                    .H_Questions["Table1"]
-                                                        [index]["Question"]
-                                                    .runes
-                                                    .toList()),
-                                                Q_id: Api.H_Questions["Table1"]
-                                                    [index]["Id"],
-                                                Answer1: op_ans[index]);
-                                          }
-                                          if (op_ans_index[index] == 1) {
-                                            await Api.MerchantAnswareInsert(
-                                                Question: utf8.decode(Api
-                                                    .H_Questions["Table1"]
-                                                        [index]["Question"]
-                                                    .runes
-                                                    .toList()),
-                                                Q_id: Api.H_Questions["Table1"]
-                                                    [index]["Id"],
-                                                Answer2: op_ans[index]);
-                                          }
-                                          if (op_ans_index[index] == 2) {
-                                            await Api.MerchantAnswareInsert(
-                                                Question: utf8.decode(Api
-                                                    .H_Questions["Table1"]
-                                                        [index]["Question"]
-                                                    .runes
-                                                    .toList()),
-                                                Q_id: Api.H_Questions["Table1"]
-                                                    [index]["Id"],
-                                                Answer3: op_ans[index]);
-                                          }
-                                          if (op_ans_index[index] == 3) {
-                                            await Api.MerchantAnswareInsert(
-                                                Question: utf8.decode(Api
-                                                    .H_Questions["Table1"]
-                                                        [index]["Question"]
-                                                    .runes
-                                                    .toList()),
-                                                Q_id: Api.H_Questions["Table1"]
-                                                    [index]["Id"],
-                                                Answer4: op_ans[index]);
-                                          }
-                                          if (op_ans_index[index] == 4) {
-                                            await Api.MerchantAnswareInsert(
-                                                Question: utf8.decode(Api
-                                                    .H_Questions["Table1"]
-                                                        [index]["Question"]
-                                                    .runes
-                                                    .toList()),
-                                                Q_id: Api.H_Questions["Table1"]
-                                                    [index]["Id"],
-                                                Answer5: op_ans[index]);
-                                          }
-                                          if (op_ans_index[index] == 5) {
-                                            await Api.MerchantAnswareInsert(
-                                                Question: utf8.decode(Api
-                                                    .H_Questions["Table1"]
-                                                        [index]["Question"]
-                                                    .runes
-                                                    .toList()),
-                                                Q_id: Api.H_Questions["Table1"]
-                                                    [index]["Id"],
-                                                Answer6: op_ans[index]);
-                                          }
-                                          if (op_ans_index[index] == 6) {
-                                            await Api.MerchantAnswareInsert(
-                                                Question: utf8.decode(Api
-                                                    .H_Questions["Table1"]
-                                                        [index]["Question"]
-                                                    .runes
-                                                    .toList()),
-                                                Q_id: Api.H_Questions["Table1"]
-                                                    [index]["Id"],
-                                                Answer7: op_ans[index]);
+                                          if (op_ans[index]!=null) {
+                                            if (op_ans_index[index] == 0) {
+                                              await Api.MerchantAnswareInsert(
+                                                      Question: utf8.decode(Api
+                                                          .H_Questions["Table1"]
+                                                              [index]
+                                                              ["Question"]
+                                                          .runes
+                                                          .toList()),
+                                                      Q_id: Api.H_Questions[
+                                                              "Table1"][index]
+                                                          ["Id"],
+                                                      Answer1: op_ans[index])
+                                                  .then(
+                                                (value) {
+                                                  setState(() {
+                                                    loader = false;
+                                                  });
+                                                },
+                                              );
+                                            }
+                                            if (op_ans_index[index] == 1) {
+                                              await Api.MerchantAnswareInsert(
+                                                      Question: utf8.decode(Api
+                                                          .H_Questions["Table1"]
+                                                              [index]
+                                                              ["Question"]
+                                                          .runes
+                                                          .toList()),
+                                                      Q_id: Api.H_Questions[
+                                                              "Table1"][index]
+                                                          ["Id"],
+                                                      Answer2: op_ans[index])
+                                                  .then(
+                                                (value) {
+                                                  setState(() {
+                                                    loader = false;
+                                                  });
+                                                },
+                                              );
+                                            }
+                                            if (op_ans_index[index] == 2) {
+                                              await Api.MerchantAnswareInsert(
+                                                      Question: utf8.decode(Api
+                                                          .H_Questions["Table1"]
+                                                              [index]
+                                                              ["Question"]
+                                                          .runes
+                                                          .toList()),
+                                                      Q_id: Api.H_Questions[
+                                                              "Table1"][index]
+                                                          ["Id"],
+                                                      Answer3: op_ans[index])
+                                                  .then(
+                                                (value) {
+                                                  setState(() {
+                                                    loader = false;
+                                                  });
+                                                },
+                                              );
+                                            }
+                                            if (op_ans_index[index] == 3) {
+                                              await Api.MerchantAnswareInsert(
+                                                      Question: utf8.decode(Api
+                                                          .H_Questions["Table1"]
+                                                              [index]
+                                                              ["Question"]
+                                                          .runes
+                                                          .toList()),
+                                                      Q_id: Api.H_Questions[
+                                                              "Table1"][index]
+                                                          ["Id"],
+                                                      Answer4: op_ans[index])
+                                                  .then(
+                                                (value) {
+                                                  setState(() {
+                                                    loader = false;
+                                                  });
+                                                },
+                                              );
+                                            }
+                                            if (op_ans_index[index] == 4) {
+                                              await Api.MerchantAnswareInsert(
+                                                      Question: utf8.decode(Api
+                                                          .H_Questions["Table1"]
+                                                              [index]
+                                                              ["Question"]
+                                                          .runes
+                                                          .toList()),
+                                                      Q_id: Api.H_Questions[
+                                                              "Table1"][index]
+                                                          ["Id"],
+                                                      Answer5: op_ans[index])
+                                                  .then(
+                                                (value) {
+                                                  setState(() {
+                                                    loader = false;
+                                                  });
+                                                },
+                                              );
+                                            }
+                                            if (op_ans_index[index] == 5) {
+                                              await Api.MerchantAnswareInsert(
+                                                      Question: utf8.decode(Api
+                                                          .H_Questions["Table1"]
+                                                              [index]
+                                                              ["Question"]
+                                                          .runes
+                                                          .toList()),
+                                                      Q_id: Api.H_Questions[
+                                                              "Table1"][index]
+                                                          ["Id"],
+                                                      Answer6: op_ans[index])
+                                                  .then(
+                                                (value) {
+                                                  setState(() {
+                                                    loader = false;
+                                                  });
+                                                },
+                                              );
+                                            }
+                                            if (op_ans_index[index] == 6) {
+                                              await Api.MerchantAnswareInsert(
+                                                      Question: utf8.decode(Api
+                                                          .H_Questions["Table1"]
+                                                              [index]
+                                                              ["Question"]
+                                                          .runes
+                                                          .toList()),
+                                                      Q_id: Api.H_Questions[
+                                                              "Table1"][index]
+                                                          ["Id"],
+                                                      Answer7: op_ans[index])
+                                                  .then(
+                                                (value) {
+                                                  setState(() {
+                                                    loader = false;
+                                                  });
+                                                },
+                                              );
+                                            }
+                                          }else{
+                                            setState(() {
+                                              loader=false;
+                                              Api.snack_bar(context: context, message: "Select  one Option");
+                                            });
                                           }
                                           print(op_ans);
+                                        } else if (Api.H_Questions["Table1"]
+                                                [index]["QuestionType"] ==
+                                            "Multipal Optional") {
+                                              if(check_box_ans[index][0].isNotEmpty||check_box_ans[index][2].isNotEmpty||check_box_ans[index][3].isNotEmpty||check_box_ans[index][4].isNotEmpty||check_box_ans[index][5].isNotEmpty||check_box_ans[index][6].isNotEmpty){
+  Api.MerchantAnswareInsert(
+                                                  Question: utf8.decode(Api
+                                                      .H_Questions["Table1"]
+                                                          [index]["Question"]
+                                                      .runes
+                                                      .toList()),
+                                                  Q_id:
+                                                      Api.H_Questions["Table1"]
+                                                          [index]["Id"],
+                                                  Answer1: check_box_ans[index]
+                                                      [0],
+                                                  Answer2: check_box_ans[index]
+                                                      [1],
+                                                  Answer3: check_box_ans[index]
+                                                      [2],
+                                                  Answer4: check_box_ans[index]
+                                                      [3],
+                                                  Answer5: check_box_ans[index]
+                                                      [4],
+                                                  Answer6: check_box_ans[index]
+                                                      [5],
+                                                  Answer7: check_box_ans[index][6])
+                                              .then(
+                                            (value) {
+                                              setState(() {
+                                                loader = false;
+                                              });
+                                            },
+                                          );
+                                              }else{
+                                                setState(() {
+                                                  loader=false;
+                                                });
+                                                Api.snack_bar(context: context, message: "select option");
+                                              }
+                                        
+                                        } else if (Api.H_Questions["Table1"]
+                                                [index]["QuestionType"] ==
+                                            "Input Type") {
+                                              if (Text_answer[index].isNotEmpty) {
+                                                 Api.MerchantAnswareInsert(
+                                                  Question: utf8.decode(Api
+                                                      .H_Questions["Table1"]
+                                                          [index]["Question"]
+                                                      .runes
+                                                      .toList()),
+                                                  Q_id:
+                                                      Api.H_Questions["Table1"]
+                                                          [index]["Id"],
+                                                  Answer1: Text_answer[index]
+                                                      [0])
+                                              .then(
+                                            (value) {
+                                              setState(() {
+                                                loader = false;
+                                              });
+                                            },
+                                          );
+                                              }else{
+                                                Api.snack_bar(context: context, message: "field Empty");
+                                                setState(() {
+                                                  loader=false;
+                                                });
+                                              }
+                                         
                                         }
-
-                                        setState(() {
-                                          loader = false;
-                                        });
                                       },
                                       child: Container(
                                         width:

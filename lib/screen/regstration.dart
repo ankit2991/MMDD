@@ -679,7 +679,9 @@ class _CheckboxExampleState extends State<RegisTration> {
                             ["ID"]);
                         print((Api.state_list[State_index]["Id"]).toString());
                         print((Api.city_list[city_index]["Id"]).toString());
-                
+                          setState(() {
+                            loader=true;
+                          });
                       String result=await  Api.MerchantRegistration(
                           BName: Bus_name_con.text.trim(),
                           MName: name_con.text.trim(),
@@ -696,12 +698,13 @@ class _CheckboxExampleState extends State<RegisTration> {
                           IsMasterReferCode: ref_code_con.text.trim(),
                           AreaId: locality_Area_con.text.trim(),
                           OrgAddress: address_con.text.trim()
-                
-                
                         );
                         if (result=="R100") {
                         // Navigator.push(context,
                         //     MaterialPageRoute(builder: (context) => LogOutPage())); 
+                         setState(() {
+                            loader=false;
+                          });
                            Navigator.pushAndRemoveUntil(
                                                   context,
                                                   MaterialPageRoute(
@@ -711,6 +714,9 @@ class _CheckboxExampleState extends State<RegisTration> {
                                                       false, // Remove all previous routes
                                                 );                   
                         }else{
+                           setState(() {
+                            loader=false;
+                          });
                           Api.snack_bar(context: context, message: "Something Went Wrong");
                         }
                           }

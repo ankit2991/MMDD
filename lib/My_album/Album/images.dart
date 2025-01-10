@@ -117,18 +117,7 @@ class _MyImageState extends State<MyImage> {
                                     ),
                                   ),
                                   // TextButton(onPressed: (){}, child: ),
-                                  Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: IconButton(
-                                            onPressed: () {
-                                             Api.UpdateProfileImg(img:_Work_data[index]["ImagePath"] ).then((value) {
-                                                Api.Mpin_check(mob_no: Api.prefs.getString("mobile_no")??"", Mpin: Api.prefs.getString("mpin")??"");
-                                             },);
-                                            },
-                                            icon:Text("set as profile",style: TextStyle(color: Colors.white,fontSize: 25),)),
-                                      )),
+                                  
                                   Align(
                                       alignment: Alignment.topRight,
                                       child: Padding(
@@ -147,48 +136,83 @@ class _MyImageState extends State<MyImage> {
                                       alignment: Alignment.bottomCenter,
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 80),
-                                        child: IconButton(
-                                            onPressed: () {
-                                              Api.downloadAndSaveImage(
-                                                      _Work_data[index]
-                                                              ["ImagePath"]
-                                                          .toString())
-                                                  .then(
-                                                (value) async {
-                                                  final result =
-                                                      await Share.shareXFiles(
-                                                          [XFile(value)],
-                                                          text: '');
+                                            vertical: 15, horizontal: 0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            IconButton(
+                                                onPressed: () {
+                                                    Api.UpdateProfileImg(img:_Work_data[index]["ImagePath"] ).then((value) {
+                                                Api.Mpin_check(mob_no: Api.prefs.getString("mobile_no")??"", Mpin: Api.prefs.getString("mpin")??"");
+                                             },).then((value) {
+                                              Navigator.pop(context);
+                                               Api.snack_bar2(context: context, message: "Done Set As Profile");
+                                             },);
                                                 },
-                                              );
-                                            },
-                                            icon: Container(
-                                              height: 50,
-                                              padding: EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xffC4A68B),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.share,
-                                                    size: 30,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Text(
-                                                    "Share",
-                                                    style: TextStyle(
+                                                icon: Container(
+                                                  height: 50,
+                                                  width: ((MediaQuery.of(context).size.width)*0.5)-20,
+                                                  alignment: Alignment.center,
+                                                  padding: EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xffC4A68B),
+                                                      // borderRadius:
+                                                      //     BorderRadius.circular(
+                                                      //         10)
+                                                              ),
+                                                  child:Text("Set As Profile",style: TextStyle(
+                                                            color: Colors.white,
+                                                            // fontSize: 25
+                                                            fontFamily: "Fontmain"
+                                                            ),)
+                                                )),
+                                        
+                                            IconButton(
+                                                onPressed: () {
+                                                  Api.downloadAndSaveImage(
+                                                          _Work_data[index]
+                                                                  ["ImagePath"]
+                                                              .toString())
+                                                      .then(
+                                                    (value) async {
+                                                      final result =
+                                                          await Share.shareXFiles(
+                                                              [XFile(value)],
+                                                              text: '');
+                                                    },
+                                                  );
+                                                },
+                                                icon: Container(
+                                                  height: 50,
+                                                  width: ((MediaQuery.of(context).size.width)*0.5)-20,
+                                                  padding: EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xffC4A68B),
+                                                      ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                        spacing: 10,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.share,
+                                                        size: 20,
                                                         color: Colors.white,
-                                                        fontSize: 25),
-                                                  )
-                                                ],
-                                              ),
-                                            )),
+                                                      ),
+                                                      Text(
+                                                        "Share",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            // fontSize: 25
+                                                            fontFamily: "Fontmain"
+                                                            ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                        
+                                          ],
+                                        ),
                                       )),
                                   // IconButton(onPressed: (){}, icon: Container(child: Text("Share")))
                                   // ElevatedButton.icon(onPressed: (){}, label: Text("Share"))
@@ -232,10 +256,10 @@ class _MyImageState extends State<MyImage> {
                                                  return  ElevatedButton(
                                                     onPressed: () {
                                                        delete.value=true;
+                                                       Navigator.of(context).pop();
                                                       setState(() {
                                                         loader = true;
                                                       });
-                                                       
                                                       Api.DeleteImgvideo(
                                                               Id: _Work_data[
                                                                           index]
@@ -243,8 +267,8 @@ class _MyImageState extends State<MyImage> {
                                                                   .toString())
                                                           .then((value) {
                                                         if (value) {
-                                                        Navigator.of(context).pop();;
-                                                         Api.snack_bar(context: context, message: "Item Deleted");
+                                                        // Navigator.of(context).pop();
+                                                        
                                                           _data.clear();
                                                           _Work_data.clear();
                                                           Api.AccountDocument()
@@ -262,7 +286,7 @@ class _MyImageState extends State<MyImage> {
                                                                     _data[i]);
                                                               }
                                                             }
-                                                           
+                                                            Api.snack_bar2(context: context, message: "Item Deleted");
                                                             setState(() {
                                                               loader = false;
                                                             });
@@ -274,13 +298,15 @@ class _MyImageState extends State<MyImage> {
                                              
                                                },),
                                               ValueListenableBuilder(valueListenable:cancel , builder: (context, value, child) {
-                                                return     ElevatedButton(
+                                                return ElevatedButton(                                                  
                                                     onPressed: () {
                                                       cancel.value=true;
                                                       Navigator.of(context)
                                                           .pop();
                                                     },
-                                                    child: Text("Cancel"),style: ButtonStyle(backgroundColor:MaterialStateProperty.all(value? Colors.white: Color(0xffC4A68B)) ,foregroundColor: WidgetStateProperty.all(value?Colors.black: Colors.white)),);
+                                                    child: Text("Cancel"),
+                                                    style: ButtonStyle(backgroundColor:MaterialStateProperty.all(value? Colors.white: Color(0xffC4A68B)) ,foregroundColor: WidgetStateProperty.all(value?Colors.black: Colors.white)),
+                                                     );
                                              
                                               },) ],
                                             );
@@ -288,7 +314,11 @@ class _MyImageState extends State<MyImage> {
                                         );
                                     
                                       },
-                                      icon: Icon(Icons.delete,color:  Color(0xffC4A68B)))
+                                      icon: Container(
+                                    
+                                        padding: EdgeInsets.all(20),
+                                        color: Colors.white,
+                                        child: Icon(Icons.delete,color:  Color(0xffC4A68B),)))
                                 ],
                               ),
                             );
@@ -296,10 +326,10 @@ class _MyImageState extends State<MyImage> {
                           imageBuilder: (context, imageProvider) {
                             return Container(
                               decoration: BoxDecoration(
-                                  color: Colors.amber,
+                                  color: const Color.fromARGB(255, 255, 255, 255),
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
-                                      image: imageProvider, fit: BoxFit.cover)),
+                                      image: imageProvider, fit: BoxFit.contain)),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -313,16 +343,17 @@ class _MyImageState extends State<MyImage> {
                                             ValueNotifier<bool>delete =ValueNotifier(false);
                                             ValueNotifier<bool>cancel =ValueNotifier(false);
                                             return AlertDialog(
-                                              title: Text("Are You Sure"),
+                                              title: Text("Are You Sure",style: TextStyle(fontFamily: "Fontmain"),),
                                               actionsAlignment:
                                                   MainAxisAlignment.spaceBetween,
                                               content: Text(
-                                                  "Do you really went to delete these Item? This process cannot be undo"),
+                                                  "Do you really went to delete these Item? This process cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
                                               actions: [
                                                ValueListenableBuilder(valueListenable: delete, builder: (context, value, child) {
-                                                 return  ElevatedButton(
-                                                    onPressed: () {
-                                                       delete.value=true;
+                                                 return    InkWell(
+                                                  onTap: (){
+                                                      delete.value=true;
+                                                       Navigator.of(context).pop();
                                                       setState(() {
                                                         loader = true;
                                                       });
@@ -334,8 +365,8 @@ class _MyImageState extends State<MyImage> {
                                                                   .toString())
                                                           .then((value) {
                                                         if (value) {
-                                                        Navigator.of(context).pop();
-                                                           Api.snack_bar(context: context, message: "Item Deleted");
+                                                        
+                                                          
                                                           _data.clear();
                                                           _Work_data.clear();
                                                           Api.AccountDocument()
@@ -353,32 +384,52 @@ class _MyImageState extends State<MyImage> {
                                                                     _data[i]);
                                                               }
                                                             }
-                                                           
+                                                            Api.snack_bar2(context: context, message: "Item Deleted");
                                                             setState(() {
                                                               loader = false;
                                                             });
                                                           });
                                                         }
                                                       });
-                                                    },
-                                                    child: Text("Delete"),style: ButtonStyle(backgroundColor:MaterialStateProperty.all(value? Colors.white: Color(0xffC4A68B)) ,foregroundColor: WidgetStateProperty.all(value?Colors.black: Colors.white)),);
-                                             
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(vertical: 10,horizontal:  20),
+                                                    decoration: BoxDecoration(
+                                                      color: value? Colors.white: Color(0xffC4A68B)
+                                                  
+                                                    ),
+                                                    child: Text("Delete",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                  ),
+                                                );
                                                },),
                                               ValueListenableBuilder(valueListenable:cancel , builder: (context, value, child) {
-                                                return     ElevatedButton(
-                                                    onPressed: () {
-                                                      cancel.value=true;
+                                                return     InkWell(
+                                                  onTap: (){
+                                                       cancel.value=true;
                                                       Navigator.of(context)
                                                           .pop();
-                                                    },
-                                                    child: Text("Cancel"),style: ButtonStyle(backgroundColor:MaterialStateProperty.all(value? Colors.white: Color(0xffC4A68B)) ,foregroundColor: WidgetStateProperty.all(value?Colors.black: Colors.white)),);
-                                             
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(vertical: 10,horizontal:  20),
+                                                    decoration: BoxDecoration(
+                                                      color: value? Colors.white: Color(0xffC4A68B)
+                                                  
+                                                    ),
+                                                    child: Text("Cancel",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                  ),
+                                                );
                                               },) ],
                                             );
                                           },
                                         );
                                       },
-                                      icon: Icon(Icons.delete,color:  Color(0xffC4A68B),)),
+                                      icon: Container(
+                                    alignment: Alignment.center,
+                                    height: 30,
+                                        padding: EdgeInsets.symmetric(vertical: 2,horizontal: 1),
+                                        
+                                        decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(3),boxShadow: [BoxShadow(blurRadius: 5,color: const Color.fromARGB(117, 0, 0, 0),offset: Offset(0, 0))]),
+                                        child: Icon(Icons.delete,color:  Color(0xffC4A68B),)),)
                                 ],
                               ),
                             );
@@ -402,7 +453,11 @@ class _MyImageState extends State<MyImage> {
         onPressed: () async {
           await Api.pickImage(img: true, source: ImageSource.gallery).then(
             (value) {
-              Api.ImageInsert(
+               setState(() {
+                    loader = true;
+                  });
+             if(value["file"]!=""){
+               Api.ImageInsert(
                       MemberAgreementUpload_UploadFile2: "UploadFile2",
                       DocType: "1",
                       ext: "." + value["ext"],
@@ -410,9 +465,7 @@ class _MyImageState extends State<MyImage> {
                       context: context)
                   .then(
                 (value) {
-                  setState(() {
-                    loader = true;
-                  });
+                 
                   _data.clear();
                   _Work_data.clear();
                   Api.AccountDocument().then(
@@ -423,6 +476,7 @@ class _MyImageState extends State<MyImage> {
                           _Work_data.add(_data[i]);
                         }
                       }
+                     Api.snack_bar2(context: context, message: "Image Upload Done");
                       setState(() {
                         loader = false;
                       });
@@ -431,6 +485,11 @@ class _MyImageState extends State<MyImage> {
                   );
                 },
               );
+             }else{
+                setState(() {
+                        loader = false;
+                      });
+             }
             },
           );
         },

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mddmerchant/App_bar/OurService/our_service.dart';
 import 'package:mddmerchant/Booking_reg/up_coming_events.dart';
 import 'package:mddmerchant/api/api.dart';
 import 'package:mddmerchant/constrans.dart';
@@ -96,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
       loading = a;
     });
   }
-
+ List<Widget> today_event=[];
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -110,6 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
     );
+   
     Api.BannerReport().then(
       (value) {
         _banners_data.clear();
@@ -130,6 +132,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ));
           }
         }
+        _banners_images.add(GestureDetector(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => send_enquiry(service_name: "Advertisement Template",),));
+          },
+          child: Container(decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/main/addImage.png"))),),));
         Api.EventBookingDetailsList(
                 Is_booking: "1",
                 Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
@@ -137,7 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
             .then(
           (value) {
             _data = value;
-            Api.Service_Question_List().then(
+            
+              Api.Service_Question_List().then(
               (value) {
                 Api.get_Merchent_Trem_And_Condition().then((value) {
                   
@@ -158,112 +166,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     print("${Api.prefs.getInt("is_Hindi")}");
-    // var size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: mainColor,
-          automaticallyImplyLeading: false,
-          elevation: 2.0,
-          // centerTitle: true,
-          title: Text(Api.User_info["Table"][0]["MemberName"],
-              style: TextStyle(
-                // fontWeight: FontWeight.w700,
-                color: Colors.white,
-                fontFamily: 'Fontmain',
-              )),
-          // centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () async {
-                setState(() {
-                  loading = true;
-                });
-                if (Api.prefs.getInt('is_Hindi') == 0) {
-                  await Api.prefs.setInt('is_Hindi', 1);
-                  Get.updateLocale(Locale('hi', 'IN'));
-                } else {
-                  await Api.prefs.setInt('is_Hindi', 0);
-                  Get.updateLocale(Locale('en', 'US'));
-                }
-                Api.Service_Question_List().then(
-                  (value) {
-                    setState(() {
-                      loading = false;
-                    });
-                  },
-                );
-                print(Api.prefs.getInt('is_Hindi'));
-              },
-              icon: Icon(Icons.g_translate_rounded,
-                  color: Colors.white, size: 30),
-            ),
-            IconButton(
-              icon: Icon(Icons.person, color: Colors.white, size: 30),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserProfile()),
-                );
-              },
-            ), // Custom home icon
-          ]),
-      body: Stack(children: <Widget>[
-        SafeArea(
-            child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 00),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 10,
-                      ),
-                      if (_banners_data.isNotEmpty)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            height:
-                                (MediaQuery.of(context).size.height / 3) - 80,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.amber,
-                            ),
-                            child: AnotherCarousel(
-                              images: _banners_images,
-                              dotSize: 5.0,
-                              dotSpacing: 15.0,
-                              dotColor:
-                                  const Color.fromARGB(255, 255, 255, 255),
-                              indicatorBgPadding: 5.0,
-                              dotBgColor: const Color.fromARGB(0, 0, 0, 0),
-                              dotVerticalPadding: 10,
-                              // animationCurve: Curves.decelerate,
-                            ),
-                          ),
-                        ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Expanded(
-                        child: ListView(
-                          padding: EdgeInsets.only(bottom: 10),
-                          shrinkWrap: true,
-                          children: [
-                            if (_data.isNotEmpty)
-                              ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  maxHeight: 200, // Set a maximum height
-                                ),
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  itemCount: _data.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, Top_index) {
-                                    return Container(
-                                      padding: EdgeInsets.all(5),
-                                      margin: EdgeInsets.only(right: 10),
+    today_event.clear();
+      for (var i = 0; i < _data.length; i++) {
+              today_event.add(Container(
+                                      padding: EdgeInsets.only(top: 5,right: 5,left: 5,bottom:  15),
+                                      margin: EdgeInsets.only(top: 5,right: 5,left: 5,bottom:  10),
                                       //  height: 100,
                                       decoration: BoxDecoration(
                                           color: Colors.white,
@@ -293,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   MainAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  _data[Top_index]
+                                                  _data[i]
                                                       ["EventStartDate"],
                                                   style: TextStyle(
                                                       fontFamily: 'Fontmain'),
@@ -302,17 +209,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ),
                                           Text(
-                                            _data[Top_index]["CustomerName"],
+                                            _data[i]["CustomerName"],
                                             style: TextStyle(
                                                 fontFamily: 'Fontmain'),
                                           ),
                                           Text(
-                                            _data[Top_index]["EventName"],
+                                            _data[i]["EventName"],
                                             style: TextStyle(
                                                 fontFamily: 'Fontmain'),
                                           ),
                                           Text(
-                                            _data[Top_index]["MobileNo"],
+                                            _data[i]["MobileNo"],
                                             style: TextStyle(
                                                 fontFamily: 'Fontmain'),
                                           ),
@@ -330,31 +237,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.end,
                                                     children: [
-                                                      if (_data[Top_index]
+                                                      if (_data[i]
                                                               ["TotalAmount"] !=
                                                           null)
                                                         Text(
-                                                          "Total Amount : ₹ ${_data[Top_index]["TotalAmount"]}",
+                                                          "Total Amount : ₹ ${_data[i]["TotalAmount"]}",
                                                           style: TextStyle(
                                                               fontFamily:
                                                                   'Fontmain',
                                                               fontSize: 10),
                                                         ),
-                                                      if (_data[Top_index][
+                                                      if (_data[i][
                                                               "BookingAmount"] !=
                                                           null)
                                                         Text(
-                                                          "Advance Amount : ₹ ${_data[Top_index]["BookingAmount"]}",
+                                                          "Advance Amount : ₹ ${_data[i]["BookingAmount"]}",
                                                           style: TextStyle(
                                                               fontFamily:
                                                                   'Fontmain',
                                                               fontSize: 10),
                                                         ),
-                                                      if (_data[Top_index]
+                                                      if (_data[i]
                                                               ["DueAmount"] !=
                                                           null)
                                                         Text(
-                                                          "Due Amount : ₹ ${_data[Top_index]["DueAmount"]}",
+                                                          "Due Amount : ₹ ${_data[i]["DueAmount"]}",
                                                           style: TextStyle(
                                                               fontFamily:
                                                                   'Fontmain',
@@ -409,6 +316,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         ValueNotifier<bool>
                                                             temp =
                                                             ValueNotifier(true);
+                                                        ValueNotifier<bool>
+                                                            load =ValueNotifier(false);
                                                         return ValueListenableBuilder(
                                                           valueListenable: temp,
                                                           builder: (context,
@@ -510,9 +419,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           return service_data.length <= index
                                                                               ? GestureDetector(
                                                                                   onTap: () async {
-                                                                                    setState(() {
-                                                                                      loading = true;
-                                                                                    });
+                                                                                    load.value=true;
                                                                                     // Navigator.of(context).pop();
                                                                                     print(submit_data);
                                                                                     for (var i = 0; i < submit_data.length; i++) {
@@ -531,16 +438,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                     print(submit_data);
 
                                                                                     if (submit_data.isNotEmpty) {
-                                                                                      await Api.RecipitFacilityInsert(Amount: tot.toString(), EventId: _data[Top_index]["id"].toString(), Remarks: _data[Top_index]["Remarks"].toString(), serviceAdd: submit_data).then(
+                                                                                      await Api.RecipitFacilityInsert(Amount: tot.toString(), EventId: _data[i]["id"].toString(), Remarks: _data[i]["Remarks"].toString(), serviceAdd: submit_data).then(
                                                                                         (value) {
                                                                                           if (value) {
                                                                                             _data.clear();
                                                                                             Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "TodayEvent").then(
                                                                                               (value) {
                                                                                                 _data = value;
-                                                                                                Api.createPdf(Total: tot.toString(), comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"], cust_name: _data[Top_index]["CustomerName"], event_date: _data[Top_index]["EventStartDate"], event_name: _data[Top_index]["EventName"], data: submit_data, add_service: true).then(
+                                                                                                Api.createPdf(Total: tot.toString(), comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[i]["MobileNo"], cust_name: _data[i]["CustomerName"], event_date: _data[i]["EventStartDate"], event_name: _data[i]["EventName"], data: submit_data, add_service: true).then(
                                                                                                   (value) async {
                                                                                                     ref(false);
+                                                                                                    load.value=false;
                                                                                                     // final directory = await getTemporaryDirectory();
                                                                                                     // final file = File("${directory!.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
                                                                                                     // await file.writeAsBytes(await value.save());
@@ -764,7 +672,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 ),
                                                               ),
                                                             );
-                                                            ;
+                                                           
                                                           },
                                                         );
                                                       },
@@ -798,6 +706,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     Payment_remark_con.clear();
                                                     amount_con2.clear();
                                                     Payment_remark_con2.clear();
+                                                    ValueNotifier<bool>loading =ValueNotifier(false);
                                                     showModalBottomSheet(
                                                       context: context,
                                                       // enableDrag: true,
@@ -853,7 +762,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         30.0, // Adjust the size of the icon
                                                                   ),
                                                                 ),
-                                                                Padding(
+                                                               ValueListenableBuilder(valueListenable: loading, builder: (context, value, child) {
+                                                                 return loading.value?Center(child: CircularProgressIndicator()):  Padding(
                                                                   padding:
                                                                       const EdgeInsets
                                                                           .all(
@@ -877,21 +787,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                 mainAxisAlignment: MainAxisAlignment.end,
                                                                                 children: [
                                                                                   Text(
-                                                                                    _data[Top_index]["EventStartDate"],
+                                                                                    _data[i]["EventStartDate"],
                                                                                     style: TextStyle(fontFamily: 'Fontmain'),
                                                                                   ),
                                                                                 ],
                                                                               ),
                                                                               Text(
-                                                                                _data[Top_index]["CustomerName"],
+                                                                                _data[i]["CustomerName"],
                                                                                 style: TextStyle(fontFamily: 'Fontmain'),
                                                                               ),
                                                                               Text(
-                                                                                _data[Top_index]["EventName"],
+                                                                                _data[i]["EventName"],
                                                                                 style: TextStyle(fontFamily: 'Fontmain'),
                                                                               ),
                                                                               Text(
-                                                                                _data[Top_index]["MobileNo"],
+                                                                                _data[i]["MobileNo"],
                                                                                 style: TextStyle(fontFamily: 'Fontmain'),
                                                                               ),
                                                                               Row(
@@ -901,19 +811,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                     child: Column(
                                                                                       crossAxisAlignment: CrossAxisAlignment.end,
                                                                                       children: [
-                                                                                        if (_data[Top_index]["TotalAmount"] != null)
+                                                                                        if (_data[i]["TotalAmount"] != null)
                                                                                           Text(
-                                                                                            "Total Amount : ₹ ${_data[Top_index]["TotalAmount"]}",
+                                                                                            "Total Amount : ₹ ${_data[i]["TotalAmount"]}",
                                                                                             style: TextStyle(fontFamily: 'Fontmain', fontSize: 10),
                                                                                           ),
-                                                                                        if (_data[Top_index]["BookingAmount"] != null)
+                                                                                        if (_data[i]["BookingAmount"] != null)
                                                                                           Text(
-                                                                                            "Advance Amount : ₹ ${_data[Top_index]["BookingAmount"]}",
+                                                                                            "Advance Amount : ₹ ${_data[i]["BookingAmount"]}",
                                                                                             style: TextStyle(fontFamily: 'Fontmain', fontSize: 10),
                                                                                           ),
-                                                                                        if (_data[Top_index]["DueAmount"] != null)
+                                                                                        if (_data[i]["DueAmount"] != null)
                                                                                           Text(
-                                                                                            "Due Amount : ₹ ${_data[Top_index]["DueAmount"]}",
+                                                                                            "Due Amount : ₹ ${_data[i]["DueAmount"]}",
                                                                                             style: TextStyle(fontFamily: 'Fontmain', fontSize: 10),
                                                                                           ),
                                                                                       ],
@@ -942,19 +852,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             onTap:
                                                                                 () async {
                                                                               // Navigator.of(context).pop();
-                                                                              setState(() {
-                                                                                loading = true;
-                                                                              });
-                                                                              await Api.RecipitInsert(Amount: amount_con2.text.trim(), Remark: Payment_remark_con2.text.trim(), Event_id: _data[Top_index]["id"].toInt().toString()).then(
+                                                                             loading.value=true;
+                                                                              await Api.RecipitInsert(Amount: amount_con2.text.trim(), Remark: Payment_remark_con2.text.trim(), Event_id: _data[i]["id"].toInt().toString()).then(
                                                                                 (value) {
                                                                                   Api.EventBookingDetailsList(Is_booking: "1", Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent: "TodayEvent").then(
                                                                                     (value) {
                                                                                       _data.clear();
                                                                                       _data = value;
-                                                                                      Api.createPdf(Total: _data[Top_index]["TotalAmount"], comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[Top_index]["MobileNo"], cust_name: _data[Top_index]["CustomerName"], event_date: _data[Top_index]["EventStartDate"], event_name: _data[Top_index]["EventName"], data: [], add_service: false, Amount: amount_con2.text, Du_Amount: _data[Top_index]["DueAmount"], Advance_Amount: _data[Top_index]["BookingAmount"] ?? "").then((value) {
+                                                                                      Api.createPdf(Total: _data[i]["TotalAmount"], comp_mob_no: Api.User_info["Table"][0]["MobileNo"], compny_name: Api.User_info["Table"][0]["OrgName"], now_Date: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}", cust_mob_no: _data[i]["MobileNo"], cust_name: _data[i]["CustomerName"], event_date: _data[i]["EventStartDate"], event_name: _data[i]["EventName"], data: [], add_service: false, Amount: amount_con2.text, Du_Amount: _data[i]["DueAmount"], Advance_Amount: _data[i]["BookingAmount"] ?? "").then((value) {
                                                                                         Navigator.of(context).pop();
                                                                                         setState(() {
-                                                                                          loading = false;
+                                                                                          loading.value = false;
                                                                                         });
                                                                                         Navigator.of(context).push(MaterialPageRoute(
                                                                                           builder: (context) => show_pdf(
@@ -989,7 +897,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     ),
                                                                   ),
                                                                 )
-                                                              ],
+                                                           ;
+                                                               },)   ],
                                                             ),
                                                           ),
                                                         );
@@ -1022,10 +931,133 @@ class _HomeScreenState extends State<HomeScreen> {
                                           )
                                         ],
                                       ),
-                                    );
-                                  },
-                                ),
-                              ),
+                                    )
+                             );
+            }
+        
+    // var size = MediaQuery.of(context).size;
+    return Scaffold(
+      appBar: AppBar(
+          backgroundColor: mainColor,
+          automaticallyImplyLeading: false,
+          elevation: 2.0,
+          // centerTitle: true,
+          title: Text(Api.User_info["Table"][0]["MemberName"],
+              style: TextStyle(
+                // fontWeight: FontWeight.w700,
+                color: Colors.white,
+                fontFamily: 'Fontmain',
+              )),
+          // centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () async {
+                setState(() {
+                  loading = true;
+                });
+                if (Api.prefs.getInt('is_Hindi') == 0) {
+                  await Api.prefs.setInt('is_Hindi', 1);
+                  Get.updateLocale(Locale('hi', 'IN'));
+                } else {
+                  await Api.prefs.setInt('is_Hindi', 0);
+                  Get.updateLocale(Locale('en', 'US'));
+                }
+                Api.Service_Question_List().then(
+                  (value) {
+                    setState(() {
+                      loading = false;
+                    });
+                  },
+                );
+                print(Api.prefs.getInt('is_Hindi'));
+              },
+              icon: Icon(Icons.g_translate_rounded,
+                  color: Colors.white, size: 30),
+            ),
+            IconButton(
+              icon: Icon(Icons.person, color: Colors.white, size: 30),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserProfile()),
+                );
+              },
+            ), // Custom home icon
+          ]),
+      body: Stack(children: <Widget>[
+        SafeArea(
+            child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 00),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 10,
+                      ),
+                      if (_banners_data.isNotEmpty)
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            height:
+                                (MediaQuery.of(context).size.height / 3) - 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                            child: AnotherCarousel(
+                              images: _banners_images,
+                              dotSize: 5.0,
+                              dotSpacing: 15.0,
+                              dotColor:
+                                  const Color.fromARGB(255, 255, 255, 255),
+                              indicatorBgPadding: 5.0,
+                              dotBgColor: const Color.fromARGB(0, 0, 0, 0),
+                              dotVerticalPadding: 10,
+                              // animationCurve: Curves.decelerate,
+                            ),
+                          ),
+                        ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Expanded(
+                        child: ListView(
+                          padding: EdgeInsets.only(bottom: 10),
+                          shrinkWrap: true,
+                          children: [
+                            if (_data.isNotEmpty)
+                              ClipRRect(
+                                
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            height:
+                                (MediaQuery.of(context).size.height / 3) - 20,
+                            width: double.infinity,
+                            margin: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(0, 184, 181, 181),
+                              // boxShadow: [BoxShadow(
+                              //                   blurRadius: 0.5,
+                              //                   color: const Color.fromARGB(
+                              //                       134, 0, 0, 0),
+                              //                   offset: Offset(1, 1))]
+                            ),
+                            child: AnotherCarousel(
+                              images: today_event,
+                              autoplay: false,
+                              dotSize: 5.0,
+                              dotSpacing: 15.0,
+                              dotIncreasedColor: Colors.black,
+                              dotColor:
+                                  const Color.fromARGB(255, 0, 0, 0),
+                              indicatorBgPadding: 5.0,
+                              dotBgColor: const Color.fromARGB(1, 0, 0, 0),
+                              dotVerticalPadding: 10,
+                              // animationCurve: Curves.decelerate,
+                            ),
+                          ),
+                        ),
                             SizedBox(
                               height: 10,
                             ),
@@ -1101,7 +1133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // ),
                                 InkWell(
                                   onTap: () {
-                                    if (((Api.User_info["Table"][0]["IsQuestionSubmited"]!=null) || (Api.User_info["Table"][0]["IsQuestionSubmited"]==true))) {
+                                    if (((Api.User_info["Table"][0]["IsQuestionSubmited"]!=null) && (Api.User_info["Table"][0]["IsQuestionSubmited"]==true))) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1159,9 +1191,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         Spacer(),
                                         Api.H_Questions.isNotEmpty
-                                            ? ((Api.User_info["Table"][0]["IsQuestionSubmited"]!=null) || (Api.User_info["Table"][0]["IsQuestionSubmited"]==true))
+                                            ? ((Api.User_info["Table"][0]["IsQuestionSubmited"]!=null) && (Api.User_info["Table"][0]["IsQuestionSubmited"]==true))
                                                 ? Text(
-                                                    "Social Account".tr,
+                                                    "Social Accounts".tr,
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontSize: 15,

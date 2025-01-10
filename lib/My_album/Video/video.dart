@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/simple/list_notifier.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mddmerchant/Promoss and ads/CreatePromoss_ads/create_pro_ads.dart';
 import 'package:mddmerchant/api/api.dart';
@@ -35,7 +36,7 @@ class _MyVideoState extends State<MyVideo> {
                 Uri.parse(_data[i]["ImagePath"]))
               ..initialize()
               ..setLooping(true)
-              ..play();
+              ..pause();
             controllers.add(temp);
           }
         }
@@ -51,6 +52,7 @@ class _MyVideoState extends State<MyVideo> {
   }
 
   @override
+  
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +71,7 @@ class _MyVideoState extends State<MyVideo> {
       ),
       body: Stack(
         children: [
-          _data.isEmpty
+          _Work_data.isEmpty
               ? Center(
                   child: Text(
                     'No Data Available',
@@ -90,12 +92,14 @@ class _MyVideoState extends State<MyVideo> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     var controller = controllers[index];
-                    controller.play();
+                    // controller.play();
                     return GestureDetector(
                       onTap: () {
                         controller.play();
+                        
                         showDialog(
                           context: context,
+
                           builder: (context) {
                             return Stack(
                               fit: StackFit.expand,
@@ -135,7 +139,7 @@ class _MyVideoState extends State<MyVideo> {
                                     alignment: Alignment.bottomCenter,
                                     child: Padding(
                                       padding: EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 80),
+                                          vertical: 15, horizontal: 100),
                                       child: IconButton(
                                           onPressed: () {
                                             Api.downloadAndSaveImage(
@@ -157,22 +161,24 @@ class _MyVideoState extends State<MyVideo> {
                                             padding: EdgeInsets.all(5),
                                             decoration: BoxDecoration(
                                                 color: Color(0xffC4A68B),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
+                                               ),
                                             child: Row(
+                                              spacing: 10,
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Icon(
                                                   Icons.share,
-                                                  size: 30,
+                                                  size: 20,
                                                   color: Colors.white,
                                                 ),
                                                 Text(
                                                   "Share",
                                                   style: TextStyle(
                                                       color: Colors.white,
-                                                      fontSize: 25),
+                                                      // fontSize: 25,
+                                                      fontFamily: "Fontmain"
+                                                      ),
                                                 )
                                               ],
                                             ),
@@ -183,14 +189,16 @@ class _MyVideoState extends State<MyVideo> {
                               ],
                             );
                           },
-                        );
+                        ).then((value) {
+                         controller.pause();
+                        },);
                         print("object");
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Colors.amber,
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(10)),
                           child: AspectRatio(
                             aspectRatio: controller.value.aspectRatio,
@@ -210,28 +218,29 @@ class _MyVideoState extends State<MyVideo> {
                                               ValueNotifier<bool> cancel =
                                                   ValueNotifier(false);
                                               return AlertDialog(
-                                                title: Text("Are You Sure"),
+                                                title: Text("Are You Sure",style: TextStyle(fontFamily: "Fontmain"),),
                                                 actionsAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 content: Text(
-                                                    "Do you really went to delete these Item? This process cannot be undo"),
+                                                    "Do you really went to delete these Item? This process cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
                                                 actions: [
                                                   ValueListenableBuilder(
                                                     valueListenable: delete,
                                                     builder: (context, value,
                                                         child) {
-                                                      return ElevatedButton(
-                                                        onPressed: () {
-                                                          delete.value = true;
+                                                      return InkWell(
+                                                  onTap: (){
+                                                       delete.value = true;
+                                                       Navigator.of(context).pop();
                                                           setState(() {
                                                             loader = true;
                                                           });
 
                                                           Api.DeleteImgvideo(Id: _Work_data[index]["Id"].toString()).then((value) {
                                                             if (value) {
-                                                              Navigator.of(context).pop();
-                                                               Api.snack_bar(context: context, message: "Item Deleted");
+                                                              
+                                                               Api.snack_bar2(context: context, message: "Item Deleted");
                                                               _data.clear();
                                                               _Work_data.clear();
                                                               controllers.clear();
@@ -253,53 +262,37 @@ class _MyVideoState extends State<MyVideo> {
                                                               });
                                                             }
                                                           });
-                                                        },
-                                                        child: Text("Delete"),
-                                                        style: ButtonStyle(
-                                                            backgroundColor:
-                                                                MaterialStateProperty
-                                                                    .all(value
-                                                                        ? Colors
-                                                                            .white
-                                                                        : Color(
-                                                                            0xffC4A68B)),
-                                                            foregroundColor:
-                                                                WidgetStateProperty
-                                                                    .all(value
-                                                                        ? Colors
-                                                                            .black
-                                                                        : Colors
-                                                                            .white)),
-                                                      );
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(vertical: 10,horizontal:  20),
+                                                    decoration: BoxDecoration(
+                                                      color: value? Colors.white: Color(0xffC4A68B)
+                                                  
+                                                    ),
+                                                    child: Text("Delete",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                  ),
+                                                );
                                                     },
                                                   ),
                                                   ValueListenableBuilder(
                                                     valueListenable: cancel,
                                                     builder: (context, value,
                                                         child) {
-                                                      return ElevatedButton(
-                                                        onPressed: () {
-                                                          cancel.value = true;
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: Text("Cancel"),
-                                                        style: ButtonStyle(
-                                                            backgroundColor:
-                                                                MaterialStateProperty
-                                                                    .all(value
-                                                                        ? Colors
-                                                                            .white
-                                                                        : Color(
-                                                                            0xffC4A68B)),
-                                                            foregroundColor:
-                                                                WidgetStateProperty
-                                                                    .all(value
-                                                                        ? Colors
-                                                                            .black
-                                                                        : Colors
-                                                                            .white)),
-                                                      );
+                                                      return InkWell(
+                                                  onTap: (){
+                                                       cancel.value=true;
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(vertical: 10,horizontal:  20),
+                                                    decoration: BoxDecoration(
+                                                      color: value? Colors.white: Color(0xffC4A68B)
+                                                  
+                                                    ),
+                                                    child: Text("Cancel",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                  ),
+                                                );
                                                     },
                                                   )
                                                 ],
@@ -335,6 +328,9 @@ class _MyVideoState extends State<MyVideo> {
         onPressed: () {
           Api.pickImage(img: false, source: ImageSource.gallery).then(
             (value) {
+              setState(() {
+                loader=true;
+              });
                final int fileSize = value["file"]!.lengthSync(); 
                if (fileSize / (1024 * 1024)<=2) {
                       Api.ImageInsert(
@@ -345,9 +341,7 @@ class _MyVideoState extends State<MyVideo> {
                       context: context)
                   .then(
                 (value) {
-                  setState(() {
-                    loader = true;
-                  });
+                 
                   _data.clear();
                   _Work_data.clear();
                   controllers.clear();
@@ -367,12 +361,16 @@ class _MyVideoState extends State<MyVideo> {
                     setState(() {
                       loader = false;
                     });
+                    Api.snack_bar(context: context, message: "Video Upload Done");
                     print(_data);
                   });
                 },
               );
         
                }else{
+                 setState(() {
+                    loader = false;
+                  });
                 Api.snack_bar(context: context, message: "video size too large on 2 MB");
                }
              },

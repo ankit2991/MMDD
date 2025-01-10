@@ -229,7 +229,7 @@ class _subscription_planState extends State<subscription_plan> {
               child: Container(
                 padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
                 margin: EdgeInsets.only(
-                    bottom: (MediaQuery.of(context).size.height) - 600,
+                    bottom: (MediaQuery.of(context).size.height)*0.8,
                     right: 20,
                     left: 20,
                     top: 20),
