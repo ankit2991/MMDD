@@ -46,6 +46,8 @@ class _PromissAdsState extends State<PromissAds> {
     setState(() {
       loader = true;
     });
+        _data.clear();
+        _Work_data.clear();
     Api.AccountDocument().then(
       (value) {
         _data = value;
@@ -222,35 +224,33 @@ class _PromissAdsState extends State<PromissAds> {
                                           "assets/images/main/img.jpg"),
                                       fit: BoxFit.cover)),
                               child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   IconButton(
                                       onPressed: () {
-                                        showDialog(
+                                       showDialog(
                                           context: context,
                                           builder: (context) {
-                                            ValueNotifier<bool> delete =
-                                                ValueNotifier(false);
-                                            ValueNotifier<bool> cancel =
-                                                ValueNotifier(false);
+                                            ValueNotifier<bool>delete =ValueNotifier(false);
+                                            ValueNotifier<bool>cancel =ValueNotifier(false);
                                             return AlertDialog(
-                                              title: Text("Are You Sure"),
+                                              title: Text("Are You Sure",style: TextStyle(fontFamily: "Fontmain"),),
                                               actionsAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                  MainAxisAlignment.spaceBetween,
                                               content: Text(
-                                                  "Do you really went to delete these Item? This process cannot be undo"),
+                                                  "Do you really went to delete these Item? This process cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
                                               actions: [
-                                                ValueListenableBuilder(
-                                                  valueListenable: delete,
-                                                  builder:
-                                                      (context, value, child) {
-                                                    return ElevatedButton(
-                                                      onPressed: () {
-                                                        delete.value = true;
+                                               ValueListenableBuilder(valueListenable: delete, builder: (context, value, child) {
+                                                 return    InkWell(
+                                                  onTap: (){
+                                                      delete.value = true;
                                                         setState(() {
                                                           loader = true;
                                                         });
+                                                      Navigator.of(
+                                                                    context)
+                                                                .pop();
 
                                                         Api.DeleteImgvideo(
                                                                 Id: _Work_data[
@@ -258,11 +258,7 @@ class _PromissAdsState extends State<PromissAds> {
                                                                         ["Id"]
                                                                     .toString())
                                                             .then((value) {
-                                                          if (value) {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                             Api.snack_bar(context: context, message: "Item Deleted");
+                                                          if (value) {                                                            
                                                             _data.clear();
                                                             _Work_data.clear();
                                                             Api.AccountDocument()
@@ -273,68 +269,55 @@ class _PromissAdsState extends State<PromissAds> {
                                                                   _Work_data.add(_data[i]);
                                                                 }
                                                               }
+                                                              Api.snack_bar2(context: context, message: "Item Deleted");
                                                               setState(() {
                                                                 loader = false;
                                                               });
                                                             });
                                                           }
                                                         });
-                                                      },
-                                                      child: Text("Delete"),
-                                                      style: ButtonStyle(
-                                                          backgroundColor:
-                                                              MaterialStateProperty
-                                                                  .all(value
-                                                                      ? Colors
-                                                                          .white
-                                                                      : Color(
-                                                                          0xffC4A68B)),
-                                                          foregroundColor:
-                                                              WidgetStateProperty
-                                                                  .all(value
-                                                                      ? Colors
-                                                                          .black
-                                                                      : Colors
-                                                                          .white)),
-                                                    );
                                                   },
-                                                ),
-                                                ValueListenableBuilder(
-                                                  valueListenable: cancel,
-                                                  builder:
-                                                      (context, value, child) {
-                                                    return ElevatedButton(
-                                                      onPressed: () {
-                                                        cancel.value = true;
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Text("Cancel"),
-                                                      style: ButtonStyle(
-                                                          backgroundColor:
-                                                              MaterialStateProperty
-                                                                  .all(value
-                                                                      ? Colors
-                                                                          .white
-                                                                      : Color(
-                                                                          0xffC4A68B)),
-                                                          foregroundColor:
-                                                              WidgetStateProperty
-                                                                  .all(value
-                                                                      ? Colors
-                                                                          .black
-                                                                      : Colors
-                                                                          .white)),
-                                                    );
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(vertical: 10,horizontal:  20),
+                                                    decoration: BoxDecoration(
+                                                      color: value? Colors.white: Color(0xffC4A68B)
+                                                  
+                                                    ),
+                                                    child: Text("Delete",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                  ),
+                                                );
+                                               },),
+                                              ValueListenableBuilder(valueListenable:cancel , builder: (context, value, child) {
+                                                return     InkWell(
+                                                  onTap: (){
+                                                       cancel.value=true;
+                                                      Navigator.of(context)
+                                                          .pop();
                                                   },
-                                                )
-                                              ],
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(vertical: 10,horizontal:  20),
+                                                    decoration: BoxDecoration(
+                                                      color: value? Colors.white: Color(0xffC4A68B)
+                                                  
+                                                    ),
+                                                    child: Text("Cancel",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                  ),
+                                                );
+                                              },) ],
                                             );
                                           },
                                         );
                                       },
-                                      icon: Icon(Icons.delete,
-                                          color: Color(0xffC4A68B)))
+                                      icon:Container(
+                                     alignment: Alignment.center,
+                                    height: 30,
+                                        padding: EdgeInsets.symmetric(vertical: 2,horizontal: 1),
+                                        
+                                        decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(3),boxShadow: [BoxShadow(blurRadius: 5,color: const Color.fromARGB(117, 0, 0, 0),offset: Offset(0, 0))]),
+                                      
+                                        // padding: EdgeInsets.all(20),
+                                        // color: Colors.white,
+                                        child: Icon(Icons.delete,color:  Color(0xffC4A68B),)))
                                 ],
                               ),
                             );
@@ -342,7 +325,7 @@ class _PromissAdsState extends State<PromissAds> {
                           imageBuilder: (context, imageProvider) {
                             return Container(
                               decoration: BoxDecoration(
-                                  color: Colors.amber,
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
                                       image: imageProvider, fit: BoxFit.cover)),
@@ -352,31 +335,28 @@ class _PromissAdsState extends State<PromissAds> {
                                 children: [
                                   IconButton(
                                       onPressed: () {
-                                    showDialog(
+                                     showDialog(
                                           context: context,
                                           builder: (context) {
-                                            ValueNotifier<bool> delete =
-                                                ValueNotifier(false);
-                                            ValueNotifier<bool> cancel =
-                                                ValueNotifier(false);
+                                            ValueNotifier<bool>delete =ValueNotifier(false);
+                                            ValueNotifier<bool>cancel =ValueNotifier(false);
                                             return AlertDialog(
-                                              title: Text("Are You Sure"),
+                                              title: Text("Are You Sure",style: TextStyle(fontFamily: "Fontmain"),),
                                               actionsAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                  MainAxisAlignment.spaceBetween,
                                               content: Text(
-                                                  "Do you really went to delete these Item? This process cannot be undo"),
+                                                  "Do you really went to delete these Item? This process cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
                                               actions: [
-                                                ValueListenableBuilder(
-                                                  valueListenable: delete,
-                                                  builder:
-                                                      (context, value, child) {
-                                                    return ElevatedButton(
-                                                      onPressed: () {
-                                                        delete.value = true;
+                                               ValueListenableBuilder(valueListenable: delete, builder: (context, value, child) {
+                                                 return    InkWell(
+                                                  onTap: (){
+                                                      delete.value = true;
                                                         setState(() {
                                                           loader = true;
                                                         });
+                                                      Navigator.of(
+                                                                    context)
+                                                                .pop();
 
                                                         Api.DeleteImgvideo(
                                                                 Id: _Work_data[
@@ -384,11 +364,7 @@ class _PromissAdsState extends State<PromissAds> {
                                                                         ["Id"]
                                                                     .toString())
                                                             .then((value) {
-                                                          if (value) {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                             Api.snack_bar(context: context, message: "Item Deleted");
+                                                          if (value) {                                                            
                                                             _data.clear();
                                                             _Work_data.clear();
                                                             Api.AccountDocument()
@@ -399,67 +375,55 @@ class _PromissAdsState extends State<PromissAds> {
                                                                   _Work_data.add(_data[i]);
                                                                 }
                                                               }
+                                                              Api.snack_bar2(context: context, message: "Item Deleted");
                                                               setState(() {
                                                                 loader = false;
                                                               });
                                                             });
                                                           }
                                                         });
-                                                      },
-                                                      child: Text("Delete"),
-                                                      style: ButtonStyle(
-                                                          backgroundColor:
-                                                              MaterialStateProperty
-                                                                  .all(value
-                                                                      ? Colors
-                                                                          .white
-                                                                      : Color(
-                                                                          0xffC4A68B)),
-                                                          foregroundColor:
-                                                              WidgetStateProperty
-                                                                  .all(value
-                                                                      ? Colors
-                                                                          .black
-                                                                      : Colors
-                                                                          .white)),
-                                                    );
                                                   },
-                                                ),
-                                                ValueListenableBuilder(
-                                                  valueListenable: cancel,
-                                                  builder:
-                                                      (context, value, child) {
-                                                    return ElevatedButton(
-                                                      onPressed: () {
-                                                        cancel.value = true;
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Text("Cancel"),
-                                                      style: ButtonStyle(
-                                                          backgroundColor:
-                                                              MaterialStateProperty
-                                                                  .all(value
-                                                                      ? Colors
-                                                                          .white
-                                                                      : Color(
-                                                                          0xffC4A68B)),
-                                                          foregroundColor:
-                                                              WidgetStateProperty
-                                                                  .all(value
-                                                                      ? Colors
-                                                                          .black
-                                                                      : Colors
-                                                                          .white)),
-                                                    );
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(vertical: 10,horizontal:  20),
+                                                    decoration: BoxDecoration(
+                                                      color: value? Colors.white: Color(0xffC4A68B)
+                                                  
+                                                    ),
+                                                    child: Text("Delete",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                  ),
+                                                );
+                                               },),
+                                              ValueListenableBuilder(valueListenable:cancel , builder: (context, value, child) {
+                                                return     InkWell(
+                                                  onTap: (){
+                                                       cancel.value=true;
+                                                      Navigator.of(context)
+                                                          .pop();
                                                   },
-                                                )
-                                              ],
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(vertical: 10,horizontal:  20),
+                                                    decoration: BoxDecoration(
+                                                      color: value? Colors.white: Color(0xffC4A68B)
+                                                  
+                                                    ),
+                                                    child: Text("Cancel",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                  ),
+                                                );
+                                              },) ],
                                             );
                                           },
-                                        );      
+                                        );
                                       },
-                                      icon: Icon(Icons.delete,color:  Color(0xffC4A68B)))
+                                      icon: Container(
+                                     alignment: Alignment.center,
+                                    height: 30,
+                                        padding: EdgeInsets.symmetric(vertical: 2,horizontal: 1),
+                                        
+                                        decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(3),boxShadow: [BoxShadow(blurRadius: 5,color: const Color.fromARGB(117, 0, 0, 0),offset: Offset(0, 0))]),
+                                      
+                                        // padding: EdgeInsets.all(20),
+                                        // color: Colors.white,
+                                        child: Icon(Icons.delete,color:  Color(0xffC4A68B),)))
                                 ],
                               ),
                        
@@ -482,6 +446,7 @@ class _PromissAdsState extends State<PromissAds> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          if(_Work_data.length<10){
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -489,6 +454,9 @@ class _PromissAdsState extends State<PromissAds> {
                       refresh: refresh,
                     )),
           );
+          }else{
+            Api.snack_bar(context: context, message: "Storage full on this section");
+          }
         },
         child: Icon(Icons.add, color: Colors.white),
         shape: RoundedRectangleBorder(

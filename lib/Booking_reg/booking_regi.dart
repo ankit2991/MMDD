@@ -5,7 +5,8 @@ import 'package:mddmerchant/Booking_reg/completed_events.dart';
 import 'package:mddmerchant/Booking_reg/up_coming_events.dart';
 
 class MyBoking extends StatefulWidget {
-  
+  Function add_booking;
+  MyBoking({required this.add_booking});
   @override
   State<MyBoking> createState() => _MyBokingState();
 }
@@ -154,7 +155,7 @@ class _MyBokingState extends State<MyBoking> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "1",refresh: refresh,data: {},update: false,)),
+              MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "1",refresh: refresh,data: {},update: false,add_booking: widget.add_booking,)),
             );
           },
           label: Text(

@@ -30,6 +30,7 @@ class Api {
   static Map TermsAndConditions = {};
   static late SharedPreferences prefs;
   static bool loading = false;
+  static Uint8List? user_logo;
   static Future<void> local_dataBase() async {
     prefs = await SharedPreferences.getInstance();
   }
@@ -38,6 +39,7 @@ class Api {
       {required context, required String message}) async {
     Flushbar(
       // message:message,
+
       backgroundColor: Colors.transparent,
       borderRadius: BorderRadius.circular(20),
       messageText: Container(
@@ -73,7 +75,7 @@ class Api {
           ),
         ),
       ),
-      duration: Duration(seconds: 3),
+      duration: Duration(seconds: 1),
       // margin: EdgeInsets.symmetric(horizontal: double.maxFinite),
 
       // icon: ,
@@ -208,6 +210,7 @@ class Api {
         ',"MobileNo":'
         "'$mob_no'"
         ',"ApiAdd":"MpinCheck","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MpinCheck';
+    print(url);
     var res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
       log("Check Mpin Api Call.............");
@@ -216,7 +219,7 @@ class Api {
 
       var data = jsonDecode(res.body);
       User_info = data;
-
+      print(User_info);
       await prefs.setBool('login', true);
       await prefs.setString("mpin", Mpin);
       await prefs.setString("mobile_no", mob_no);
@@ -511,7 +514,7 @@ class Api {
       var data = jsonDecode(res.body);
       // city_list = data["Table1"];
       log("RecipitInsert Api DATA .............");
-      // print(data);
+      print(data);
       // return data["Table1"];
     } else {
       log("Error........ RecipitInsert Api ");
@@ -610,10 +613,7 @@ class Api {
         if (ext == ".pdf") {
           snack_bar(context: context, message: "PDF Upload Done");
         } else if (ext == ".mp4") {
-          
-        } else {
-          
-        }
+        } else {}
       }
       // return data["Table1"];
     } else {
@@ -905,7 +905,8 @@ class Api {
         directorys = directory.path;
       }
       // Create the file in the local storage
-      final file = File('${directorys}/MMDD Document${DateTime.now().microsecondsSinceEpoch}.pdf');
+      final file = File(
+          '${directorys}/MMDD Document${DateTime.now().microsecondsSinceEpoch}.pdf');
 
       // Write the byte data to the file
       await file.writeAsBytes(byteData.buffer.asUint8List(
@@ -1132,20 +1133,22 @@ class Api {
   }
 
   // ____________________________________________________________   (add service pdf)
-  static Future<pw.Document> createPdf(
-      {required String now_Date,
-      required String event_name,
-      required String event_date,
-      required String compny_name,
-      required String comp_mob_no,
-      required String cust_mob_no,
-      required String cust_name,
-      required String Total,
-      required List<Map> data,
-      required bool add_service,
-      String Amount = "",
-      String Advance_Amount = "",
-      String Du_Amount = ""}) async {
+  static Future<pw.Document> createPdf({
+    required String now_Date,
+    required String event_name,
+    required String event_date,
+    required String compny_name,
+    required String comp_mob_no,
+    required String cust_mob_no,
+    required String cust_name,
+    required String Total,
+    required List<Map> data,
+    required bool add_service,
+    String Amount = "",
+    String Advance_Amount = "",
+    String Du_Amount = "",
+    String remark = "",
+  }) async {
     // Create a PDF document
 
     final pd = pw.Document();
@@ -1154,6 +1157,9 @@ class Api {
     final fontData =
         await rootBundle.load('assets/fonts/Poppins/Poppins-SemiBold.ttf');
     final ttf = pw.Font.ttf(fontData);
+    final ByteData imageData =
+        await rootBundle.load('assets/logo/app logo.png');
+    final Uint8List imageBytes = imageData.buffer.asUint8List();
     List<pw.TableRow> Rows = [
       pw.TableRow(
         decoration: pw.BoxDecoration(color: PdfColors.grey300),
@@ -1248,58 +1254,74 @@ class Api {
     // Add a page
     pdf.addPage(pw.Page(
         // pageFormat: PdfPageFormat.a4,
-        margin: pw.EdgeInsets.only(top: 20, left: 20, right: 20),
+        margin: pw.EdgeInsets.only(top: 20, left: 20, right: 20,bottom: 0),
         build: (pw.Context context) => pw.Stack(children: [
+              pw.Align(
+                alignment: pw.Alignment.center,
+                child: pw.Opacity(
+                  opacity: 0.3,
+                  child: pw.Image(
+                    pw.MemoryImage(imageBytes),
+                    width: 250,
+                    height: 250,
+                  ),
+                ),
+              ),
               pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
                   // Left Corner Heading
 
                   pw.Row(
-                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: pw.MainAxisAlignment.start,
                       children: [
+                        // pw.Image(pw.MemoryImage(user_logo!),width: 50,height: 50,),// MMDD logo add
+                        pw.SizedBox(width: 20),
+                        pw.Image(pw.MemoryImage(user_logo!),
+                            width: 50, height: 50), // user logo add
+                            pw.SizedBox(width: 110),
                         pw.Text(
-                          'MMDD ( Make My Dream Day )',
+                          compny_name,
                           style: pw.TextStyle(
                             fontSize: 30,
                             fontWeight: pw.FontWeight.bold,
                           ),
                         ),
-                        pw.Container(
-                            padding: pw.EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
-                            color: PdfColors.blue,
-                            child: pw.Text("INVOICE",
-                                style: pw.TextStyle(color: PdfColors.white)))
+                        
+                        
+                        // pw.Container(
+                        //     padding: pw.EdgeInsets.symmetric(
+                        //         vertical: 5, horizontal: 10),
+                        //     color: PdfColors.blue,
+                        //     child: pw.Text("INVOICE",
+                        //         style: pw.TextStyle(color: PdfColors.white)))
                       ]),
-                      pw.SizedBox(height: 5),
+                  pw.SizedBox(height: 5),
                   pw.Row(
-                    crossAxisAlignment: pw.CrossAxisAlignment.end,
+                      crossAxisAlignment: pw.CrossAxisAlignment.end,
                       mainAxisAlignment: pw.MainAxisAlignment.start,
                       children: [
                         //  pw.SizedBox(width: 50),
                         pw.Text(
                           'Mobile : ',
                           style: pw.TextStyle(
-                          //  color:  PdfColor(0.5, 0.5, 0.5)
-                            // fontSize: 15,
-                            // fontWeight: pw.FontWeight.bold,
-                          ),
+                              //  color:  PdfColor(0.5, 0.5, 0.5)
+                              // fontSize: 15,
+                              // fontWeight: pw.FontWeight.bold,
+                              ),
                         ),
                         pw.Text(
-                          '18005700102',
-                          style: pw.TextStyle(
-                           color:  PdfColor(0.5, 0.5, 0.5)
-                            // fontSize: 15,
-                            // fontWeight: pw.FontWeight.bold,
-                          ),
+                          User_info["Table"][0]["MobileNo"],
+                          style: pw.TextStyle(color: PdfColor(0.5, 0.5, 0.5)
+                              // fontSize: 15,
+                              // fontWeight: pw.FontWeight.bold,
+                              ),
                         ),
-                        pw.SizedBox(width: 20),
-                        pw.Text("Email : ",
-                                style: pw.TextStyle()),
-                        pw.Text("Info@makemydreamday.in",
-                                style: pw.TextStyle(color:  PdfColor(0.5, 0.5, 0.5))),
-                       
+                        // pw.SizedBox(width: 20),
+                        // pw.Text("Email : ",
+                        //         style: pw.TextStyle()),
+                        // pw.Text("Info@makemydreamday.in",
+                        //         style: pw.TextStyle(color:  PdfColor(0.5, 0.5, 0.5))),
                       ]),
 
                   // Main content
@@ -1310,11 +1332,14 @@ class Api {
                     color: PdfColors.black, // Color of the divider
                   ),
                   pw.Container(
-                      height: 50,
+                      height: 60,
+                      margin: pw.EdgeInsets.symmetric(vertical: 5),
                       // color: PdfColors.amber,
                       child: pw.Column(
+                      
                           mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                           children: [
+                            pw.SizedBox(height: 5),
                             pw.Row(children: [
                               pw.Text("Invoice Date: ",
                                   style: pw.TextStyle(
@@ -1322,6 +1347,7 @@ class Api {
                               pw.Text(now_Date,
                                   style: pw.TextStyle(color: PdfColors.black))
                             ]),
+                            pw.SizedBox(height: 5),
                             pw.Row(children: [
                               pw.Text("Event Name: ",
                                   style: pw.TextStyle(
@@ -1329,6 +1355,7 @@ class Api {
                               pw.Text(event_name,
                                   style: pw.TextStyle(color: PdfColors.black))
                             ]),
+                            pw.SizedBox(height: 5),
                             pw.Row(children: [
                               pw.Text("Event Date:   ",
                                   style: pw.TextStyle(
@@ -1341,86 +1368,161 @@ class Api {
                   pw.Row(children: [
                     pw.Container(
                         width: 350,
-                        height: 50,
+                        height: 60,
                         // color: PdfColors.amber,
                         child: pw.Column(
                             mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                             crossAxisAlignment: pw.CrossAxisAlignment.start,
                             children: [
+                              pw.SizedBox(height: 5),
                               pw.Text("Company",
                                   style: pw.TextStyle(
                                       color: PdfColor(0.5, 0.5, 0.5))),
+                                      pw.SizedBox(height: 5),
                               pw.Text(
                                 compny_name,
                               ),
+                              pw.SizedBox(height: 5),
                               pw.Text(
                                 "Phone: $comp_mob_no",
                                 // style: pw.TextStyle(
                                 //     color: PdfColor(0.5, 0.5, 0.5))
                               ),
+                              pw.SizedBox(height: 5),
                             ])),
                     pw.Container(
                         child: pw.Column(
                             crossAxisAlignment: pw.CrossAxisAlignment.start,
                             children: [
+                              pw.SizedBox(height: 5),
                           pw.Text("Customer",
                               style:
                                   pw.TextStyle(color: PdfColor(0.5, 0.5, 0.5))),
+                                  pw.SizedBox(height: 5),
                           pw.Text(
                             cust_name,
                           ),
+                          pw.SizedBox(height: 5),
                           pw.Text(
                             "Phone: $cust_mob_no ",
                           ),
+                          pw.SizedBox(height: 5),
                         ])),
                   ]),
                   pw.SizedBox(height: 5),
                   if (add_service == false)
-                    pw.Container(
-                        alignment: pw.Alignment.centerLeft,
-                        height: 60,
-                        width: double.infinity,
-                        child: pw.Column(
-                          mainAxisAlignment: pw.MainAxisAlignment.center,
-                          children: [
-                            pw.Row(
-                                mainAxisAlignment:
-                                    pw.MainAxisAlignment.spaceBetween,
-                                children: [
-                                  pw.Text("Total Amount"),
-                                  pw.Text("₹${Total}",
-                                      style: pw.TextStyle(
-                                          fontWeight: pw.FontWeight.bold,
-                                          font: ttf)),
-                                ]),
-                            pw.Row(
-                                mainAxisAlignment:
-                                    pw.MainAxisAlignment.spaceBetween,
-                                children: [
-                                  pw.Text(
-                                    "Today Amount",
-                                  ),
-                                  pw.Text("₹${Amount}",
-                                      style: pw.TextStyle(
-                                          fontWeight: pw.FontWeight.bold,
-                                          font: ttf)),
-                                ]),
-                            pw.Row(
-                                mainAxisAlignment:
-                                    pw.MainAxisAlignment.spaceBetween,
-                                children: [
-                                  pw.Text("Advance Amount"),
-                                  pw.Text("${Advance_Amount}",
-                                      style: pw.TextStyle(
-                                          fontWeight: pw.FontWeight.bold,
-                                          font: ttf)),
-                                ])
-                          ],
-                        )),
+                    pw.Table(
+                        border: pw.TableBorder.all(color: PdfColor(.5, .5, .5)),
+                        columnWidths: {
+                        0: pw.FixedColumnWidth(200), // Fixed width for column 1
+                        // 1: pw.FlexColumnWidth(1), // Flexible width for column 2
+                        // 2: pw.FlexColumnWidth(1), // Flexible width for column 3
+                        // 3: pw.FlexColumnWidth(1), // Flexible width for column 3
+                        // 4: pw.FlexColumnWidth(1), // Flexible width for column 3
+                        // 5: pw.FlexColumnWidth(1), // Flexible width for column 3
+                      },
+                        children: [
+                          pw.TableRow(children: [
+                            pw.Padding(padding: pw.EdgeInsets.symmetric(horizontal: 5,vertical: 2),child: pw.Text("Total Amount",                                
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold)),),
+                            pw.Padding(padding: pw.EdgeInsets.symmetric(horizontal: 5,vertical: 2),child: pw.Text("₹${Total}",
+                            textAlign: pw.TextAlign.end,
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold, font: ttf)),)
+                          ]),
+                          pw.TableRow(children: [
+                            pw.Padding(padding: pw.EdgeInsets.symmetric(horizontal: 5,vertical: 2),child: pw.Text("Advance Amount"),),
+                            pw.Padding(padding: pw.EdgeInsets.symmetric(horizontal: 5,vertical: 2),child: pw.Text("₹${Advance_Amount}",
+                            textAlign: pw.TextAlign.end,
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold, font: ttf)),)
+                          ]),
+                          pw.TableRow(children: [
+                            pw.Padding(padding: pw.EdgeInsets.symmetric(horizontal: 5,vertical: 2),child: pw.Text("Due Amount"),),
+                            pw.Padding(padding: pw.EdgeInsets.symmetric(horizontal: 5,vertical: 2),child: pw.Text("₹${Du_Amount}",
+                            textAlign: pw.TextAlign.end,
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold, font: ttf)),)
+                          ]),
+                          ]),
+                    if(add_service==false)
+                      pw.Table(
+                        border: pw.TableBorder.all(
+                          color:
+                              PdfColor(.5, .5, .5)),
+                               columnWidths: {
+                        0: pw.FixedColumnWidth(6), // Fixed width for column 1
+                        // 1: pw.FlexColumnWidth(2), // Flexible width for column 2
+                        // 2: pw.FlexColumnWidth(1), // Flexible width for column 3
+                        // 3: pw.FlexColumnWidth(1), // Flexible width for column 3
+                        // 4: pw.FlexColumnWidth(1), // Flexible width for column 3
+                        // 5: pw.FlexColumnWidth(1), // Flexible width for column 3
+                      },
+                        children: [pw.TableRow(children: [
+                            pw.Padding(padding: pw.EdgeInsets.symmetric(horizontal: 5,vertical: 2),child: pw.Text("Remark"),),
+                            pw.Padding(padding: pw.EdgeInsets.symmetric(horizontal: 5,vertical: 2),child:  pw.Text("${remark}",
+                            textAlign: pw.TextAlign.start,
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold, font: ttf)),),
+                           
+                          ]),]),
+                  // pw.Container(
+                  //     alignment: pw.Alignment.centerLeft,
+                  //     height: 70,
+                  //     width: double.infinity,
+                  //     child: pw.Column(
+                  //       mainAxisAlignment: pw.MainAxisAlignment.center,
+                  //       children: [
+                  //         pw.Row(
+                  //             mainAxisAlignment:
+                  //                 pw.MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               pw.Text("Remark"),
+                  //               pw.Text("${remark}",
+                  //                   style: pw.TextStyle(
+                  //                       fontWeight: pw.FontWeight.bold,
+                  //                       font: ttf)),
+                  //             ]),
+                  //         // pw.Row(
+                  //         //     mainAxisAlignment:
+                  //         //         pw.MainAxisAlignment.spaceBetween,
+                  //         //     children: [
+                  //         //       pw.Text(
+                  //         //         "Today Amount",
+                  //         //       ),
+                  //         //       pw.Text("₹${Amount}",
+                  //         //           style: pw.TextStyle(
+                  //         //               fontWeight: pw.FontWeight.bold,
+                  //         //               font: ttf)),
+                  //         //     ]),
+                  //         pw.Row(
+                  //             mainAxisAlignment:
+                  //                 pw.MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               pw.Text("Advance Amount"),
+                  //               pw.Text("₹${Advance_Amount}",
+                  //                   style: pw.TextStyle(
+                  //                       fontWeight: pw.FontWeight.bold,
+                  //                       font: ttf)),
+                  //             ]),
+                  //         pw.Row(
+                  //             mainAxisAlignment:
+                  //                 pw.MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               pw.Text("Remark"),
+                  //               pw.Text("${remark}",
+                  //                   style: pw.TextStyle(
+                  //                       fontWeight: pw.FontWeight.bold,
+                  //                       font: ttf)),
+                  //             ])
+                  //       ],
+                  //     )),
+
                   if (add_service == false)
                     pw.Container(
                         margin: pw.EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10),
+                            vertical: 11, horizontal: 10),
                         height: 40,
                         width: double.maxFinite,
                         alignment: pw.Alignment.center,
@@ -1430,7 +1532,7 @@ class Api {
                                 color: PdfColors.white,
                                 fontSize: 20,
                                 font: ttf))),
-                      pw.SizedBox(height: 10),
+                  pw.SizedBox(height: 10),
                   if (add_service)
                     pw.Table(
                       border: pw.TableBorder.all(
@@ -1486,6 +1588,7 @@ class Api {
                   left: 0,
                   right: 0,
                   child: pw.Column(children: [
+                    // pw.Image(pw. ),
                     pw.Row(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
@@ -1507,6 +1610,28 @@ class Api {
                           ),
                         ]),
                     pw.Divider(),
+                    
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                      pw.Image(
+                    pw.MemoryImage(imageBytes),
+                    width: 50,
+                    height: 50,
+                  
+                  ),
+                  pw.SizedBox(width: 10),
+                  pw.Column(children: [
+pw.Text("* This is computer generated invoice does not require signatures *",
+                        textAlign: pw.TextAlign.center),
+                  pw.Text("Co- powered by mmdd (make my dream day)",style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  pw.Row(children: [ pw.Container(child: pw.Row(children: [pw.Text("Mobile :"),pw.Text("18005700102",style: pw.TextStyle(color: PdfColor(0.5, 0.5, 0.5)))])),
+                 pw.SizedBox(width: 10),
+                  pw.Container(child: pw.Row(children: [pw.Text("Email:"),pw.Text("info@makemydreamday.in",style: pw.TextStyle(color: PdfColor(0.5, 0.5, 0.5)))]))
+                 ])
+                  ])
+
+                    ])
                   ])),
             ])));
     // final directory = Directory('/storage/emulated/0/Download');
@@ -1703,8 +1828,9 @@ class Api {
       throw ("Error........ EventBooking Api ");
     }
   }
+
   // ________________________________________________________________________________________
-  static Future<void> UpdateProfileImg({required String img }) async {
+  static Future<void> UpdateProfileImg({required String img}) async {
     //  List<int> imageBytes = await img.readAsBytes();
     //   String base64String = base64Encode(imageBytes);
     String url =
@@ -1721,6 +1847,18 @@ class Api {
     } else {
       log("Error........ BannerReport Api ");
       throw ("Error........ BannerReport Api ");
+    }
+  }
+
+  // _____________________________________________________________________________________(get logo)
+  static Future<void> getLogo({required String url}) async {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      user_logo = response.bodyBytes;
+      log("Get logo Api call ......... Make by me");
+    } else {
+      print('Failed to fetch the image. Status code: ${response.statusCode}');
+      return;
     }
   }
 }

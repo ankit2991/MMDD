@@ -67,7 +67,7 @@ class _MyEnquiryState extends State<MyEnquiry> {
               onTap: (){
                  Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "0",refresh: refresh,update: true,data: _data[index],)),
+            MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "0",refresh: refresh,update: true,data: _data[index],add_booking: (){},)),
           );
               },
               child: Container(
@@ -128,7 +128,7 @@ class _MyEnquiryState extends State<MyEnquiry> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "0",refresh: refresh,update: false,data: {},)),
+            MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "0",refresh: refresh,update: false,data: {},add_booking: (){},)),
           );
         },
         child: Icon(Icons.add, color: Colors.white),

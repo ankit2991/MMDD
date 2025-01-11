@@ -165,6 +165,8 @@ var discount_con=TextEditingController();
                 ),
                 TextFormField(
                   controller: mob_con,
+                  maxLength: 10,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: "Mobile Number",
                     labelStyle: TextStyle(
@@ -189,9 +191,9 @@ var discount_con=TextEditingController();
                     fontFamily: 'sub-tittle',
                     fontSize: 16.0,
                   ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly // Only numbers
-                  ],
+                  // inputFormatters: [
+                  //   FilteringTextInputFormatter.digitsOnly // Only numbers
+                  // ],
                 ),
                 SizedBox(
                   height: 15,
@@ -407,13 +409,18 @@ setState(() {
                       minimumSize: Size(650, 45),
                     ),
                     onPressed: () {
+                      if (_image!=null&& b_name_con.text.isNotEmpty &&mob_con.text.isNotEmpty&&address_con.text.isNotEmpty&&discount_con.text.isNotEmpty&& _endDate!=null&&_startDate!=null) {
                       Api.widget_to_img(_globalKey).then((value) {
                        Api.ImageInsert(img: value,DocType: "3",ext: "."+ext,MemberAgreementUpload_UploadFile2:"UploadFile2",context: context ).then((value) {
                          widget.refresh();
                          Navigator.of(context).pop();
                        },);
                         
-                      },);
+                      },);                        
+                      }else{
+                        Api.snack_bar(context: context, message: "Somthing Went Wrong");
+                      }
+
                     },
                     child: Text(
                       'UPLOAD AD',

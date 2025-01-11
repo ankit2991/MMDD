@@ -12,7 +12,7 @@ import 'package:mddmerchant/main.dart';
 
 class subscription_plan extends StatefulWidget {
   Function ref;
-   subscription_plan({required this.ref });
+  subscription_plan({required this.ref});
 
   @override
   State<subscription_plan> createState() => _subscription_planState();
@@ -39,9 +39,16 @@ class _subscription_planState extends State<subscription_plan> {
         Api.Packagelist().then(
           (value) {
             _package_list = value;
-            int index = _data.indexWhere((item) => item['ID'] == Api.User_info["Table"][0]["F_SubscriberMaster"]);
-            if(Api.User_info["Table"][0]["F_SubscriberMaster"]!=null){
-              buttom_sheet(SubscriberId:Api.User_info["Table"][0]["F_SubscriberMaster"].toString(),SubscriptionCharge:Api.User_info["Table"][0]["AccountBalance"].toString(),SubscriptionName: _data[index]["SubscriptionName"],sub: false  );
+            int index = _data.indexWhere((item) =>
+                item['ID'] == Api.User_info["Table"][0]["F_SubscriberMaster"]);
+            if (Api.User_info["Table"][0]["F_SubscriberMaster"] != null&&Api.User_info["Table"][0]["F_SubscriberMaster"]!=0) {
+              buttom_sheet(
+                  SubscriberId: Api.User_info["Table"][0]["F_SubscriberMaster"]
+                      .toString(),
+                  SubscriptionCharge:
+                      Api.User_info["Table"][0]["AccountBalance"].toString(),
+                  SubscriptionName: _data[index]["SubscriptionName"],
+                  sub: false);
             }
 
             setState(() {
@@ -53,144 +60,353 @@ class _subscription_planState extends State<subscription_plan> {
     );
   }
 
-  void buttom_sheet({required String SubscriptionName,required String SubscriptionCharge,required String SubscriberId,required bool sub}){
-       if(Api.User_info["Table"][0]["F_SubscriberMaster"]!=null&&sub==true&&Api.User_info["Table"][0]["F_SubscriberMaster"]!=0){
-      SubscriptionCharge= ((double.parse(SubscriptionCharge)-Api.User_info["Table"][0]["SubscriptionAmount"])+Api.User_info["Table"][0]["AccountBalance"]).toString();
-       }
-       showModalBottomSheet(
-                          scrollControlDisabledMaxHeightRatio: 300,
-                          isScrollControlled: true,
-                          context: context,
-                          backgroundColor: Colors.white,
-                          // isScrollControlled: ,
-                          builder: (context) {
-                            return Padding(
-                              // padding: const EdgeInsets.only(bottom: 0,),
-                              padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom,
+  void buttom_sheet(
+      {required String SubscriptionName,
+      required String SubscriptionCharge,
+      required String SubscriberId,
+      required bool sub}) {
+    String? _selectedValue;
+    if (Api.User_info["Table"][0]["F_SubscriberMaster"] != null &&
+        sub == true &&
+        Api.User_info["Table"][0]["F_SubscriberMaster"] != 0) {
+      // SubscriptionCharge = ((double.parse(SubscriptionCharge) -
+      //             Api.User_info["Table"][0]["SubscriptionAmount"]) +
+      //         Api.User_info["Table"][0]["AccountBalance"])
+      //     .toString();
+    }
+    if (sub==false) {
+      showModalBottomSheet(
+        scrollControlDisabledMaxHeightRatio: 300,
+        isScrollControlled: true,
+        context: context,
+        backgroundColor: Colors.white,
+        // isScrollControlled: ,
+        builder: (context) {
+          ValueNotifier<bool> load = ValueNotifier(false);
+          return ValueListenableBuilder(
+            valueListenable: load,
+            builder: (context, value, child) {
+              return Padding(
+                // padding: const EdgeInsets.only(bottom: 0,),
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: Container(
+                  height: (MediaQuery.sizeOf(context).height / 2) - 60,
+                  child: Column(
+                    spacing: 20,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppBar(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xffC4A68B),
+                        title: Text(
+                          "Add Payment".tr,
+                          style: TextStyle(fontFamily: "Fontmain"),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: 10,
+                          children: [
+                            Container(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    SubscriptionName,
+                                    style: TextStyle(fontFamily: "Fontmain"),
+                                  ),
+                                ],
                               ),
-                              child: Container(
-                                height: (MediaQuery.sizeOf(context).height / 2)-60,
-                                child: Column(
-                                  spacing: 20,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    AppBar(
-                                      foregroundColor: Colors.white,
-                                      backgroundColor: Color(0xffC4A68B),
-                                      title: Text(
-                                        "Add Payment".tr,
-                                        style:
-                                            TextStyle(fontFamily: "Fontmain"),
-                                      ),
-                                    ),
-                                    Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        spacing: 10,
-                                        children: [
-                                          Container(
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  SubscriptionName,
-                                                  style: TextStyle(
-                                                      fontFamily: "Fontmain"),
-                                                ),
-                                                Text(
-                                                  SubscriptionCharge
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontFamily: "Fontmain"),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          TextFormField(
-                                            controller: amount_con,
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                                label: Text("Amount"),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .black)),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color:
-                                                                Colors.black))),
-                                          ),
-                                          TextFormField(
-                                            controller: remark_con,
-                                            decoration: InputDecoration(
-                                                label: Text("Remark"),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .black)),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color:
-                                                                Colors.black))),
-                                          ),
-                                          
-                                        ],
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                            onTap: (){
-                                            if(amount_con.text.isNotEmpty){
-                                                Api.SubscriptionInsert(Amount: amount_con.text,BankRefNo: "",PaymentMode: "Cash",Remarks: remark_con.text,SubscriberId: SubscriberId,TransctionNo: "").then((value) {
-                                               if(value=="R100"){                                                
-                                                  Api.snack_bar(context: context, message: "Activated successfully this plan");
-                                                }else if(value=="R200"){                                              
-                                                  Api.snack_bar(context: context, message: "successfully Add on plan");
-                                                }
-                                               Api.Mpin_check(mob_no: Api.prefs.getString("mobile_no")??"", Mpin: Api.prefs.getString("mpin")??"").then((value) {
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).pop();
-                                                      widget.ref(false);
-                                               },);
-                                                
-                                              },);
-                                            }else{
-                                              Api.snack_bar(context: context, message: "Something went wrong");
-                                            }
-                                            },
-                                            child: Container(
-                                              height: 60,
-                                              width: double.maxFinite,
-                                              color: Color(0xffC4A68B),
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                "Pay Amount",
-                                                style: TextStyle(
-                                                    fontFamily: "Fontmain",
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          )
-                                  ],
+                            ),
+                            Row(
+                              children: [
+                                Radio(
+                                  value: SubscriptionCharge.toString(),
+                                  groupValue: _selectedValue,
+                                  onChanged: (value) {
+                                    _selectedValue = value;
+                                    load.value = load.value ? false : true;
+                                    amount_con.text=_selectedValue!;
+                                  },
                                 ),
-                              ),
+                                Text(
+                                  SubscriptionCharge.toString(),
+                                  style: TextStyle(fontFamily: "Fontmain"),
+                                )
+                              ],
+                            ),
+                            // TextFormField(
+                            //   controller: amount_con,
+                            //   keyboardType: TextInputType.number,
+                            //   decoration: InputDecoration(
+                            //       label: Text("Amount"),
+                            //       enabledBorder:
+                            //           OutlineInputBorder(
+                            //               borderSide: BorderSide(
+                            //                   color: Colors
+                            //                       .black)),
+                            //       focusedBorder:
+                            //           OutlineInputBorder(
+                            //               borderSide: BorderSide(
+                            //                   color:
+                            //                       Colors.black))),
+                            // ),
+                            TextFormField(
+                              controller: remark_con,
+                              decoration: InputDecoration(
+                                  label: Text("Remark"),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black))),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (amount_con.text.isNotEmpty) {
+                            Api.SubscriptionInsert(
+                                    Amount: amount_con.text,
+                                    BankRefNo: "",
+                                    PaymentMode: "Cash",
+                                    Remarks: remark_con.text,
+                                    SubscriberId: SubscriberId,
+                                    TransctionNo: "")
+                                .then(
+                              (value) {
+                                if (value == "R100") {
+                                  Api.snack_bar2(
+                                      context: context,
+                                      message:
+                                          "Activated successfully this plan");
+                                } else if (value == "R200") {
+                                  Api.snack_bar2(
+                                      context: context,
+                                      message: "successfully Add on plan");
+                                }
+                                Api.Mpin_check(
+                                        mob_no:
+                                            Api.prefs.getString("mobile_no") ??
+                                                "",
+                                        Mpin: Api.prefs.getString("mpin") ?? "")
+                                    .then(
+                                  (value) {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    widget.ref(false);
+                                  },
+                                );
+                              },
                             );
-                          },
-                        );
-                 
+                          } else {
+                            Api.snack_bar(
+                                context: context,
+                                message: "Something went wrong");
+                          }
+                        },
+                        child: Container(
+                          height: 60,
+                          width: double.maxFinite,
+                          color: Color(0xffC4A68B),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Pay Amount",
+                            style: TextStyle(
+                                fontFamily: "Fontmain", color: Colors.white),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
+    } else {
+      showModalBottomSheet(
+        scrollControlDisabledMaxHeightRatio: 300,
+        isScrollControlled: true,
+        context: context,
+        backgroundColor: Colors.white,
+        // isScrollControlled: ,
+        builder: (context) {
+          ValueNotifier<bool> load = ValueNotifier(false);
+          return ValueListenableBuilder(
+            valueListenable: load,
+            builder: (context, value, child) {
+              return Padding(
+                // padding: const EdgeInsets.only(bottom: 0,),
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: Container(
+                  height: (MediaQuery.sizeOf(context).height / 2) - 60,
+                  child: Column(
+                    spacing: 20,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppBar(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xffC4A68B),
+                        title: Text(
+                          "Add Payment".tr,
+                          style: TextStyle(fontFamily: "Fontmain"),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: 10,
+                          children: [
+                            Container(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    SubscriptionName,
+                                    style: TextStyle(fontFamily: "Fontmain"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Radio(
+                                  value: (double.parse(SubscriptionCharge)/2).round().toString(),
+                                  groupValue: _selectedValue,
+                                  onChanged: (value) {
+                                    _selectedValue = value;
+                                    amount_con.text=_selectedValue!;
+                                    load.value = load.value ? false : true;
+                                  },
+                                ),
+                                Text(
+                                  (double.parse(SubscriptionCharge)/2).round().toString(),
+                                  style: TextStyle(fontFamily: "Fontmain"),
+                                ),
+                                Radio(
+                                  value: SubscriptionCharge.toString(),
+                                  groupValue: _selectedValue,
+                                  onChanged: (value) {
+                                    _selectedValue = value;
+                                    amount_con.text=_selectedValue!;
+                                    load.value = load.value ? false : true;
+                                  },
+                                ),
+                                Text(
+                                  SubscriptionCharge.toString(),
+                                  style: TextStyle(fontFamily: "Fontmain"),
+                                )
+                              ],
+                            ),
+                            // TextFormField(
+                            //   controller: amount_con,
+                            //   keyboardType: TextInputType.number,
+                            //   decoration: InputDecoration(
+                            //       label: Text("Amount"),
+                            //       enabledBorder:
+                            //           OutlineInputBorder(
+                            //               borderSide: BorderSide(
+                            //                   color: Colors
+                            //                       .black)),
+                            //       focusedBorder:
+                            //           OutlineInputBorder(
+                            //               borderSide: BorderSide(
+                            //                   color:
+                            //                       Colors.black))),
+                            // ),
+                            TextFormField(
+                              controller: remark_con,
+                              decoration: InputDecoration(
+                                  label: Text("Remark"),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black))),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (amount_con.text.isNotEmpty) {
+                            Api.SubscriptionInsert(
+                                    Amount: amount_con.text,
+                                    BankRefNo: "",
+                                    PaymentMode: "Cash",
+                                    Remarks: remark_con.text,
+                                    SubscriberId: SubscriberId,
+                                    TransctionNo: "")
+                                .then(
+                              (value) {
+                                if (value == "R100") {
+                                  Api.snack_bar(
+                                      context: context,
+                                      message:
+                                          "Activated successfully this plan");
+                                } else if (value == "R200") {
+                                  Api.snack_bar(
+                                      context: context,
+                                      message: "successfully Add on plan");
+                                }
+                                Api.Mpin_check(
+                                        mob_no:
+                                            Api.prefs.getString("mobile_no") ??
+                                                "",
+                                        Mpin: Api.prefs.getString("mpin") ?? "")
+                                    .then(
+                                  (value) {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    widget.ref(false);
+                                  },
+                                );
+                              },
+                            );
+                          } else {
+                            Api.snack_bar(
+                                context: context,
+                                message: "Something went wrong");
+                          }
+                        },
+                        child: Container(
+                          height: 60,
+                          width: double.maxFinite,
+                          color: Color(0xffC4A68B),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Pay Amount",
+                            style: TextStyle(
+                                fontFamily: "Fontmain", color: Colors.white),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     itms.clear();
-
     for (var i = 0; i < _data.length; i++) {
       List<TableRow> Temp = [];
       for (var j = 0; j < _package_list.length; j++) {
@@ -229,7 +445,7 @@ class _subscription_planState extends State<subscription_plan> {
               child: Container(
                 padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
                 margin: EdgeInsets.only(
-                    bottom: (MediaQuery.of(context).size.height)*0.8,
+                    bottom: (MediaQuery.of(context).size.height) * 0.8,
                     right: 20,
                     left: 20,
                     top: 20),
@@ -285,7 +501,12 @@ class _subscription_planState extends State<subscription_plan> {
                         amount_con.clear();
                         remark_con.clear();
                         log(_data[i]["ID"].toString());
-                        buttom_sheet(SubscriptionName: _data[i]["SubscriptionName"], SubscriptionCharge: _data[i]["SubscriptionCharge"].toString() , SubscriberId: _data[i]["ID"].toString(),sub: true);
+                        buttom_sheet(
+                            SubscriptionName: _data[i]["SubscriptionName"],
+                            SubscriptionCharge:
+                                _data[i]["SubscriptionCharge"].toString(),
+                            SubscriberId: _data[i]["ID"].toString(),
+                            sub: true);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -295,7 +516,13 @@ class _subscription_planState extends State<subscription_plan> {
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                         child: Text(
-                         Api.User_info["Table"][0]["F_SubscriberMaster"]!=null&&Api.User_info["Table"][0]["F_SubscriberMaster"]!=0?"Upgrade": "GET STARTED".tr,
+                          Api.User_info["Table"][0]["F_SubscriberMaster"] !=
+                                      null &&
+                                  Api.User_info["Table"][0]
+                                          ["F_SubscriberMaster"] !=
+                                      0
+                              ? "Upgrade"
+                              : "GET STARTED".tr,
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),

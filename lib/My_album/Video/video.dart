@@ -50,10 +50,27 @@ class _MyVideoState extends State<MyVideo> {
       },
     );
   }
-
+// void add()async{
+//   _Work_data.clear();
+//   for (var i = 0; i < _data.length; i++) {
+//           if (_data[i]["Doctype"] == 2) {
+//             _Work_data.add(_data[i]);
+//             VideoPlayerController temp = await VideoPlayerController.networkUrl(
+//                 Uri.parse(_data[i]["ImagePath"]))
+//               ..initialize()
+//               ..setLooping(true)
+//               ..pause();
+//             controllers.add(temp);
+//           }
+//         }
+//         setState(() {
+          
+//         });
+// }
   @override
   
   Widget build(BuildContext context) {
+    //  add();
     return Scaffold(
       appBar: AppBar(
         title: Text('Videos'.tr,
@@ -127,6 +144,7 @@ class _MyVideoState extends State<MyVideo> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: IconButton(
                                           onPressed: () {
+                                            controller.pause();
                                             Navigator.of(context).pop();
                                           },
                                           icon: Icon(
@@ -326,7 +344,8 @@ class _MyVideoState extends State<MyVideo> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Api.pickImage(img: false, source: ImageSource.gallery).then(
+          if (_Work_data.length<4) {
+               Api.pickImage(img: false, source: ImageSource.gallery).then(
             (value) {
               setState(() {
                 loader=true;
@@ -375,7 +394,11 @@ class _MyVideoState extends State<MyVideo> {
                }
              },
           );
-        },
+    
+          }else{
+            Api.snack_bar(context: context, message: "Storage Full on this Section");
+          }
+           },
         child: Icon(Icons.add, color: Colors.white),
         shape: RoundedRectangleBorder(
           borderRadius:

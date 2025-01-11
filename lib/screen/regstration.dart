@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:mddmerchant/App_bar/user_acc.dart';
 import 'package:mddmerchant/api/api.dart';
 import 'package:mddmerchant/main.dart';
+import 'package:mddmerchant/screen/Mpinpage.dart';
 import 'package:mddmerchant/screen/terms_and_condation.dart';
 
 class RegisTration extends StatefulWidget {
@@ -52,6 +53,8 @@ class _CheckboxExampleState extends State<RegisTration> {
     // TODO: implement initState
     super.initState();
     // Api.CategoryList_data.clear();
+     _selectedState = null; // Default selected language
+ _selectedSyCity = null;
     _Category!.clear();
     _selectedCategory = null;
     _selectedSubCategory = null;
@@ -709,7 +712,7 @@ class _CheckboxExampleState extends State<RegisTration> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          LogOutPage()), // The new page to display
+                                                          MpinPage(mob_no:widget.Mob ,)), // The new page to display
                                                   (Route<dynamic> route) =>
                                                       false, // Remove all previous routes
                                                 );                   

@@ -98,7 +98,7 @@ class _MyImageState extends State<MyImage> {
                                                   CupertinoActivityIndicator());
                                         },
                                         errorWidget: (context, url, error) {
-                                          return Container(
+                                          Navigator.pop(context);                                          return Container(
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                               image: AssetImage(
@@ -214,7 +214,7 @@ class _MyImageState extends State<MyImage> {
                                           ],
                                         ),
                                       )),
-                                  // IconButton(onPressed: (){}, icon: Container(child: Text("Share")))
+                                  // // IconButton(onPressed: (){}, icon: Container(child: Text("Share")))
                                   // ElevatedButton.icon(onPressed: (){}, label: Text("Share"))
                                 ],
                               );
@@ -240,26 +240,27 @@ class _MyImageState extends State<MyImage> {
                                 children: [
                                   IconButton(
                                       onPressed: () {
-                                           showDialog(
+                                         showDialog(
                                           context: context,
                                           builder: (context) {
                                             ValueNotifier<bool>delete =ValueNotifier(false);
                                             ValueNotifier<bool>cancel =ValueNotifier(false);
                                             return AlertDialog(
-                                              title: Text("Are You Sure"),
+                                              title: Text("Are You Sure",style: TextStyle(fontFamily: "Fontmain"),),
                                               actionsAlignment:
                                                   MainAxisAlignment.spaceBetween,
                                               content: Text(
-                                                  "Do you really went to delete these Item? This process cannot be undo"),
+                                                  "Do you really went to delete these Item? This process cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
                                               actions: [
                                                ValueListenableBuilder(valueListenable: delete, builder: (context, value, child) {
-                                                 return  ElevatedButton(
-                                                    onPressed: () {
-                                                       delete.value=true;
+                                                 return    InkWell(
+                                                  onTap: (){
+                                                      delete.value=true;
                                                        Navigator.of(context).pop();
                                                       setState(() {
                                                         loader = true;
                                                       });
+                                                       
                                                       Api.DeleteImgvideo(
                                                               Id: _Work_data[
                                                                           index]
@@ -267,8 +268,8 @@ class _MyImageState extends State<MyImage> {
                                                                   .toString())
                                                           .then((value) {
                                                         if (value) {
-                                                        // Navigator.of(context).pop();
                                                         
+                                                          
                                                           _data.clear();
                                                           _Work_data.clear();
                                                           Api.AccountDocument()
@@ -293,31 +294,48 @@ class _MyImageState extends State<MyImage> {
                                                           });
                                                         }
                                                       });
-                                                    },
-                                                    child: Text("Delete"),style: ButtonStyle(backgroundColor:MaterialStateProperty.all(value? Colors.white: Color(0xffC4A68B)) ,foregroundColor: WidgetStateProperty.all(value?Colors.black: Colors.white)),);
-                                             
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(vertical: 10,horizontal:  20),
+                                                    decoration: BoxDecoration(
+                                                      color: value? Colors.white: Color(0xffC4A68B)
+                                                  
+                                                    ),
+                                                    child: Text("Delete",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                  ),
+                                                );
                                                },),
                                               ValueListenableBuilder(valueListenable:cancel , builder: (context, value, child) {
-                                                return ElevatedButton(                                                  
-                                                    onPressed: () {
-                                                      cancel.value=true;
+                                                return     InkWell(
+                                                  onTap: (){
+                                                       cancel.value=true;
                                                       Navigator.of(context)
                                                           .pop();
-                                                    },
-                                                    child: Text("Cancel"),
-                                                    style: ButtonStyle(backgroundColor:MaterialStateProperty.all(value? Colors.white: Color(0xffC4A68B)) ,foregroundColor: WidgetStateProperty.all(value?Colors.black: Colors.white)),
-                                                     );
-                                             
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(vertical: 10,horizontal:  20),
+                                                    decoration: BoxDecoration(
+                                                      color: value? Colors.white: Color(0xffC4A68B)
+                                                  
+                                                    ),
+                                                    child: Text("Cancel",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                  ),
+                                                );
                                               },) ],
                                             );
                                           },
                                         );
-                                    
+                                  
                                       },
                                       icon: Container(
-                                    
-                                        padding: EdgeInsets.all(20),
-                                        color: Colors.white,
+                                     alignment: Alignment.center,
+                                    height: 30,
+                                        padding: EdgeInsets.symmetric(vertical: 2,horizontal: 1),
+                                        
+                                        decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(3),boxShadow: [BoxShadow(blurRadius: 5,color: const Color.fromARGB(117, 0, 0, 0),offset: Offset(0, 0))]),
+                                      
+                                        // padding: EdgeInsets.all(20),
+                                        // color: Colors.white,
                                         child: Icon(Icons.delete,color:  Color(0xffC4A68B),)))
                                 ],
                               ),
@@ -451,7 +469,9 @@ class _MyImageState extends State<MyImage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Api.pickImage(img: true, source: ImageSource.gallery).then(
+
+         if(_Work_data.length<10){
+           await Api.pickImage(img: true, source: ImageSource.gallery).then(
             (value) {
                setState(() {
                     loader = true;
@@ -492,6 +512,9 @@ class _MyImageState extends State<MyImage> {
              }
             },
           );
+         }else{
+          Api.snack_bar(context: context, message: "Storage full on this section");
+         }
         },
         child: Icon(Icons.add, color: Colors.white),
         shape: RoundedRectangleBorder(

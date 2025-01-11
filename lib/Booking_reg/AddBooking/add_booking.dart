@@ -12,11 +12,14 @@ class AddBooking extends StatefulWidget {
   Function refresh;
   bool update;
   Map data;
+  Function add_booking;
   AddBooking(
       {required String this.Isbooking,
       required this.refresh,
       required this.update,
-      required this.data});
+      required this.data,
+      required this.add_booking
+      });
   _AddBookingState createState() => _AddBookingState();
 }
 
@@ -782,6 +785,7 @@ class _AddBookingState extends State<AddBooking> {
                                 (value) {
                                   if (value) {
                                     widget.refresh();
+                                    widget.add_booking(true);
                                     Navigator.of(context).pop();
                                   } else {
                                     name_con.clear();
