@@ -13,6 +13,8 @@ import 'package:mddmerchant/App_bar/OurService/our_service.dart';
 import 'package:mddmerchant/main.dart';
 import 'package:mddmerchant/screen/Mpinpage.dart';
 import 'package:mddmerchant/screen/otp.dart';
+import 'package:mddmerchant/screen/refer_and_earn.dart';
+import 'package:open_filex/open_filex.dart';
 import 'dart:developer' as developer;
 import "../api/api.dart";
 import 'dart:io';
@@ -25,8 +27,9 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   @override
-    File ?_profile;
+  File? _profile;
 
+  bool loader = false;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -43,94 +46,172 @@ class _UserProfileState extends State<UserProfile> {
           },
         ),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          // Profile Picture and Name
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: (){
-                  //   Api.pickImage(img: true, source: ImageSource.gallery).then((value) {
-                  //   setState(() {
-                  //   _profile=value["file"];
-                  //     // Api.UpdateProfileImg(img: _profile!);
-                  //   });
-                  // },);
-                  },
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundColor: mainColor,
-                    // backgroundImage:_profile==null? AssetImage(""):Image.file(_profile!),
-                    // Profile picture placeholder
-                    child:Api.User_info["Table"][0]["profileImage"]!=null?Image.network(fit: BoxFit.cover,Api.User_info["Table"][0]["profileImage"],errorBuilder: (context, error, stackTrace) {
-                      return Icon(Icons.person, size: 50, color: Colors.white);
-                    },) :Icon(Icons.person, size: 50, color: Colors.white),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  Api.User_info["Table"][0]["MemberName"],
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "Fontmain"),
-                ),
-                Text(
-                  Api.User_info["Table"][0]["MobileNo"],
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[700],
-                      fontFamily: "Fontmain"),
-                ),
-                Api.User_info["Table"][0]["AccountBalance"] != null
-                    ? Text(
-                        "Wallet ₹${Api.User_info["Table"][0]["AccountBalance"].toString()}",
-                        style: TextStyle(
-                          fontSize: 16,
-                          // fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                          fontFamily: 'Fontmain',
-                        ))
-                    : Text("Wallet ₹00",
-                        style: TextStyle(
-                          fontSize: 16,
-                          // fontWeight: FontWeight.w700,
-                          color: Colors.grey[700],
-                          fontFamily: 'Fontmain',
+          Column(
+            children: [
+              // Profile Picture and Name
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                        onTap: () async {
+                          await Api.pickImage(
+                                  img: true, source: ImageSource.gallery)
+                              .then(
+                            (value) {
+                              setState(() {
+                                loader = true;
+                              });
+                              if (value["file"] != "") {
+                                Api.ImageInsert(
+                                        MemberAgreementUpload_UploadFile2:
+                                            "UploadFile2",
+                                        DocType: "6",
+                                        ext: "." + value["ext"],
+                                        img: value["file"],
+                                        context: context)
+                                    .then(
+                                  (value) {
+                                    Api.Mpin_check(
+                                            mob_no: Api.prefs
+                                                    .getString("mobile_no") ??
+                                                "",
+                                            Mpin: Api.prefs.getString("mpin") ??
+                                                "")
+                                        .then(
+                                      (value) {
+                                        setState(() {
+                                          loader = false;
+                                        });
+                                        Api.snack_bar2(
+                                            context: context,
+                                            message:
+                                                "successfully Logo Update");
+                                      },
+                                    );
+                                  },
+                                );
+                              } else {
+                                setState(() {
+                                  loader = false;
+                                });
+                              }
+                            },
+                          );
+                        },
+                        child: CachedNetworkImage(
+                          imageUrl: Api.User_info["Table"][0]["LogoImg"],
+                          progressIndicatorBuilder: (context, url, progress) {
+                            return CircleAvatar(
+                              // backgroundImage: AssetImage(
+                              //       "assets/images/main/User-Account-1024.png",),
+                              radius: 50,
+                              backgroundColor: mainColor,
+                              child: CircularProgressIndicator(),
+                            );
+                          },
+                          imageBuilder: (context, imageProvider) {
+                            return CircleAvatar(
+                              radius: 50,
+                              backgroundColor: mainColor,
+                              backgroundImage: Api.User_info["Table"][0]
+                                          ["LogoImg"] !=
+                                      null
+                                  ? imageProvider
+                                  : AssetImage(
+                                      "assets/images/main/User-Account-1024.png"),
+                              // Profile picture placeholder
+                              // child: Api.User_info["Table"][0]["LogoImg"] != null
+                              //       ? Image.network(
+                              //           fit: BoxFit.cover,
+                              //           ,
+                              //           errorBuilder: (context, error, stackTrace) {
+                              //             return Icon(Icons.person,
+                              //                 size: 50, color: Colors.white);
+                              //           },
+                              //         )
+                              //       : Icon(Icons.person, size: 50, color: Colors.white),
+                            );
+                          },
                         )),
-              ],
-            ),
+                    SizedBox(height: 10),
+                    Text(
+                      Api.User_info["Table"][0]["MemberName"],
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Fontmain"),
+                    ),
+                    Text(
+                      Api.User_info["Table"][0]["MobileNo"],
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[700],
+                          fontFamily: "Fontmain"),
+                    ),
+                    Api.User_info["Table"][0]["AccountBalance"] != null
+                        ? Text(
+                            "Wallet ₹${Api.User_info["Table"][0]["AccountBalance"].toString()}",
+                            style: TextStyle(
+                              fontSize: 16,
+                              // fontWeight: FontWeight.w700,
+                              color: Colors.black,
+                              fontFamily: 'Fontmain',
+                            ))
+                        : Text("Wallet ₹00",
+                            style: TextStyle(
+                              fontSize: 16,
+                              // fontWeight: FontWeight.w700,
+                              color: Colors.grey[700],
+                              fontFamily: 'Fontmain',
+                            )),
+                  ],
+                ),
+              ),
+              // Profile Options List
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  children: [
+                    ProfileOption(
+                        title: "Account Document", page: Account_Document()),
+                    ProfileOption(
+                        title: "Basic Information",
+                        page: BasicInformationPage()),
+                    ProfileOption(
+                        title: "Registration Information",
+                        page: RegistrationInformationPage()),
+                    ProfileOption(
+                        title: "Bank Information", page: BankInformationPage()),
+                    ProfileOption(title: "MMDD Orders", page: MMDDOrdersPage()),
+                    ProfileOption(title: "My Services", page: MyServicesPage()),
+                    ProfileOption(title: "Discount", page: Discount_screen()),
+                    ProfileOption(title: "Our Services", page: OurService()),
+                    ProfileOption(
+                        title: "My Terms & Conditions",
+                        page: TermsAndConditionsPage()),
+                    ProfileOption(title: "Review", page: ReviewPage()),
+                    ProfileOption(title: "Phone Diary", page: PhoneDiary()),
+                    ProfileOption(title: "Refer and Earn", page: referAndEarn()),
+                    ProfileOption(title: "Contact Us", page: ContactPage()),
+                    ProfileOption(title: "Log Out", page: LogOutPage()),
+                  ],
+                ),
+              ),
+            ],
           ),
-          // Profile Options List
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              children: [
-                ProfileOption(
-                    title: "Account Document", page: Account_Document()),
-                ProfileOption(
-                    title: "Basic Information", page: BasicInformationPage()),
-                ProfileOption(
-                    title: "Registration Information",
-                    page: RegistrationInformationPage()),
-                ProfileOption(
-                    title: "Bank Information", page: BankInformationPage()),
-                ProfileOption(title: "MMDD Orders", page: MMDDOrdersPage()),
-                ProfileOption(title: "My Services", page: MyServicesPage()),
-                ProfileOption(title: "Discount", page: Discount_screen()),
-                ProfileOption(title: "Our Services", page: OurService()),
-                ProfileOption(
-                    title: "My Terms & Conditions",
-                    page: TermsAndConditionsPage()),
-                ProfileOption(title: "Review", page: ReviewPage()),
-                ProfileOption(title: "Phone Diary", page: PhoneDiary()),
-                ProfileOption(title: "Contact Us", page: ContactPage()),
-                ProfileOption(title: "Log Out", page: LogOutPage()),
-              ],
+          if (loader)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: 50.0,
+                ),
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -216,11 +297,15 @@ class _Discount_screenState extends State<Discount_screen> {
                     var discount_con = TextEditingController();
                     DateTime? _startDate;
                     DateTime? _endDate;
-                    if (_data[index]["IsDiscount"] == true) {
+                    // if (_data[index]["IsDiscount"] == true) {
+                    if(_data[index]["DiscountAmount"]!=null){
                       discount_con.text =
                           _data[index]["DiscountAmount"].toString();
+                    }
+                    if(_data[index]["DiscountAmount"]!=null){
                       total.value = _data[index]["Amount"] -
                           _data[index]["DiscountAmount"];
+                    }
                       if (_data[index]["DisStartDate"] != null) {
                         _startDate =
                             DateTime.parse(_data[index]["DisStartDate"]);
@@ -253,7 +338,7 @@ class _Discount_screenState extends State<Discount_screen> {
                           );
                         }
                       }
-                    }
+                    
 
                     Future<void> _selectDate(
                         BuildContext context, bool isStart) async {
@@ -286,7 +371,22 @@ class _Discount_screenState extends State<Discount_screen> {
                         }
                       }
                     }
-
+                    bool dis_read_only=false;
+                    bool dis_date_only=false;
+                     if( bools[index] == true){
+                      if(_endDate!=null){
+                        if(_endDate!.isBefore(DateTime.now())){
+                          dis_read_only=false;
+                          dis_date_only=false;
+                        }else{
+                          dis_read_only=true;
+                          dis_date_only=true;
+                        }
+                      }
+                     }else{
+                      dis_read_only=true;
+                      dis_date_only=true;
+                     }
                     // var tot_con=TextEditingController();
                     return Container(
                       margin: EdgeInsets.all(10),
@@ -401,7 +501,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                       total.value = 0;
                                     }
                                   },
-                                  readOnly: bools[index] == true ? false : true,
+                                  readOnly: dis_read_only,
                                   decoration: InputDecoration(
                                       labelText: "Discount",
                                       enabledBorder: OutlineInputBorder(
@@ -446,7 +546,7 @@ class _Discount_screenState extends State<Discount_screen> {
                           ValueListenableBuilder(
                             valueListenable: date_ref,
                             builder: (context, value, child) {
-                              return Row(
+                              return IgnorePointer(ignoring:dis_date_only ,child:  Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
@@ -567,8 +667,9 @@ class _Discount_screenState extends State<Discount_screen> {
                                     ),
                                   ),
                                 ],
-                              );
-                            },
+                              )
+                           ,);
+                               },
                           ),
                           GestureDetector(
                             onTap: () {
@@ -691,9 +792,17 @@ class ProfileOption extends StatelessWidget {
   }
 }
 
-class Account_Document extends StatelessWidget {
-  const Account_Document({super.key});
+class Account_Document extends StatefulWidget {
+  Account_Document({super.key});
 
+  @override
+  State<Account_Document> createState() => _Account_DocumentState();
+}
+
+class _Account_DocumentState extends State<Account_Document> {
+  bool _loder = false;
+  String account_pdf_url = "https://wedingappapi.systranstechnology.com/BussDoc/DownloadDoc/MMDDMerchantDocument.pdf";
+  String Gst_pdf_url = "https://wedingappapi.systranstechnology.com/BussDoc/DownloadDoc/MMDDMerchantGSTDeduction.pdf";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -707,84 +816,203 @@ class Account_Document extends StatelessWidget {
         foregroundColor: Colors.white,
         backgroundColor: Color(0xffC4A68B),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                Api.moveFileToLocalStorage().then(
-                  (value) {
-                    
-                    Api.snack_bar(
-                        context: context,
-                        message: "check your download folder");
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _loder = true;
+                    });
+                    Api.getAccountPDF(url: account_pdf_url).then(
+                      (value) async {
+                        final result = await OpenFilex.open(value);
+                        setState(() {
+                          _loder = false;
+                        });
+                        Api.snack_bar(
+                            context: context,
+                            message: "check your download folder");
+                      },
+                    );
                   },
-                );
-              },
-              child: Container(
-                alignment: Alignment.center,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black,
-                          blurRadius: 5,
-                          offset: Offset(0, 0))
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)),
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.all(10),
-                child: Text(
-                  "Download pdf",
-                  style: TextStyle(fontFamily: "Fontmain"),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 5,
+                              offset: Offset(0, 0))
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(10),
+                    child: Text(
+                      "Download pdf",
+                      style: TextStyle(fontFamily: "Fontmain"),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Api.pickPDF().then(
+                      (value) {
+                        if (value != null) {
+                          setState(() {
+                            _loder = true;
+                          });
+                          File temp = File(value ?? "");
+                          Api.ImageInsert(
+                                  DocType: "4",
+                                  MemberAgreementUpload_UploadFile2:
+                                      "MemberAgreementUpload",
+                                  ext: ".pdf",
+                                  img: temp,
+                                  context: context)
+                              .then(
+                            (value) {
+                              setState(() {
+                                _loder = false;
+                              });
+                            },
+                          );
+                        } else {
+                              setState(() {
+                                _loder = false;
+                              });
+                          Api.snack_bar(
+                              context: context, message: "File not select");
+                        }
+                      },
+                    );
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    // width: double.infinity,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 5,
+                              offset: Offset(0, 0))
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(10),
+                    child: Text("Upload pdf",
+                        style: TextStyle(fontFamily: "Fontmain")),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _loder = true;
+                    });
+                    Api.getAccountPDF(url: Gst_pdf_url).then(
+                      (value) async {
+                        final result = await OpenFilex.open(value);
+                        setState(() {
+                          _loder = false;
+                        });
+                        Api.snack_bar(
+                            context: context,
+                            message: "check your download folder");
+                      },
+                    );
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 5,
+                              offset: Offset(0, 0))
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(10),
+                    child: Text(
+                      "Gst Download pdf",
+                      style: TextStyle(fontFamily: "Fontmain"),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Api.pickPDF().then(
+                      (value) {
+                        if (value != null) {
+                              setState(() {
+                                _loder = true;
+                              });
+                          File temp = File(value ?? "");
+                          Api.ImageInsert(
+                              DocType: "5",
+                              MemberAgreementUpload_UploadFile2:
+                                  "MemberAgreementUpload",
+                              ext: ".pdf",
+                              img: temp,
+                              context: context).then((value) {
+                                    setState(() {
+                                _loder = false;
+                              });
+                              },);
+                        } else {
+                              setState(() {
+                                _loder = false;
+                              });
+                          Api.snack_bar(
+                              context: context, message: "File not select");
+                        }
+                      },
+                    );
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    // width: double.infinity,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 5,
+                              offset: Offset(0, 0))
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(10),
+                    child: Text("Gst Upload pdf",
+                        style: TextStyle(fontFamily: "Fontmain")),
+                  ),
+                )
+              ],
+            ),
+          ),
+          if (_loder)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: 50.0,
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Api.pickPDF().then(
-                  (value) {
-                    if (value != null) {
-                      File temp = File(value ?? "");
-                      Api.ImageInsert(
-                          DocType: "4",
-                          MemberAgreementUpload_UploadFile2:
-                              "MemberAgreementUpload",
-                          ext: ".pdf",
-                          img: temp,
-                          context: context);
-                    } else {
-                      Api.snack_bar(
-                          context: context, message: "File not select");
-                    }
-                  },
-                );
-              },
-              child: Container(
-                alignment: Alignment.center,
-                width: double.infinity,
-                // width: double.infinity,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black,
-                          blurRadius: 5,
-                          offset: Offset(0, 0))
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)),
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.all(10),
-                child: Text("Upload pdf",
-                    style: TextStyle(fontFamily: "Fontmain")),
-              ),
-            )
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -812,9 +1040,11 @@ class BasicInformationPage extends StatelessWidget {
       text: Api.User_info["Table"][0]["OrgAddress"] ?? "");
 
   var Template_con = TextEditingController(
-      text: Api.User_info["Table"][0]["AdsTemplate"].toString());
+      text: Api.User_info["Table"][0]["AdsTemplate"].toInt().toString()??"");
   var Balance_con = TextEditingController(
-      text: Api.User_info["Table"][0]["SmsBalance"].toString());
+      text: Api.User_info["Table"][0]["SmsBalance"].toInt().toString()??"");
+  var Reel_con = TextEditingController(
+      text: Api.User_info["Table"][0]["ReelCount"]??"");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1168,6 +1398,37 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
+            if(Api.User_info["Table"][0]["ReelCount"]!=null&&Api.User_info["Table"][0]["ReelCount"]>0)
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: Reel_con,
+                  decoration: InputDecoration(
+                    labelText: "Reel Quantity",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
+                      fontFamily: 'sub-tittle',
+                      fontSize: 14,
+                    ),
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
+                  ),
+                  style: TextStyle(
+                    fontFamily: 'sub-tittle',
+                    fontSize: 16.0,
+                  ),
+                  inputFormatters: [
+                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
+                ),
+              ),
+            
             ],
           ),
         ),
@@ -1541,7 +1802,7 @@ class BankInformationPage extends StatelessWidget {
                 controller: ifsc_code_con,
                 // keyboardType: TextInputType.number,
                 maxLength: 11,
-                
+
                 decoration: InputDecoration(
                   labelText: "IFSC Code",
                   labelStyle: TextStyle(
@@ -1596,7 +1857,26 @@ class BankInformationPage extends StatelessWidget {
   }
 }
 
-class MMDDOrdersPage extends StatelessWidget {
+class MMDDOrdersPage extends StatefulWidget {
+  @override
+  State<MMDDOrdersPage> createState() => _MMDDOrdersPageState();
+}
+
+class _MMDDOrdersPageState extends State<MMDDOrdersPage> {
+  List<dynamic> _data=[];
+  bool loader=false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loader=true;
+    Api.MMDDOrderList().then((value) {
+      _data=value;
+        setState(() {
+        loader=false;
+        });
+    },);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1619,11 +1899,103 @@ class MMDDOrdersPage extends StatelessWidget {
               Navigator.pop(context);
             }),
       ),
-      body: Center(
+      body:
+      //  loader?
+       Center(
           child: Text(
         'No Data Awailable',
         style: TextStyle(fontFamily: 'Fontmain', color: Color(0xe5777474)),
-      )),
+      ))
+      // : ListView.builder(
+      //   itemCount: _data.length,
+      //   itemBuilder: (context, index) {
+      //   return Container(
+      //   padding: EdgeInsets.only(top: 5, right: 5, left: 5, bottom: 15),
+      //   margin: EdgeInsets.only(top: 5, right: 5, left: 5, bottom: 10),
+      //   //  height: 100,
+      //   decoration: BoxDecoration(
+      //       color: Colors.white,
+      //       borderRadius: BorderRadius.circular(10),
+      //       boxShadow: [
+      //         BoxShadow(
+      //             blurRadius: 0.5,
+      //             color: const Color.fromARGB(134, 0, 0, 0),
+      //             offset: Offset(1, 1))
+      //       ]),
+      //   child: Column(
+      //     crossAxisAlignment: CrossAxisAlignment.start,
+      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //     children: [
+      //       Container(
+      //         width: (MediaQuery.of(context).size.width) - 40,
+      //         // color: Colors.amber,
+      //         child: Row(
+      //           mainAxisAlignment: MainAxisAlignment.end,
+      //           children: [
+      //             Text(
+      //               _data[index]["EventStartDate"].split("T").first,
+      //               style: TextStyle(fontFamily: 'Fontmain'),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       Text(
+      //         _data[index]["CustomerName"],
+      //         style: TextStyle(fontFamily: 'Fontmain'),
+      //       ),
+      //       Text(
+      //         _data[index]["EventName"],
+      //         style: TextStyle(fontFamily: 'Fontmain'),
+      //       ),
+      //       Text(
+      //         _data[index]["MobileNo"],
+      //         style: TextStyle(fontFamily: 'Fontmain'),
+      //       ),
+      //       Container(
+      //         width: (MediaQuery.of(context).size.width) - 40,
+      //         child: Row(
+      //           mainAxisAlignment: MainAxisAlignment.end,
+      //           children: [
+      //             Container(
+      //               child: Column(
+      //                 crossAxisAlignment: CrossAxisAlignment.end,
+      //                 children: [
+      //                   if (_data[index]["TotalAmount"] != null)
+      //                     Text(
+      //                       "Total Amount : ₹ ${_data[index]["TotalAmount"]}",
+      //                       style:
+      //                           TextStyle(fontFamily: 'Fontmain', fontSize: 10),
+      //                     ),
+      //                   if (_data[index]["BookingAmount"] != null)
+      //                     Text(
+      //                       "Advance Amount : ₹ ${_data[index]["BookingAmount"]}",
+      //                       style:
+      //                           TextStyle(fontFamily: 'Fontmain', fontSize: 10),
+      //                     ),
+      //                   if (_data[index]["DueAmount"] != null)
+      //                     Text(
+      //                       "Due Amount : ₹ ${_data[index]["DueAmount"]}",
+      //                       style:
+      //                           TextStyle(fontFamily: 'Fontmain', fontSize: 10),
+      //                     ),
+      //                 ],
+      //               ),
+      //             )
+      //           ],
+      //         ),
+      //       ),
+      //       Container(
+      //         width: (MediaQuery.of(context).size.width) - 40,
+      //         child: Row(
+      //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //           children: [],
+      //         ),
+      //       )
+      //     ],
+      //   ),
+      // );
+   
+      // },),
     );
   }
 }

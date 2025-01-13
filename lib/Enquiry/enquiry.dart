@@ -15,6 +15,10 @@ class _MyEnquiryState extends State<MyEnquiry> {
   List<dynamic> _data = [];
   bool loder=false;
   void refresh(){
+    setState(() {
+    loder=true;
+      
+    });
   Api.EventBookingDetailsList(Is_booking: "0",Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:"UpcomingEvent" ).then((value) {
       _data=value;
       print(_data);
@@ -22,6 +26,9 @@ class _MyEnquiryState extends State<MyEnquiry> {
           loder = false;
         });
     },);
+  }
+  void dami(bool a){
+    print(a);
   }
   void initState() {
     // TODO: implement initState
@@ -128,7 +135,7 @@ class _MyEnquiryState extends State<MyEnquiry> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "0",refresh: refresh,update: false,data: {},add_booking: (){},)),
+            MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "0",refresh: refresh,update: false,data: {},add_booking: dami,)),
           );
         },
         child: Icon(Icons.add, color: Colors.white),

@@ -727,6 +727,9 @@ class _AddBookingState extends State<AddBooking> {
                         GestureDetector(
                           onTap: (){
                                 if (_formKey.currentState!.validate()) {
+                                  setState(() {
+                                    loader=true;
+                                  });
                               if (widget.update) {
                                 Api.EventBooking(
                                   IsBooking: "1",
@@ -746,6 +749,9 @@ class _AddBookingState extends State<AddBooking> {
                                 ).then(
                                 (value) {
                                   if (value) {
+                                     setState(() {
+                                    loader=false;
+                                  });
                                     widget.refresh();
                                     Navigator.of(context).pop();
                                   } else {
@@ -755,6 +761,9 @@ class _AddBookingState extends State<AddBooking> {
                                     event_address_con.clear();
                                     remark_con.clear();
                                     eventLocation_con.clear();
+                                          setState(() {
+                                    loader=false;
+                                  });
                                   }
                                 },
                               );
@@ -784,6 +793,9 @@ class _AddBookingState extends State<AddBooking> {
                                   .then(
                                 (value) {
                                   if (value) {
+                                          setState(() {
+                                    loader=false;
+                                  });
                                     widget.refresh();
                                     widget.add_booking(true);
                                     Navigator.of(context).pop();
@@ -794,6 +806,9 @@ class _AddBookingState extends State<AddBooking> {
                                     event_address_con.clear();
                                     remark_con.clear();
                                     eventLocation_con.clear();
+                                          setState(() {
+                                    loader=false;
+                                  });
                                   }
                                 },
                               );

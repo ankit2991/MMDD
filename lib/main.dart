@@ -26,6 +26,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:mddmerchant/show_pdf.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
@@ -161,12 +162,19 @@ class _HomeScreenState extends State<HomeScreen> {
               (value) {
                 Api.get_Merchent_Trem_And_Condition().then(
                   (value) {
+                    if(Api.User_info["Table"][0]["LogoImg"]!=null){
                     Api.getLogo(url: Api.User_info["Table"][0]["LogoImg"]).then((value) {
                     setState(() {
                       loading = false;
                     });
                       
                     },);
+                      
+                    }else{
+                       setState(() {
+                      loading = false;
+                    });
+                    }
                   },
                 );
               },
@@ -187,7 +195,8 @@ void update_booking(bool a){
     print("${Api.prefs.getInt("is_Hindi")}");
     today_event.clear();
     for (var i = 0; i < _data.length; i++) {
-      today_event.add(Container(
+      today_event.add(
+        Container(
         padding: EdgeInsets.only(top: 5, right: 5, left: 5, bottom: 15),
         margin: EdgeInsets.only(top: 5, right: 5, left: 5, bottom: 10),
         //  height: 100,
@@ -1127,6 +1136,9 @@ void update_booking(bool a){
                                                       GestureDetector(
                                                         onTap: () async {
                                                           // Navigator.of(context).pop();
+                                                          if(amount_con2.text.isNotEmpty){
+                                                            
+                                                          if(int.parse(_data[i]["DueAmount"])>=int.parse(amount_con2.text.trim())){
                                                           loading.value = true;
                                                           await Api.RecipitInsert(
                                                                   Amount:
@@ -1209,7 +1221,15 @@ void update_booking(bool a){
                                                           remark_con.clear();
 
                                                           // Api.
-                                                        },
+                                                       
+                                                         }else{
+                                                          Api.snack_bar(context: context, message: "Invalid Amount");
+                                                         } }else{
+                                                          Api.snack_bar(context: context, message: "Enter the Amount");
+
+                                                         }
+                                                         
+                                                         },
                                                         child: Container(
                                                           height: 50,
                                                           color:

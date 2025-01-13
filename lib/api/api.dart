@@ -401,7 +401,7 @@ class Api {
         "\"${User_info["Table"][0]["Id"].toInt()}\""
         ',"ServiceId":'
         "'${User_info["Table"][0]["ServiceID"]}'"
-        ',"IsHindi":"${prefs.getInt("is_Hindi")}","ApiAdd":"ServiceQuestionList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=ServiceQuestionList';
+        ',"IsHindi":"${prefs.getInt("is_Hindi")??"0"}","ApiAdd":"ServiceQuestionList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=ServiceQuestionList';
     print(url);
     var res = await http.get(Uri.parse(url));
 
@@ -503,9 +503,7 @@ class Api {
       required String Event_id,
       required String Remark}) async {
     String url =
-        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"Amount":\"$Amount\","EventId":\"$Event_id\","F_VoucherTypeMaster":"1","F_LedgerDr":\"$Event_id\","F_LedgerCr":'
-        "\"${User_info["Table"][0]["Id"].toInt()}\""
-        ',"Remarks":\"$Remark\","ApiAdd":"RecipitInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=RecipitInsert';
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"Amount":\"$Amount\","EventId":\"$Event_id\","F_VoucherTypeMaster":"1","F_LedgerDr":\"${User_info["Table"][0]["Id"].toInt()}\","F_LedgerCr":"-1","Remarks":\"$Remark\","ApiAdd":"RecipitInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=RecipitInsert';
     print(url);
     var res = await http.get(Uri.parse(url));
 
@@ -684,7 +682,7 @@ class Api {
     String url =
         'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"Amount":"${double.parse(Amount).toInt()}","EventId":"${double.parse(EventId).toInt()}","F_VoucherTypeMaster":"1","F_LedgerDr":\"${double.parse(EventId).toInt()}\","F_LedgerCr":'
         "\"${User_info["Table"][0]["Id"].toInt()}\""
-        ',"RequestJson":{"Services":$serviceAdd},"Remarks":"$Remarks","ApiAdd":"RecipitFacilityInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=RecipitFacilityInsert';
+        ',"RequestJson":\'{"Services":$serviceAdd}\',"Remarks":"$Remarks","ApiAdd":"RecipitFacilityInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=RecipitFacilityInsert';
     print(url);
     var res = await http.get(Uri.parse(url));
 
@@ -882,16 +880,12 @@ class Api {
   }
 
   // _________________________________________________________________________________________________________
-  static Future<File> moveFileToLocalStorage() async {
+  static Future<String> getAccountPDF({required String url}) async {
     try {
-      // Load the file from the assets folder
-      final byteData =
-          await rootBundle.load('assets/images/main/downloadedFile.pdf');
-
-      // Get the local directory path
-      String? directorys;
+       final response = await http.get(Uri.parse(url));
+     if(response.statusCode==200){
+       String? directorys;
       if (Platform.isAndroid) {
-        // Use the external storage directory for Android
         final directory = Directory('/storage/emulated/0/Download');
         if (await directory.exists()) {
           directorys = directory.path;
@@ -905,22 +899,60 @@ class Api {
         directorys = directory.path;
       }
       // Create the file in the local storage
-      final file = File(
-          '${directorys}/MMDD Document${DateTime.now().microsecondsSinceEpoch}.pdf');
+      final file = File('${directorys}/MMDD Document${DateTime.now().microsecondsSinceEpoch}.pdf');
 
       // Write the byte data to the file
-      await file.writeAsBytes(byteData.buffer.asUint8List(
-        byteData.offsetInBytes,
-        byteData.lengthInBytes,
-      ));
+      await file.writeAsBytes(response.bodyBytes);
 
       print('File moved to: ${file.path}');
-      return file;
+      return file.path;
+     }
+     return "";
     } catch (e) {
       print('Error moving file: $e');
       throw 'Error moving file: $e';
     }
   }
+  // // _________________________________________________________________________________________________________
+  // static Future<String> moveFileToLocalStorage() async {
+  //   try {
+  //     // Load the file from the assets folder
+  //     final byteData =
+  //         await rootBundle.load('assets/images/main/downloadedFile.pdf');
+
+  //     // Get the local directory path
+  //     String? directorys;
+  //     if (Platform.isAndroid) {
+  //       // Use the external storage directory for Android
+  //       final directory = Directory('/storage/emulated/0/Download');
+  //       if (await directory.exists()) {
+  //         directorys = directory.path;
+  //       } else {
+  //         var temp = await getDownloadsDirectory();
+  //         directorys = temp!.path;
+  //       }
+  //     } else if (Platform.isIOS) {
+  //       // Use the app's documents directory for iOS (iOS doesn't have a shared Downloads folder)
+  //       final directory = await getApplicationDocumentsDirectory();
+  //       directorys = directory.path;
+  //     }
+  //     // Create the file in the local storage
+  //     final file = File(
+  //         '${directorys}/MMDD Document${DateTime.now().microsecondsSinceEpoch}.pdf');
+
+  //     // Write the byte data to the file
+  //     await file.writeAsBytes(byteData.buffer.asUint8List(
+  //       byteData.offsetInBytes,
+  //       byteData.lengthInBytes,
+  //     ));
+
+  //     print('File moved to: ${file.path}');
+  //     return file.path;
+  //   } catch (e) {
+  //     print('Error moving file: $e');
+  //     throw 'Error moving file: $e';
+  //   }
+  // }
 
   // _______________________________________________________________
   static Future<String?> pickPDF() async {
@@ -1277,8 +1309,12 @@ class Api {
                       children: [
                         // pw.Image(pw.MemoryImage(user_logo!),width: 50,height: 50,),// MMDD logo add
                         pw.SizedBox(width: 20),
+                        if(user_logo!=null)
                         pw.Image(pw.MemoryImage(user_logo!),
                             width: 50, height: 50), // user logo add
+                        if(user_logo==null)
+                            pw.SizedBox(width: 50),
+
                             pw.SizedBox(width: 110),
                         pw.Text(
                           compny_name,
@@ -1861,4 +1897,24 @@ pw.Text("* This is computer generated invoice does not require signatures *",
       return;
     }
   }
+  
+  // ____________________________________________________________________   (Show service in event )
+  static Future<List<dynamic>> MMDDOrderList() async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MerchantId":\"${User_info["Table"][0]["Id"].toInt()}\","ApiAdd":"MMDDOrderList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=MMDDOrderList';
+    print(url);
+    var res = await http.get(Uri.parse(url));
+
+    if (res.statusCode == 200) {
+      log("MMDDOrderList Api Call.............");
+      var data = jsonDecode(res.body);
+      log("MMDDOrderList Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ MMDDOrderList Api ");
+      throw ("Error........ MMDDOrderList Api ");
+    }
+  }
+
 }
