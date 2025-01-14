@@ -1,5 +1,6 @@
-import 'dart:convert';
+// import 'dart:convert';
 import 'dart:io';
+// import 'dart:nativewrappers/_internal/vm/lib/developer.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,6 +34,7 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // elevation: 4.2,
         title: Text(
           "Profile",
           style: TextStyle(color: Colors.white, fontFamily: 'Fontmain'),
@@ -101,41 +103,54 @@ class _UserProfileState extends State<UserProfile> {
                             },
                           );
                         },
-                        child: CachedNetworkImage(
-                          imageUrl: Api.User_info["Table"][0]["LogoImg"],
-                          progressIndicatorBuilder: (context, url, progress) {
-                            return CircleAvatar(
-                              // backgroundImage: AssetImage(
-                              //       "assets/images/main/User-Account-1024.png",),
-                              radius: 50,
-                              backgroundColor: mainColor,
-                              child: CircularProgressIndicator(),
-                            );
-                          },
-                          imageBuilder: (context, imageProvider) {
-                            return CircleAvatar(
-                              radius: 50,
-                              backgroundColor: mainColor,
-                              backgroundImage: Api.User_info["Table"][0]
-                                          ["LogoImg"] !=
-                                      null
-                                  ? imageProvider
-                                  : AssetImage(
-                                      "assets/images/main/User-Account-1024.png"),
-                              // Profile picture placeholder
-                              // child: Api.User_info["Table"][0]["LogoImg"] != null
-                              //       ? Image.network(
-                              //           fit: BoxFit.cover,
-                              //           ,
-                              //           errorBuilder: (context, error, stackTrace) {
-                              //             return Icon(Icons.person,
-                              //                 size: 50, color: Colors.white);
-                              //           },
-                              //         )
-                              //       : Icon(Icons.person, size: 50, color: Colors.white),
-                            );
-                          },
-                        )),
+                        child: Api.User_info["Table"][0]["LogoImg"] != null
+                            ? CachedNetworkImage(
+                                imageUrl: Api.User_info["Table"][0]["LogoImg"],
+                                progressIndicatorBuilder:
+                                    (context, url, progress) {
+                                  return CircleAvatar(
+                                    // backgroundImage: AssetImage(
+                                    //       "assets/images/main/User-Account-1024.png",),
+                                    radius: 50,
+                                    backgroundColor: mainColor,
+                                    child: CircularProgressIndicator(),
+                                  );
+                                },
+                                imageBuilder: (context, imageProvider) {
+                                  return CircleAvatar(
+                                    radius: 50,
+                                    backgroundColor: mainColor,
+                                    backgroundImage: Api.User_info["Table"][0]
+                                                ["LogoImg"] !=
+                                            null
+                                        ? imageProvider
+                                        : AssetImage(
+                                            "assets/images/main/User-Account-1024.png"),
+                                    // Profile picture placeholder
+                                    // child: Api.User_info["Table"][0]["LogoImg"] != null
+                                    //       ? Image.network(
+                                    //           fit: BoxFit.cover,
+                                    //           ,
+                                    //           errorBuilder: (context, error, stackTrace) {
+                                    //             return Icon(Icons.person,
+                                    //                 size: 50, color: Colors.white);
+                                    //           },
+                                    //         )
+                                    //       : Icon(Icons.person, size: 50, color: Colors.white),
+                                  );
+                                },
+                              )
+                            : CircleAvatar(
+                                // backgroundImage: AssetImage(
+                                //       "assets/images/main/User-Account-1024.png",),
+                                radius: 50,
+                                backgroundColor: mainColor,
+                                child: Icon(
+                                  Icons.person,
+                                  size: 50,
+                                  color: Colors.white,
+                                ),
+                              )),
                     SizedBox(height: 10),
                     Text(
                       Api.User_info["Table"][0]["MemberName"],
@@ -194,7 +209,8 @@ class _UserProfileState extends State<UserProfile> {
                         page: TermsAndConditionsPage()),
                     ProfileOption(title: "Review", page: ReviewPage()),
                     ProfileOption(title: "Phone Diary", page: PhoneDiary()),
-                    ProfileOption(title: "Refer and Earn", page: referAndEarn()),
+                    ProfileOption(
+                        title: "Refer and Earn", page: referAndEarn()),
                     ProfileOption(title: "Contact Us", page: ContactPage()),
                     ProfileOption(title: "Log Out", page: LogOutPage()),
                   ],
@@ -298,47 +314,44 @@ class _Discount_screenState extends State<Discount_screen> {
                     DateTime? _startDate;
                     DateTime? _endDate;
                     // if (_data[index]["IsDiscount"] == true) {
-                    if(_data[index]["DiscountAmount"]!=null){
+                    if (_data[index]["DiscountAmount"] != null) {
                       discount_con.text =
                           _data[index]["DiscountAmount"].toString();
                     }
-                    if(_data[index]["DiscountAmount"]!=null){
+                    if (_data[index]["DiscountAmount"] != null) {
                       total.value = _data[index]["Amount"] -
                           _data[index]["DiscountAmount"];
                     }
-                      if (_data[index]["DisStartDate"] != null) {
-                        _startDate =
-                            DateTime.parse(_data[index]["DisStartDate"]);
+                    if (_data[index]["DisStartDate"] != null) {
+                      _startDate = DateTime.parse(_data[index]["DisStartDate"]);
+                    }
+                    if (_data[index]["DisEndDate"] != null) {
+                      _endDate = DateTime.parse(_data[index]["DisEndDate"]);
+                      if (_endDate.isBefore(DateTime.now())) {
+                        Api.FacilityDiscountInsert(
+                                DiscountStartDate:
+                                    "${_startDate!.toLocal()}".split(' ')[0],
+                                DiscountEndDate:
+                                    "${_endDate!.toLocal()}".split(' ')[0],
+                                DiscountAmount: discount_con.text,
+                                FacilityId: _data[index]["Id"].toString(),
+                                IsDiscount: "0")
+                            .then(
+                          (value) {
+                            if (bools[index] == true) {
+                              // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
+                              Api.snack_bar(
+                                  context: context,
+                                  message: "Discount Activated successfully");
+                            } else {
+                              Api.snack_bar(
+                                  context: context,
+                                  message: "Discount Deactivated successfully");
+                            }
+                          },
+                        );
                       }
-                      if (_data[index]["DisEndDate"] != null) {
-                        _endDate = DateTime.parse(_data[index]["DisEndDate"]);
-                        if (_endDate.isBefore(DateTime.now())) {
-                          Api.FacilityDiscountInsert(
-                                  DiscountStartDate:
-                                      "${_startDate!.toLocal()}".split(' ')[0],
-                                  DiscountEndDate:
-                                      "${_endDate!.toLocal()}".split(' ')[0],
-                                  DiscountAmount: discount_con.text,
-                                  FacilityId: _data[index]["Id"].toString(),
-                                  IsDiscount: "0")
-                              .then(
-                            (value) {
-                              if (bools[index] == true) {
-                                // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
-                                Api.snack_bar(
-                                    context: context,
-                                    message: "Discount Activated successfully");
-                              } else {
-                                Api.snack_bar(
-                                    context: context,
-                                    message:
-                                        "Discount Deactivated successfully");
-                              }
-                            },
-                          );
-                        }
-                      }
-                    
+                    }
 
                     Future<void> _selectDate(
                         BuildContext context, bool isStart) async {
@@ -371,22 +384,23 @@ class _Discount_screenState extends State<Discount_screen> {
                         }
                       }
                     }
-                    bool dis_read_only=false;
-                    bool dis_date_only=false;
-                     if( bools[index] == true){
-                      if(_endDate!=null){
-                        if(_endDate!.isBefore(DateTime.now())){
-                          dis_read_only=false;
-                          dis_date_only=false;
-                        }else{
-                          dis_read_only=true;
-                          dis_date_only=true;
+
+                    bool dis_read_only = false;
+                    bool dis_date_only = false;
+                    if (bools[index] == true) {
+                      if (_endDate != null) {
+                        if (_endDate!.isBefore(DateTime.now())) {
+                          dis_read_only = false;
+                          dis_date_only = false;
+                        } else {
+                          dis_read_only = true;
+                          dis_date_only = true;
                         }
                       }
-                     }else{
-                      dis_read_only=true;
-                      dis_date_only=true;
-                     }
+                    } else {
+                      dis_read_only = true;
+                      dis_date_only = true;
+                    }
                     // var tot_con=TextEditingController();
                     return Container(
                       margin: EdgeInsets.all(10),
@@ -546,130 +560,134 @@ class _Discount_screenState extends State<Discount_screen> {
                           ValueListenableBuilder(
                             valueListenable: date_ref,
                             builder: (context, value, child) {
-                              return IgnorePointer(ignoring:dis_date_only ,child:  Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Container(
-                                    width: (MediaQuery.of(context).size.width /
-                                            2) -
-                                        30,
-                                    child: TextFormField(
-                                      onTap: () {
-                                        _selectDate(context, true);
-                                      },
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return "Please select Discount Start Date";
-                                        }
-                                      },
-                                      decoration: InputDecoration(
-                                        errorBorder: OutlineInputBorder(
-                                            borderSide:
-                                                BorderSide(color: Colors.red)),
-                                        suffixIcon: IconButton(
-                                          icon: Icon(Icons.calendar_today),
-                                          onPressed: () {
-                                            _selectDate(context, true);
-                                          },
+                              return IgnorePointer(
+                                ignoring: dis_date_only,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Container(
+                                      width:
+                                          (MediaQuery.of(context).size.width /
+                                                  2) -
+                                              30,
+                                      child: TextFormField(
+                                        onTap: () {
+                                          _selectDate(context, true);
+                                        },
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Please select Discount Start Date";
+                                          }
+                                        },
+                                        decoration: InputDecoration(
+                                          errorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.red)),
+                                          suffixIcon: IconButton(
+                                            icon: Icon(Icons.calendar_today),
+                                            onPressed: () {
+                                              _selectDate(context, true);
+                                            },
+                                          ),
+                                          labelText: "Start Discount Date",
+                                          labelStyle: TextStyle(
+                                            color: Color(0xe5777474),
+                                            fontFamily: 'sub-tittle',
+                                            fontSize: 14,
+                                          ),
+                                          floatingLabelStyle: TextStyle(
+                                              color: Color(0xffC4A68B)),
+                                          border: OutlineInputBorder(),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Color(0xffC4A68B),
+                                                width: 2),
+                                          ),
                                         ),
-                                        labelText: "Start Discount Date",
-                                        labelStyle: TextStyle(
-                                          color: Color(0xe5777474),
+                                        style: TextStyle(
                                           fontFamily: 'sub-tittle',
-                                          fontSize: 14,
+                                          fontSize: 12.0,
                                         ),
-                                        floatingLabelStyle:
-                                            TextStyle(color: Color(0xffC4A68B)),
-                                        border: OutlineInputBorder(),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xffC4A68B),
-                                              width: 2),
+                                        controller: TextEditingController(
+                                          text: _startDate != null
+                                              ? "${_startDate!.toLocal()}"
+                                                  .split(' ')[0]
+                                              : '',
                                         ),
+                                        readOnly: true,
                                       ),
-                                      style: TextStyle(
-                                        fontFamily: 'sub-tittle',
-                                        fontSize: 12.0,
-                                      ),
-                                      controller: TextEditingController(
-                                        text: _startDate != null
-                                            ? "${_startDate!.toLocal()}"
-                                                .split(' ')[0]
-                                            : '',
-                                      ),
-                                      readOnly: true,
                                     ),
-                                  ),
-                                  Container(
-                                    width: (MediaQuery.of(context).size.width /
-                                            2) -
-                                        30,
-                                    child: TextFormField(
-                                      onTap: () {
-                                        if (_startDate != null) {
-                                          _selectDate(context, false);
-                                        } else {
-                                          Api.snack_bar(
-                                              context: context,
-                                              message:
-                                                  "Please Select Start Date");
-                                        }
-                                      },
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return "Please select Discount Start Date";
-                                        }
-                                      },
-                                      decoration: InputDecoration(
-                                        errorBorder: OutlineInputBorder(
-                                            borderSide:
-                                                BorderSide(color: Colors.red)),
-                                        suffixIcon: IconButton(
-                                          icon: Icon(Icons.calendar_today),
-                                          onPressed: () {
-                                            if (_startDate != null) {
-                                              _selectDate(context, false);
-                                            } else {
-                                              Api.snack_bar(
-                                                  context: context,
-                                                  message:
-                                                      "Please Select Start Date");
-                                            }
-                                          },
+                                    Container(
+                                      width:
+                                          (MediaQuery.of(context).size.width /
+                                                  2) -
+                                              30,
+                                      child: TextFormField(
+                                        onTap: () {
+                                          if (_startDate != null) {
+                                            _selectDate(context, false);
+                                          } else {
+                                            Api.snack_bar(
+                                                context: context,
+                                                message:
+                                                    "Please Select Start Date");
+                                          }
+                                        },
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Please select Discount Start Date";
+                                          }
+                                        },
+                                        decoration: InputDecoration(
+                                          errorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.red)),
+                                          suffixIcon: IconButton(
+                                            icon: Icon(Icons.calendar_today),
+                                            onPressed: () {
+                                              if (_startDate != null) {
+                                                _selectDate(context, false);
+                                              } else {
+                                                Api.snack_bar(
+                                                    context: context,
+                                                    message:
+                                                        "Please Select Start Date");
+                                              }
+                                            },
+                                          ),
+                                          labelText: "End Discount Date",
+                                          labelStyle: TextStyle(
+                                            color: Color(0xe5777474),
+                                            fontFamily: 'sub-tittle',
+                                            fontSize: 14,
+                                          ),
+                                          floatingLabelStyle: TextStyle(
+                                              color: Color(0xffC4A68B)),
+                                          border: OutlineInputBorder(),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Color(0xffC4A68B),
+                                                width: 2),
+                                          ),
                                         ),
-                                        labelText: "End Discount Date",
-                                        labelStyle: TextStyle(
-                                          color: Color(0xe5777474),
+                                        style: TextStyle(
                                           fontFamily: 'sub-tittle',
-                                          fontSize: 14,
+                                          fontSize: 12.0,
                                         ),
-                                        floatingLabelStyle:
-                                            TextStyle(color: Color(0xffC4A68B)),
-                                        border: OutlineInputBorder(),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xffC4A68B),
-                                              width: 2),
+                                        controller: TextEditingController(
+                                          text: _endDate != null
+                                              ? "${_endDate!.toLocal()}"
+                                                  .split(' ')[0]
+                                              : '',
                                         ),
+                                        readOnly: true,
                                       ),
-                                      style: TextStyle(
-                                        fontFamily: 'sub-tittle',
-                                        fontSize: 12.0,
-                                      ),
-                                      controller: TextEditingController(
-                                        text: _endDate != null
-                                            ? "${_endDate!.toLocal()}"
-                                                .split(' ')[0]
-                                            : '',
-                                      ),
-                                      readOnly: true,
                                     ),
-                                  ),
-                                ],
-                              )
-                           ,);
-                               },
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                           GestureDetector(
                             onTap: () {
@@ -801,8 +819,10 @@ class Account_Document extends StatefulWidget {
 
 class _Account_DocumentState extends State<Account_Document> {
   bool _loder = false;
-  String account_pdf_url = "https://wedingappapi.systranstechnology.com/BussDoc/DownloadDoc/MMDDMerchantDocument.pdf";
-  String Gst_pdf_url = "https://wedingappapi.systranstechnology.com/BussDoc/DownloadDoc/MMDDMerchantGSTDeduction.pdf";
+  String account_pdf_url =
+      "https://wedingappapi.systranstechnology.com/BussDoc/DownloadDoc/MMDDMerchantDocument.pdf";
+  String Gst_pdf_url =
+      "https://wedingappapi.systranstechnology.com/BussDoc/DownloadDoc/MMDDMerchantGSTDeduction.pdf";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -885,9 +905,9 @@ class _Account_DocumentState extends State<Account_Document> {
                             },
                           );
                         } else {
-                              setState(() {
-                                _loder = false;
-                              });
+                          setState(() {
+                            _loder = false;
+                          });
                           Api.snack_bar(
                               context: context, message: "File not select");
                         }
@@ -955,25 +975,28 @@ class _Account_DocumentState extends State<Account_Document> {
                     Api.pickPDF().then(
                       (value) {
                         if (value != null) {
-                              setState(() {
-                                _loder = true;
-                              });
+                          setState(() {
+                            _loder = true;
+                          });
                           File temp = File(value ?? "");
                           Api.ImageInsert(
-                              DocType: "5",
-                              MemberAgreementUpload_UploadFile2:
-                                  "MemberAgreementUpload",
-                              ext: ".pdf",
-                              img: temp,
-                              context: context).then((value) {
-                                    setState(() {
-                                _loder = false;
-                              });
-                              },);
-                        } else {
+                                  DocType: "5",
+                                  MemberAgreementUpload_UploadFile2:
+                                      "MemberAgreementUpload",
+                                  ext: ".pdf",
+                                  img: temp,
+                                  context: context)
+                              .then(
+                            (value) {
                               setState(() {
                                 _loder = false;
                               });
+                            },
+                          );
+                        } else {
+                          setState(() {
+                            _loder = false;
+                          });
                           Api.snack_bar(
                               context: context, message: "File not select");
                         }
@@ -1019,32 +1042,56 @@ class _Account_DocumentState extends State<Account_Document> {
 }
 
 // Example pages
-class BasicInformationPage extends StatelessWidget {
+class BasicInformationPage extends StatefulWidget {
+  @override
+  State<BasicInformationPage> createState() => _BasicInformationPageState();
+}
+
+class _BasicInformationPageState extends State<BasicInformationPage> {
   var nam_con = TextEditingController(
       text: Api.User_info["Table"][0]["MemberName"] ?? "");
+
   var B_nam_con =
       TextEditingController(text: Api.User_info["Table"][0]["OrgName"] ?? "");
+
   var mob_con =
       TextEditingController(text: Api.User_info["Table"][0]["MobileNo"] ?? "");
+
   var alt_mob_con = TextEditingController(
       text: Api.User_info["Table"][0]["OtherMobileNo"] ?? "");
+
   var email_con =
       TextEditingController(text: Api.User_info["Table"][0]["EmailId"] ?? "");
+
   var state_con =
       TextEditingController(text: Api.User_info["Table"][0]["StateName"] ?? "");
+
   var city_con =
       TextEditingController(text: Api.User_info["Table"][0]["CityName"] ?? "");
+
   var loc_con =
       TextEditingController(text: Api.User_info["Table"][0]["AreaName"] ?? "");
+
   var address_con = TextEditingController(
       text: Api.User_info["Table"][0]["OrgAddress"] ?? "");
 
-  var Template_con = TextEditingController(
-      text: Api.User_info["Table"][0]["AdsTemplate"].toInt().toString()??"");
+  var Template_con = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (Api.User_info["Table"][0]["AdsTemplate"] != null) {
+      Template_con.text =
+          Api.User_info["Table"][0]["AdsTemplate"].toInt().toString();
+    }
+  }
+
   var Balance_con = TextEditingController(
-      text: Api.User_info["Table"][0]["SmsBalance"].toInt().toString()??"");
-  var Reel_con = TextEditingController(
-      text: Api.User_info["Table"][0]["ReelCount"]??"");
+      text: Api.User_info["Table"][0]["SmsBalance"].toInt().toString() ?? "");
+
+  var Reel_con =
+      TextEditingController(text: Api.User_info["Table"][0]["ReelCount"] ?? "");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1398,37 +1445,37 @@ class BasicInformationPage extends StatelessWidget {
                   ],
                 ),
               ),
-            if(Api.User_info["Table"][0]["ReelCount"]!=null&&Api.User_info["Table"][0]["ReelCount"]>0)
-              IgnorePointer(
-                ignoring: true,
-                child: TextFormField(
-                  controller: Reel_con,
-                  decoration: InputDecoration(
-                    labelText: "Reel Quantity",
-                    labelStyle: TextStyle(
-                      color: Color(0xe5777474),
+              if (Api.User_info["Table"][0]["ReelCount"] != null &&
+                  Api.User_info["Table"][0]["ReelCount"] > 0)
+                IgnorePointer(
+                  ignoring: true,
+                  child: TextFormField(
+                    controller: Reel_con,
+                    decoration: InputDecoration(
+                      labelText: "Reel Quantity",
+                      labelStyle: TextStyle(
+                        color: Color(0xe5777474),
+                        fontFamily: 'sub-tittle',
+                        fontSize: 14,
+                      ),
+                      floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffC4A68B)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(0xffC4A68B), width: 2),
+                      ),
+                    ),
+                    style: TextStyle(
                       fontFamily: 'sub-tittle',
-                      fontSize: 14,
+                      fontSize: 16.0,
                     ),
-                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffC4A68B)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xffC4A68B), width: 2),
-                    ),
+                    inputFormatters: [
+                      // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                    ],
                   ),
-                  style: TextStyle(
-                    fontFamily: 'sub-tittle',
-                    fontSize: 16.0,
-                  ),
-                  inputFormatters: [
-                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                  ],
                 ),
-              ),
-            
             ],
           ),
         ),
@@ -1863,20 +1910,191 @@ class MMDDOrdersPage extends StatefulWidget {
 }
 
 class _MMDDOrdersPageState extends State<MMDDOrdersPage> {
-  List<dynamic> _data=[];
-  bool loader=false;
+  List<dynamic> _data = [];
+  bool loader = false;
+  List<int> event_ids = [];
+  List<Widget> orders_list = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loader=true;
-    Api.MMDDOrderList().then((value) {
-      _data=value;
+    loader = true;
+    Api.MMDDOrderList().then(
+      (value) {
+        _data = value;
+        // ________________________________   add unique event ids
+        for (var i = 0; i < _data.length; i++) {
+          if (event_ids.contains(_data[i]["Id"]) == false) {
+            event_ids.add(_data[i]["Id"].toInt());
+          }
+        }
+        // __________________________________________
+        for (int i = 0; i < event_ids.length; i++) {
+          int index = _data.indexWhere((map) => map['Id'] == event_ids[i]);
+          List<Widget> rows = [];
+          // rows.add(TableRow(children: [
+          //             Padding(
+          //               padding: const EdgeInsets.symmetric(vertical: 2),
+          //               child: Text("No.",style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Fontmain"),textAlign: TextAlign.center,),
+          //             ),
+          //             Padding(
+          //               padding: const EdgeInsets.symmetric(vertical: 2),
+          //               child: Text("Date",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Fontmain")),
+          //             ),
+          //              Padding(
+          //               padding: const EdgeInsets.symmetric(vertical: 2),
+          //               child: Text("Amount",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Fontmain")),
+          //             ),
+          //             // Padding(
+          //             //   padding: const EdgeInsets.symmetric(vertical: 2),
+          //             //   child: Row(
+          //             //     mainAxisAlignment: MainAxisAlignment.center,
+          //             //     children: [
+          //             //       Text("Cr/",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green)),
+          //             //       Text("Dr",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red)),
+          //             //     ],
+          //             //   ),
+          //             // ),
+
+          //           ]),);
+          for (int j = 0; j < _data.length; j++) {
+            if (_data[j]["Id"].toInt() == event_ids[i]) {
+              print("${_data[j]["Id"].toInt()} == ${event_ids[i]}");
+              rows.add(Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [BoxShadow(color: const Color.fromARGB(188, 0, 0, 0),offset: Offset(0, 0),blurRadius: .5)],color: Colors.white),
+                child: ListTile(
+                  // contentPadding: EdgeInsets.all(0),
+                  minTileHeight: 20,
+                  title: Text(
+                    "Voucher No. ${_data[j]["VoucherNo"].toString()}",
+                    style: TextStyle(fontFamily: "Fontmain",fontSize: 10),
+                    // textAlign: TextAlign.center,
+                  ),
+                  subtitle: Text("Date: ${_data[j]["VoucherDate"].toString().split("T").first}",style: TextStyle(fontFamily: "Fontmain",fontSize: 10)),
+                  trailing: Text("${_data[j]["Type"]=="Cr"?"+":"-"} ₹ ${_data[j]["Amount"]}",textAlign: TextAlign.right,style: TextStyle(color:_data[j]["Type"]=="Cr"? Colors.green:Colors.red,fontFamily: "Fontmain")),
+                ),
+              ));
+              // rows.add(
+              //   TableRow(children: [
+              //         Padding(
+              //           padding: const EdgeInsets.symmetric(vertical: 2),
+              //           child: Text(_data[j]["VoucherNo"].toString(),style: TextStyle(fontFamily: "Fontmain"),textAlign: TextAlign.center,),
+              //         ),
+              //         Padding(
+              //           padding: const EdgeInsets.symmetric(vertical: 2),
+              //           child: Text(_data[j]["VoucherDate"].toString().split("T").first,textAlign: TextAlign.center,style: TextStyle(fontFamily: "Fontmain")),
+              //         ),
+
+              //         Padding(
+              //           padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 2),
+              //           child: Text("${_data[j]["Type"]=="Cr"?"+":"-"} ${_data[j]["Amount"]}",textAlign: TextAlign.right,style: TextStyle(color:_data[j]["Type"]=="Cr"? Colors.green:Colors.red,fontFamily: "Fontmain")),
+              //         ),
+              //         //  Container(
+              //         //   // color:_data[j]["Type"]=="Cr"?Colors.green: Colors.red,
+              //         //    child: Padding(
+              //         //     padding: const EdgeInsets.symmetric(vertical: 2),
+              //         //       child: Icon(_data[j]["Type"]=="Cr"?Icons.add:Icons.remove,color:_data[j]["Type"]=="Cr"? Colors.green:Colors.red),
+              //         //     // child: Text(_data[j]["Type"]=="Cr"?"+":"-",textAlign: TextAlign.center,style: TextStyle()),
+              //         //                          ),
+              //         //  ),
+              //       ]),
+              // );
+            }
+          }
+          print("______________________________________");
+          orders_list.add(Container(
+            padding: EdgeInsets.only(top: 5, right: 5, left: 5, bottom: 15),
+            margin: EdgeInsets.only(top: 5, right: 10, left: 10, bottom: 10),
+            //  height: 100,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 0.5,
+                      color: const Color.fromARGB(134, 0, 0, 0),
+                      offset: Offset(1, 1))
+                ]),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  width: (MediaQuery.of(context).size.width) - 40,
+                  // color: Colors.amber,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        _data[index]["EventStartDate"].split("T").first,
+                        style: TextStyle(fontFamily: 'Fontmain'),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  _data[index]["CustomerName"],
+                  style: TextStyle(fontFamily: 'Fontmain'),
+                ),
+                Text(
+                  _data[index]["EventName"],
+                  style: TextStyle(fontFamily: 'Fontmain'),
+                ),
+                Text(
+                  _data[index]["MobileNo"],
+                  style: TextStyle(fontFamily: 'Fontmain'),
+                ),
+                Container(
+                  width: (MediaQuery.of(context).size.width) - 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            if (_data[index]["TotalAmount"] != null)
+                              Text(
+                                "Total Amount : ₹ ${_data[index]["TotalAmount"]}",
+                                style: TextStyle(
+                                    fontFamily: 'Fontmain', fontSize: 10),
+                              ),
+                            if (_data[index]["BookingAmount"] != null)
+                              Text(
+                                "Advance Amount : ₹ ${_data[index]["BookingAmount"]}",
+                                style: TextStyle(
+                                    fontFamily: 'Fontmain', fontSize: 10),
+                              ),
+                            if (_data[index]["DueAmount"] != null)
+                              Text(
+                                "Due Amount : ₹ ${_data[index]["DueAmount"]}",
+                                style: TextStyle(
+                                    fontFamily: 'Fontmain', fontSize: 10),
+                              ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10,),
+                Column(children: rows,spacing: 5,)
+              ],
+            ),
+          ));
+
+          //  rows.clear();
+        }
+        print(event_ids);
         setState(() {
-        loader=false;
+          loader = false;
         });
-    },);
+      },
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1899,103 +2117,25 @@ class _MMDDOrdersPageState extends State<MMDDOrdersPage> {
               Navigator.pop(context);
             }),
       ),
-      body:
-      //  loader?
-       Center(
-          child: Text(
-        'No Data Awailable',
-        style: TextStyle(fontFamily: 'Fontmain', color: Color(0xe5777474)),
-      ))
-      // : ListView.builder(
-      //   itemCount: _data.length,
-      //   itemBuilder: (context, index) {
-      //   return Container(
-      //   padding: EdgeInsets.only(top: 5, right: 5, left: 5, bottom: 15),
-      //   margin: EdgeInsets.only(top: 5, right: 5, left: 5, bottom: 10),
-      //   //  height: 100,
-      //   decoration: BoxDecoration(
-      //       color: Colors.white,
-      //       borderRadius: BorderRadius.circular(10),
-      //       boxShadow: [
-      //         BoxShadow(
-      //             blurRadius: 0.5,
-      //             color: const Color.fromARGB(134, 0, 0, 0),
-      //             offset: Offset(1, 1))
-      //       ]),
-      //   child: Column(
-      //     crossAxisAlignment: CrossAxisAlignment.start,
-      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //     children: [
-      //       Container(
-      //         width: (MediaQuery.of(context).size.width) - 40,
-      //         // color: Colors.amber,
-      //         child: Row(
-      //           mainAxisAlignment: MainAxisAlignment.end,
-      //           children: [
-      //             Text(
-      //               _data[index]["EventStartDate"].split("T").first,
-      //               style: TextStyle(fontFamily: 'Fontmain'),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //       Text(
-      //         _data[index]["CustomerName"],
-      //         style: TextStyle(fontFamily: 'Fontmain'),
-      //       ),
-      //       Text(
-      //         _data[index]["EventName"],
-      //         style: TextStyle(fontFamily: 'Fontmain'),
-      //       ),
-      //       Text(
-      //         _data[index]["MobileNo"],
-      //         style: TextStyle(fontFamily: 'Fontmain'),
-      //       ),
-      //       Container(
-      //         width: (MediaQuery.of(context).size.width) - 40,
-      //         child: Row(
-      //           mainAxisAlignment: MainAxisAlignment.end,
-      //           children: [
-      //             Container(
-      //               child: Column(
-      //                 crossAxisAlignment: CrossAxisAlignment.end,
-      //                 children: [
-      //                   if (_data[index]["TotalAmount"] != null)
-      //                     Text(
-      //                       "Total Amount : ₹ ${_data[index]["TotalAmount"]}",
-      //                       style:
-      //                           TextStyle(fontFamily: 'Fontmain', fontSize: 10),
-      //                     ),
-      //                   if (_data[index]["BookingAmount"] != null)
-      //                     Text(
-      //                       "Advance Amount : ₹ ${_data[index]["BookingAmount"]}",
-      //                       style:
-      //                           TextStyle(fontFamily: 'Fontmain', fontSize: 10),
-      //                     ),
-      //                   if (_data[index]["DueAmount"] != null)
-      //                     Text(
-      //                       "Due Amount : ₹ ${_data[index]["DueAmount"]}",
-      //                       style:
-      //                           TextStyle(fontFamily: 'Fontmain', fontSize: 10),
-      //                     ),
-      //                 ],
-      //               ),
-      //             )
-      //           ],
-      //         ),
-      //       ),
-      //       Container(
-      //         width: (MediaQuery.of(context).size.width) - 40,
-      //         child: Row(
-      //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //           children: [],
-      //         ),
-      //       )
-      //     ],
-      //   ),
-      // );
-   
-      // },),
+      body: Stack(
+        children: [
+          _data.length > 0
+              ? ListView(children: orders_list,shrinkWrap: true,)
+              : Center(
+                  child: Text("No data"),
+                ),
+          if (loader)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: 50.0,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -2716,7 +2856,7 @@ class _ReviewPageState extends State<ReviewPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "CustomerName",
+                                  "Customer Name",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 RatingBar.builder(
@@ -2742,12 +2882,12 @@ class _ReviewPageState extends State<ReviewPage> {
                                 ),
                               ],
                             ),
-                            subtitle: Text("CustomerRemark",
+                            subtitle: Text("Customer Remark",
                                 style: TextStyle(
                                     color:
                                         const Color.fromARGB(255, 61, 61, 61))),
                           ),
-                          Text("MembarRemark",
+                          Text("Member Remark",
                               style: TextStyle(
                                   color:
                                       const Color.fromARGB(255, 151, 151, 151)))

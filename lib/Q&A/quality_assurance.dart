@@ -94,7 +94,7 @@ class _QualityAssState extends State<QualityAss> {
 
                         return Container(
                             margin:
-                                EdgeInsets.only(top: 10, right: 10, left: 10),
+                                EdgeInsets.only(top: 10, right: 0, left: 0),
                             padding: EdgeInsets.all(10),
                             // height: 600,
                             decoration: BoxDecoration(
@@ -131,14 +131,14 @@ class _QualityAssState extends State<QualityAss> {
                                     padding: EdgeInsets.only(bottom: 20),
                                     // color: Colors.blue,
                                     child: GridView.builder(
+                                      padding: EdgeInsets.all(0),
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        childAspectRatio: 3,
-                                        crossAxisSpacing: 0,
-                                        mainAxisSpacing: 7,
-                                        
-                                      ),
+                                              crossAxisCount: 2,
+                                              // childAspectRatio: 3,
+                                              crossAxisSpacing: 0,
+                                              mainAxisSpacing: 0,
+                                              mainAxisExtent: 75),
 
                                       // itemExtent: 30,
                                       shrinkWrap: true,
@@ -149,49 +149,107 @@ class _QualityAssState extends State<QualityAss> {
                                         if (Api.H_Questions["Table1"][index]
                                                 ["Option" + "${index1 + 1}"] !=
                                             null) {
-                                          return RadioListTile<String>(
-                                            contentPadding: EdgeInsets.zero,
-                                            visualDensity: VisualDensity(
-                                                horizontal: -2, vertical: -4),
-
-                                            title: Text(
-                                                utf8.decode(Api
-                                                    .H_Questions["Table1"]
-                                                        [index]["Option" +
-                                                            "${index1 + 1}"]
-                                                    .runes
-                                                    .toList()),
-                                                style: Api.prefs.getInt(
-                                                            "is_Hindi") ==
-                                                        0
-                                                    ? TextStyle(
-                                                        fontSize: 11,
-                                                        fontFamily: 'Fontmain')
-                                                    : TextStyle(
-                                                        fontFamily:
-                                                            "hindi-font",
-                                                        fontSize: 15)),
-                                            value: utf8.decode(Api
-                                                .H_Questions["Table1"][index]
-                                                    ["Option" + "${index1 + 1}"]
-                                                .runes
-                                                .toList()),
-                                            // style: GoogleFonts.notoSansDevanagari(fontSize: 20),
-                                            groupValue: op_ans[index],
-
-                                            onChanged: (value) {
-                                              print(index1);
-                                              setState(() {
-                                                op_ans.removeAt(index);
-                                                op_ans_index.removeAt(index);
-                                                op_ans.insert(index, value);
-                                                op_ans_index.insert(
-                                                    index, index1);
-                                                // selectedOption =
-                                                //     value; // Update the selected value
-                                              });
-                                            },
+                                          return Container(
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    Radio(                                                  
+                                                      value: utf8.decode(Api
+                                                          .H_Questions["Table1"]
+                                                              [index]["Option" +
+                                                                  "${index1 + 1}"]
+                                                          .runes
+                                                          .toList()),
+                                                      groupValue: op_ans[index],
+                                                      onChanged: (value) {
+                                                        print(index1);
+                                                        setState(() {
+                                                          op_ans.removeAt(index);
+                                                          op_ans_index
+                                                              .removeAt(index);
+                                                          op_ans.insert(
+                                                              index, value);
+                                                          op_ans_index.insert(
+                                                              index, index1);
+                                                          // selectedOption =
+                                                          //     value; // Update the selected value
+                                                        });
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                                Container(
+                                                  width: 110,
+                                                  child: Text(
+                                                      utf8.decode(Api
+                                                          .H_Questions["Table1"]
+                                                              [index]["Option" +
+                                                                  "${index1 + 1}"]
+                                                          .runes
+                                                          .toList()),
+                                                      textAlign: TextAlign.left,
+                                                      style: Api.prefs.getInt(
+                                                                  "is_Hindi") ==
+                                                              0
+                                                          ? TextStyle(
+                                                              fontSize: 11,
+                                                              fontFamily:
+                                                                  'Fontmain')
+                                                          : TextStyle(
+                                                              fontFamily:
+                                                                  "hindi-font",
+                                                              fontSize: 15)),
+                                                ),
+                                              ],
+                                            ),
                                           );
+                                          // return RadioListTile<String>(
+                                          //   contentPadding: EdgeInsets.zero,
+                                          //   visualDensity: VisualDensity(
+                                          //       horizontal: -2, vertical: -4),
+
+                                          //   title: Text(
+
+                                          //       utf8.decode(Api
+                                          //           .H_Questions["Table1"]
+                                          //               [index]["Option" +
+                                          //                   "${index1 + 1}"]
+                                          //           .runes
+                                          //           .toList()),
+                                          //           textAlign: TextAlign.left,
+                                          //       style: Api.prefs.getInt(
+                                          //                   "is_Hindi") ==
+                                          //               0
+                                          //           ? TextStyle(
+                                          //               fontSize: 11,
+                                          //               fontFamily: 'Fontmain')
+                                          //           : TextStyle(
+                                          //               fontFamily:
+                                          //                   "hindi-font",
+                                          //               fontSize: 15)),
+                                          //   value: utf8.decode(Api
+                                          //       .H_Questions["Table1"][index]
+                                          //           ["Option" + "${index1 + 1}"]
+                                          //       .runes
+                                          //       .toList()),
+                                          //   // style: GoogleFonts.notoSansDevanagari(fontSize: 20),
+                                          //   groupValue: op_ans[index],
+
+                                          //   onChanged: (value) {
+                                          //     print(index1);
+                                          //     setState(() {
+                                          //       op_ans.removeAt(index);
+                                          //       op_ans_index.removeAt(index);
+                                          //       op_ans.insert(index, value);
+                                          //       op_ans_index.insert(
+                                          //           index, index1);
+                                          //       // selectedOption =
+                                          //       //     value; // Update the selected value
+                                          //     });
+                                          //   },
+                                          // );
                                         }
                                       },
                                     ),
@@ -313,7 +371,7 @@ class _QualityAssState extends State<QualityAss> {
                                         if (Api.H_Questions["Table1"][index]
                                                 ["QuestionType"] ==
                                             "Signal Optional") {
-                                          if (op_ans[index]!=null) {
+                                          if (op_ans[index] != null) {
                                             if (op_ans_index[index] == 0) {
                                               await Api.MerchantAnswareInsert(
                                                       Question: utf8.decode(Api
@@ -454,82 +512,100 @@ class _QualityAssState extends State<QualityAss> {
                                                 },
                                               );
                                             }
-                                          }else{
+                                          } else {
                                             setState(() {
-                                              loader=false;
-                                              Api.snack_bar(context: context, message: "Select  one Option");
+                                              loader = false;
+                                              Api.snack_bar(
+                                                  context: context,
+                                                  message:
+                                                      "Select  one Option");
                                             });
                                           }
                                           print(op_ans);
                                         } else if (Api.H_Questions["Table1"]
                                                 [index]["QuestionType"] ==
                                             "Multipal Optional") {
-                                              if(check_box_ans[index][0].isNotEmpty||check_box_ans[index][2].isNotEmpty||check_box_ans[index][3].isNotEmpty||check_box_ans[index][4].isNotEmpty||check_box_ans[index][5].isNotEmpty||check_box_ans[index][6].isNotEmpty){
-  Api.MerchantAnswareInsert(
-                                                  Question: utf8.decode(Api
-                                                      .H_Questions["Table1"]
-                                                          [index]["Question"]
-                                                      .runes
-                                                      .toList()),
-                                                  Q_id:
-                                                      Api.H_Questions["Table1"]
-                                                          [index]["Id"],
-                                                  Answer1: check_box_ans[index]
-                                                      [0],
-                                                  Answer2: check_box_ans[index]
-                                                      [1],
-                                                  Answer3: check_box_ans[index]
-                                                      [2],
-                                                  Answer4: check_box_ans[index]
-                                                      [3],
-                                                  Answer5: check_box_ans[index]
-                                                      [4],
-                                                  Answer6: check_box_ans[index]
-                                                      [5],
-                                                  Answer7: check_box_ans[index][6])
-                                              .then(
-                                            (value) {
-                                              setState(() {
-                                                loader = false;
-                                              });
-                                            },
-                                          );
-                                              }else{
+                                          if (check_box_ans[index]
+                                                      [0]
+                                                  .isNotEmpty ||
+                                              check_box_ans[index]
+                                                      [2]
+                                                  .isNotEmpty ||
+                                              check_box_ans[index]
+                                                      [3]
+                                                  .isNotEmpty ||
+                                              check_box_ans[index]
+                                                      [4]
+                                                  .isNotEmpty ||
+                                              check_box_ans[index][5]
+                                                  .isNotEmpty ||
+                                              check_box_ans[index][6]
+                                                  .isNotEmpty) {
+                                            Api.MerchantAnswareInsert(
+                                                    Question: utf8.decode(Api
+                                                        .H_Questions["Table1"]
+                                                            [index]["Question"]
+                                                        .runes
+                                                        .toList()),
+                                                    Q_id:
+                                                        Api.H_Questions["Table1"]
+                                                            [index]["Id"],
+                                                    Answer1:
+                                                        check_box_ans[index][0],
+                                                    Answer2:
+                                                        check_box_ans[index][1],
+                                                    Answer3:
+                                                        check_box_ans[index][2],
+                                                    Answer4:
+                                                        check_box_ans[index][3],
+                                                    Answer5:
+                                                        check_box_ans[index][4],
+                                                    Answer6: check_box_ans[index][5],
+                                                    Answer7: check_box_ans[index][6])
+                                                .then(
+                                              (value) {
                                                 setState(() {
-                                                  loader=false;
+                                                  loader = false;
                                                 });
-                                                Api.snack_bar(context: context, message: "select option");
-                                              }
-                                        
+                                              },
+                                            );
+                                          } else {
+                                            setState(() {
+                                              loader = false;
+                                            });
+                                            Api.snack_bar(
+                                                context: context,
+                                                message: "select option");
+                                          }
                                         } else if (Api.H_Questions["Table1"]
                                                 [index]["QuestionType"] ==
                                             "Input Type") {
-                                              if (Text_answer[index].isNotEmpty) {
-                                                 Api.MerchantAnswareInsert(
-                                                  Question: utf8.decode(Api
-                                                      .H_Questions["Table1"]
-                                                          [index]["Question"]
-                                                      .runes
-                                                      .toList()),
-                                                  Q_id:
-                                                      Api.H_Questions["Table1"]
-                                                          [index]["Id"],
-                                                  Answer1: Text_answer[index]
-                                                      [0])
-                                              .then(
-                                            (value) {
-                                              setState(() {
-                                                loader = false;
-                                              });
-                                            },
-                                          );
-                                              }else{
-                                                Api.snack_bar(context: context, message: "field Empty");
+                                          if (Text_answer[index].isNotEmpty) {
+                                            Api.MerchantAnswareInsert(
+                                                    Question: utf8.decode(Api
+                                                        .H_Questions["Table1"]
+                                                            [index]["Question"]
+                                                        .runes
+                                                        .toList()),
+                                                    Q_id: Api.H_Questions[
+                                                        "Table1"][index]["Id"],
+                                                    Answer1: Text_answer[index]
+                                                        [0])
+                                                .then(
+                                              (value) {
                                                 setState(() {
-                                                  loader=false;
+                                                  loader = false;
                                                 });
-                                              }
-                                         
+                                              },
+                                            );
+                                          } else {
+                                            Api.snack_bar(
+                                                context: context,
+                                                message: "field Empty");
+                                            setState(() {
+                                              loader = false;
+                                            });
+                                          }
                                         }
                                       },
                                       child: Container(

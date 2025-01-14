@@ -241,7 +241,7 @@ class _MyVideoState extends State<MyVideo> {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 content: Text(
-                                                    "Do you really went to delete these Item? This process cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
+                                                    "Do you really want to delete this Video? The same cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
                                                 actions: [
                                                   ValueListenableBuilder(
                                                     valueListenable: delete,
@@ -342,69 +342,77 @@ class _MyVideoState extends State<MyVideo> {
             ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (_Work_data.length<4) {
-               Api.pickImage(img: false, source: ImageSource.gallery).then(
-            (value) {
-              setState(() {
-                loader=true;
-              });
-               final int fileSize = value["file"]!.lengthSync(); 
-               if (fileSize / (1024 * 1024)<=2) {
-                      Api.ImageInsert(
-                      DocType: "2",
-                      ext: "." + value["ext"],
-                      img: value["file"],
-                      MemberAgreementUpload_UploadFile2: "UploadFile2",
-                      context: context)
-                  .then(
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // spacing: 50,
+        children: [
+          SizedBox(width: 5,),
+          Text("Max. 2 Clips can be uploaded Upto 2 MB",style: TextStyle(color: Colors.black38,fontSize:13 ),),
+          FloatingActionButton(
+            onPressed: () {
+              if (_Work_data.length<4) {
+                   Api.pickImage(img: false, source: ImageSource.gallery).then(
                 (value) {
-                 
-                  _data.clear();
-                  _Work_data.clear();
-                  controllers.clear();
-                  Api.AccountDocument().then((value) async {
-                    _data = value;
-                    for (var i = 0; i < _data.length; i++) {
-                      if (_data[i]["Doctype"] == 2) {
-                        _Work_data.add(_data[i]);
-                        VideoPlayerController temp = await VideoPlayerController
-                            .networkUrl(Uri.parse(_data[i]["ImagePath"]))
-                          ..initialize()
-                          ..setLooping(true)
-                          ..play();
-                        controllers.add(temp);
-                      }
-                    }
-                    setState(() {
-                      loader = false;
-                    });
-                    Api.snack_bar(context: context, message: "Video Upload Done");
-                    print(_data);
+                  setState(() {
+                    loader=true;
                   });
-                },
+                   final int fileSize = value["file"]!.lengthSync(); 
+                   if (fileSize / (1024 * 1024)<=2) {
+                          Api.ImageInsert(
+                          DocType: "2",
+                          ext: "." + value["ext"],
+                          img: value["file"],
+                          MemberAgreementUpload_UploadFile2: "UploadFile2",
+                          context: context)
+                      .then(
+                    (value) {
+                     
+                      _data.clear();
+                      _Work_data.clear();
+                      controllers.clear();
+                      Api.AccountDocument().then((value) async {
+                        _data = value;
+                        for (var i = 0; i < _data.length; i++) {
+                          if (_data[i]["Doctype"] == 2) {
+                            _Work_data.add(_data[i]);
+                            VideoPlayerController temp = await VideoPlayerController
+                                .networkUrl(Uri.parse(_data[i]["ImagePath"]))
+                              ..initialize()
+                              ..setLooping(true)
+                              ..play();
+                            controllers.add(temp);
+                          }
+                        }
+                        setState(() {
+                          loader = false;
+                        });
+                        Api.snack_bar(context: context, message: "Video Upload Done");
+                        print(_data);
+                      });
+                    },
+                  );
+            
+                   }else{
+                     setState(() {
+                        loader = false;
+                      });
+                    Api.snack_bar(context: context, message: "video size too large on 2 MB");
+                   }
+                 },
               );
-        
-               }else{
-                 setState(() {
-                    loader = false;
-                  });
-                Api.snack_bar(context: context, message: "video size too large on 2 MB");
-               }
-             },
-          );
-    
-          }else{
-            Api.snack_bar(context: context, message: "Storage Full on this Section");
-          }
-           },
-        child: Icon(Icons.add, color: Colors.white),
-        shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(44), // Adjust the value for desired radius
-        ),
-        backgroundColor: Color(0xffC4A68B),
+              
+              }else{
+                Api.snack_bar(context: context, message: "Storage Full on this Section");
+              }
+               },
+            child: Icon(Icons.add, color: Colors.white),
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(44), // Adjust the value for desired radius
+            ),
+            backgroundColor: Color(0xffC4A68B),
+          ),
+        ],
       ),
     );
   }

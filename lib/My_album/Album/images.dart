@@ -365,7 +365,7 @@ class _MyImageState extends State<MyImage> {
                                               actionsAlignment:
                                                   MainAxisAlignment.spaceBetween,
                                               content: Text(
-                                                  "Do you really went to delete these Item? This process cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
+                                                  "Do you really want to delete this image? The same cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
                                               actions: [
                                                ValueListenableBuilder(valueListenable: delete, builder: (context, value, child) {
                                                  return    InkWell(
@@ -467,61 +467,68 @@ class _MyImageState extends State<MyImage> {
             ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-
-         if(_Work_data.length<10){
-           await Api.pickImage(img: true, source: ImageSource.gallery).then(
-            (value) {
-               setState(() {
-                    loader = true;
-                  });
-             if(value["file"]!=""){
-               Api.ImageInsert(
-                      MemberAgreementUpload_UploadFile2: "UploadFile2",
-                      DocType: "1",
-                      ext: "." + value["ext"],
-                      img: value["file"],
-                      context: context)
-                  .then(
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          SizedBox(width: 5,),
+          Text("Max. 10 images can be uploaded",style: TextStyle(color: Colors.black38),),
+          FloatingActionButton(
+            onPressed: () async {
+          
+             if(_Work_data.length<10){
+               await Api.pickImage(img: true, source: ImageSource.gallery).then(
                 (value) {
-                 
-                  _data.clear();
-                  _Work_data.clear();
-                  Api.AccountDocument().then(
-                    (value) {
-                      _data = value;
-                      for (var i = 0; i < _data.length; i++) {
-                        if (_data[i]["Doctype"] == 1) {
-                          _Work_data.add(_data[i]);
-                        }
-                      }
-                     Api.snack_bar2(context: context, message: "Image Upload Done");
-                      setState(() {
-                        loader = false;
+                   setState(() {
+                        loader = true;
                       });
-                      print(_data);
+                 if(value["file"]!=""){
+                   Api.ImageInsert(
+                          MemberAgreementUpload_UploadFile2: "UploadFile2",
+                          DocType: "1",
+                          ext: "." + value["ext"],
+                          img: value["file"],
+                          context: context)
+                      .then(
+                    (value) {
+                     
+                      _data.clear();
+                      _Work_data.clear();
+                      Api.AccountDocument().then(
+                        (value) {
+                          _data = value;
+                          for (var i = 0; i < _data.length; i++) {
+                            if (_data[i]["Doctype"] == 1) {
+                              _Work_data.add(_data[i]);
+                            }
+                          }
+                         Api.snack_bar2(context: context, message: "Image Upload Done");
+                          setState(() {
+                            loader = false;
+                          });
+                          print(_data);
+                        },
+                      );
                     },
                   );
+                 }else{
+                    setState(() {
+                            loader = false;
+                          });
+                 }
                 },
               );
              }else{
-                setState(() {
-                        loader = false;
-                      });
+              Api.snack_bar(context: context, message: "Storage full on this section");
              }
             },
-          );
-         }else{
-          Api.snack_bar(context: context, message: "Storage full on this section");
-         }
-        },
-        child: Icon(Icons.add, color: Colors.white),
-        shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(44), // Adjust the value for desired radius
-        ),
-        backgroundColor: Color(0xffC4A68B),
+            child: Icon(Icons.add, color: Colors.white),
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(44), // Adjust the value for desired radius
+            ),
+            backgroundColor: Color(0xffC4A68B),
+          ),
+        ],
       ),
     );
   }

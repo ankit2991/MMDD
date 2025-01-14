@@ -164,6 +164,7 @@ class Api {
       print(res);
       print(res.body);
       var data = jsonDecode(res.body);
+      print(data);
       if (data["Table1"][0]["IsRegister"] == 0) {
         return false;
       } else {
@@ -1660,7 +1661,7 @@ class Api {
                   pw.Column(children: [
 pw.Text("* This is computer generated invoice does not require signatures *",
                         textAlign: pw.TextAlign.center),
-                  pw.Text("Co- powered by mmdd (make my dream day)",style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  pw.Text("Co- powered by MMDD (Make My Dream Day)",style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                   pw.Row(children: [ pw.Container(child: pw.Row(children: [pw.Text("Mobile :"),pw.Text("18005700102",style: pw.TextStyle(color: PdfColor(0.5, 0.5, 0.5)))])),
                  pw.SizedBox(width: 10),
                   pw.Container(child: pw.Row(children: [pw.Text("Email:"),pw.Text("info@makemydreamday.in",style: pw.TextStyle(color: PdfColor(0.5, 0.5, 0.5)))]))

@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/images/main/addImage.png"))),
+                    image: AssetImage("assets/images/main/img.jpg.jpeg"))),
           ),
         ));
         Api.EventBookingDetailsList(
