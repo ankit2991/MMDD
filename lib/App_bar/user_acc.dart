@@ -293,11 +293,12 @@ class _Discount_screenState extends State<Discount_screen> {
           centerTitle: true,
         ),
         body: Stack(children: [
-          loader
-              ? Center(
-                  child: Text('No Data Available'),
-                )
-              : ListView.builder(
+          // loader
+          //     ? Center(
+          //         child: Text('No Data Available'),
+          //       )
+          //     : 
+              ListView.builder(
                   shrinkWrap: true,
                   itemCount: _data.length,
                   itemBuilder: (context, index) {
@@ -431,6 +432,66 @@ class _Discount_screenState extends State<Discount_screen> {
                                     onChanged: (values) {
                                       setState(() {
                                         check.value = values;
+                                        if (_data[index]["DisEndDate"] !=
+                                                null &&
+                                            _endDate!.isAfter(DateTime.now())) {
+                                               setState(() {
+                                                  loader = true;
+                                                });
+                                          Api.FacilityDiscountInsert(
+                                                  DiscountStartDate:
+                                                      "${_startDate!.toLocal()}"
+                                                          .split(' ')[0],
+                                                  DiscountEndDate:
+                                                      "${_endDate!.toLocal()}"
+                                                          .split(' ')[0],
+                                                  DiscountAmount:
+                                                      discount_con.text,
+                                                  FacilityId: _data[index]["Id"]
+                                                      .toString(),
+                                                  IsDiscount:
+                                                      check.value == true
+                                                          ? "1"
+                                                          : "0")
+                                              .then(
+                                            (value) {
+                                              if (bools[index] == true) {
+                                                // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
+                                                Api.snack_bar(
+                                                    context: context,
+                                                    message:
+                                                        "Discount Activated successfully");
+                                               
+                                                Api.FacilityReport().then(
+                                                  (value) {
+                                                     _data.clear();
+                                                    _data = value;
+                                                    setState(() {
+                                                      loader = false;
+                                                    });
+                                                  },
+                                                );
+                                              } else {
+                                                Api.snack_bar(
+                                                    context: context,
+                                                    message:
+                                                        "Discount Deactivated successfully");
+                                                setState(() {
+                                                  loader = true;
+                                                });
+                                                Api.FacilityReport().then(
+                                                  (value) {
+                                                     _data.clear();
+                                                    _data = value;
+                                                    setState(() {
+                                                      loader = false;
+                                                    });
+                                                  },
+                                                );
+                                              }
+                                            },
+                                          );
+                                        }
                                         bools.removeAt(index);
                                         bools.insert(index, values);
                                       });
@@ -689,47 +750,79 @@ class _Discount_screenState extends State<Discount_screen> {
                               );
                             },
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Api.FacilityDiscountInsert(
-                                      DiscountStartDate:
-                                          "${_startDate!.toLocal()}"
-                                              .split(' ')[0],
-                                      DiscountEndDate: "${_endDate!.toLocal()}"
-                                          .split(' ')[0],
-                                      DiscountAmount: discount_con.text,
-                                      FacilityId: _data[index]["Id"].toString(),
-                                      IsDiscount:
-                                          bools[index] == true ? "1" : "0")
-                                  .then(
-                                (value) {
-                                  if (bools[index] == true) {
-                                    // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
-                                    Api.snack_bar(
-                                        context: context,
-                                        message:
-                                            "Discount Activated successfully");
-                                  } else {
-                                    Api.snack_bar(
-                                        context: context,
-                                        message:
-                                            "Discount Deactivated successfully");
-                                  }
-                                },
-                              );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Color(0xffC4A68B),
-                                  borderRadius: BorderRadius.circular(10)),
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: Text(
-                                "Save",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "Fontmain"),
+                          Visibility(
+                            visible: dis_date_only ? false : true,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  loader = true;
+                                });
+                                Api.FacilityDiscountInsert(
+                                        DiscountStartDate:
+                                            "${_startDate!.toLocal()}"
+                                                .split(' ')[0],
+                                        DiscountEndDate:
+                                            "${_endDate!.toLocal()}"
+                                                .split(' ')[0],
+                                        DiscountAmount: discount_con.text,
+                                        FacilityId:
+                                            _data[index]["Id"].toString(),
+                                        IsDiscount:
+                                            bools[index] == true ? "1" : "0")
+                                    .then(
+                                  (value) {
+                                    if (bools[index] == true) {
+                                      // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
+                                      Api.snack_bar(
+                                          context: context,
+                                          message:
+                                              "Discount Activated successfully");
+                                      //    setState(() {
+                                      //   loader=true;
+                                      // });
+                                      Api.FacilityReport().then(
+                                        (value) {
+                                           _data.clear();
+                                          _data = value;
+                                          setState(() {
+                                            loader = false;
+                                          });
+                                        },
+                                      );
+                                    } else {
+                                      Api.snack_bar(
+                                          context: context,
+                                          message:
+                                              "Discount Deactivated successfully");
+                                      //    setState(() {
+                                      //   loader=true;
+                                      // });
+                                      Api.FacilityReport().then(
+                                        (value) {
+                                          _data.clear();
+                                          _data = value;
+                                          setState(() {
+                                            loader = false;
+                                          });
+                                        },
+                                      );
+                                    }
+                                  },
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Color(0xffC4A68B),
+                                    borderRadius: BorderRadius.circular(10)),
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                child: Text(
+                                  "Save",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Fontmain"),
+                                ),
                               ),
                             ),
                           )
@@ -1962,18 +2055,33 @@ class _MMDDOrdersPageState extends State<MMDDOrdersPage> {
               print("${_data[j]["Id"].toInt()} == ${event_ids[i]}");
               rows.add(Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [BoxShadow(color: const Color.fromARGB(188, 0, 0, 0),offset: Offset(0, 0),blurRadius: .5)],color: Colors.white),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          color: const Color.fromARGB(188, 0, 0, 0),
+                          offset: Offset(0, 0),
+                          blurRadius: .5)
+                    ],
+                    color: Colors.white),
                 child: ListTile(
                   // contentPadding: EdgeInsets.all(0),
                   minTileHeight: 20,
                   title: Text(
                     "Voucher No. ${_data[j]["VoucherNo"].toString()}",
-                    style: TextStyle(fontFamily: "Fontmain",fontSize: 10),
+                    style: TextStyle(fontFamily: "Fontmain", fontSize: 10),
                     // textAlign: TextAlign.center,
                   ),
-                  subtitle: Text("Date: ${_data[j]["VoucherDate"].toString().split("T").first}",style: TextStyle(fontFamily: "Fontmain",fontSize: 10)),
-                  trailing: Text("${_data[j]["Type"]=="Cr"?"+":"-"} ₹ ${_data[j]["Amount"]}",textAlign: TextAlign.right,style: TextStyle(color:_data[j]["Type"]=="Cr"? Colors.green:Colors.red,fontFamily: "Fontmain")),
+                  subtitle: Text(
+                      "Date: ${_data[j]["VoucherDate"].toString().split("T").first}",
+                      style: TextStyle(fontFamily: "Fontmain", fontSize: 10)),
+                  trailing: Text(
+                      "${_data[j]["Type"] == "Cr" ? "+" : "-"} ₹ ${_data[j]["Amount"]}",
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                          color: _data[j]["Type"] == "Cr"
+                              ? Colors.green
+                              : Colors.red,
+                          fontFamily: "Fontmain")),
                 ),
               ));
               // rows.add(
@@ -2079,8 +2187,13 @@ class _MMDDOrdersPageState extends State<MMDDOrdersPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 10,),
-                Column(children: rows,spacing: 5,)
+                SizedBox(
+                  height: 10,
+                ),
+                Column(
+                  children: rows,
+                  spacing: 5,
+                )
               ],
             ),
           ));
@@ -2120,7 +2233,10 @@ class _MMDDOrdersPageState extends State<MMDDOrdersPage> {
       body: Stack(
         children: [
           _data.length > 0
-              ? ListView(children: orders_list,shrinkWrap: true,)
+              ? ListView(
+                  children: orders_list,
+                  shrinkWrap: true,
+                )
               : Center(
                   child: Text("No data"),
                 ),
@@ -3300,27 +3416,34 @@ class _LogOutPageState extends State<LogOutPage> {
                                   loader = true;
                                 });
                                 if (loader) {
-                                  bool check_user =
-                                      await Api.mob_check(mob_con.text.trim());
-                                  if (!check_user) {
-                                    await Api.send_otp(
-                                        mob_con.text.trim(), context);
-                                    // await Api.send_otp(mob_con.text.trim());
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => OtpPage(
-                                                  mob_no: mob_con.text,
-                                                  priv_screen: "Log_In_Screen",
-                                                )));
-                                    // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-                                  } else {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MpinPage(
-                                                  mob_no: mob_con.text.trim(),
-                                                )));
+                                  try {
+                                    bool check_user = await Api.mob_check(
+                                        mob_con.text.trim());
+                                    if (!check_user) {
+                                      await Api.send_otp(
+                                          mob_con.text.trim(), context);
+                                      // await Api.send_otp(mob_con.text.trim());
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => OtpPage(
+                                                    mob_no: mob_con.text,
+                                                    priv_screen:
+                                                        "Log_In_Screen",
+                                                  )));
+                                      // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                                    } else {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => MpinPage(
+                                                    mob_no: mob_con.text.trim(),
+                                                  )));
+                                    }
+                                  } catch (e) {
+                                    Api.snack_bar(
+                                        context: context,
+                                        message: "Somthing Went Wrong");
                                   }
                                 }
                                 setState(() {

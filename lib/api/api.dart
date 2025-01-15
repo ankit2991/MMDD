@@ -172,7 +172,8 @@ class Api {
       }
     } else {
       log("Error........check mobile number regesterd or not API ");
-      return false;
+      throw("Error........check mobile number regesterd or not API ");
+      // return false;
     }
   }
 
@@ -477,11 +478,7 @@ class Api {
         "'$Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent'"
         ',"MerchantId":'
         "\"${User_info["Table"][0]["Id"].toInt()}\""
-        ',"IsBooking":'
-        "'$Is_booking'"
-        ',"MerchantId":'
-        "\"${User_info["Table"][0]["Id"].toInt()}\""
-        ',"ApiAdd":"EventBookingDetailsList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=EventBookingDetailsList';
+        ',"IsBooking":"$Is_booking","ApiAdd":"EventBookingDetailsList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=EventBookingDetailsList';
     print(url);
     var res = await http.get(Uri.parse(url));
 
