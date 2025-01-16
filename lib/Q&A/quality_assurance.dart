@@ -152,8 +152,10 @@ class _QualityAssState extends State<QualityAss> {
                                           return Container(
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
                                                     Radio(                                                  
                                                       value: utf8.decode(Api

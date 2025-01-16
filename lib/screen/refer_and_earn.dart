@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mddmerchant/api/api.dart';
 import 'package:mddmerchant/constrans.dart';
+import 'package:flutter/services.dart';
 
 class referAndEarn extends StatelessWidget {
   const referAndEarn({super.key});
@@ -9,8 +11,11 @@ class referAndEarn extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-       backgroundColor: mainColor,
-        title: Text("Refer and Earn",style: TextStyle(fontFamily: "Fontmain"),),
+        backgroundColor: mainColor,
+        title: Text(
+          "Refer and Earn",
+          style: TextStyle(fontFamily: "Fontmain"),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -30,13 +35,16 @@ class referAndEarn extends StatelessWidget {
             Table(
               border: TableBorder.all(),
               children: [
-                TableRow(children: [Padding(
+                TableRow(children: [
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('Refer + Earn',textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
-                  ),])
+                    child: Text('Refer + Earn',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15)),
+                  ),
+                ])
               ],
-
             ),
             Table(
               border: TableBorder.all(),
@@ -109,7 +117,6 @@ class referAndEarn extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ]),
-                
               ],
             ),
             SizedBox(
@@ -195,6 +202,42 @@ class referAndEarn extends StatelessWidget {
           ],
         ),
       ),
+    
+      floatingActionButton: Api.User_info["Table"][0]["SelfReferCode"] != null
+          ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(
+                            text: Api.User_info["Table"][0]["SelfReferCode"]))
+                        .then((_) {
+                      Api.snack_bar(context: context, message: "copied Refer Code");
+                    });
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(color:  mainColor,borderRadius: BorderRadius.circular(20)),
+                    child: Row(
+                      spacing: 5,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Icon(Icons.copy,color: Colors.white,),
+                        Text("${Api.User_info["Table"][0]["SelfReferCode"]}",style: TextStyle(color: Colors.white),)
+                      ],
+                    ),
+                  )),
+            ],
+          )
+          : SizedBox(),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
+// onPressed: () {
+//           Clipboard.setData(ClipboardData(text: Api.User_info["Table"][0]["SelfReferCode"])).then((_) {
+//            Api.snack_bar(context: context, message: "Refer Code copied");
+//           });
+//         },
+        // child: Text(),

@@ -113,7 +113,7 @@ class _UserProfileState extends State<UserProfile> {
                                     //       "assets/images/main/User-Account-1024.png",),
                                     radius: 50,
                                     backgroundColor: mainColor,
-                                    child: CircularProgressIndicator(),
+                                    child: CupertinoActivityIndicator(),
                                   );
                                 },
                                 imageBuilder: (context, imageProvider) {
@@ -212,7 +212,55 @@ class _UserProfileState extends State<UserProfile> {
                     ProfileOption(
                         title: "Refer and Earn", page: referAndEarn()),
                     ProfileOption(title: "Contact Us", page: ContactPage()),
-                    ProfileOption(title: "Log Out", page: LogOutPage()),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 16),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            "Log Out",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Fontmain',
+                              // fontWeight: FontWeight.w500,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          onTap: () async {
+                            await Api.prefs.setBool('login', false).then(
+                              (value) {
+                                print(Api.prefs.getBool('login'));
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          LogOutPage()), // The new page to display
+                                  (Route<dynamic> route) =>
+                                      false, // Remove all previous routes
+                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) => LogOutPage()),
+                                // );
+                              },
+                            );
+                            // Navigate to the selected page
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -293,12 +341,11 @@ class _Discount_screenState extends State<Discount_screen> {
           centerTitle: true,
         ),
         body: Stack(children: [
-          // loader
-          //     ? Center(
-          //         child: Text('No Data Available'),
-          //       )
-          //     : 
-              ListView.builder(
+          _data.isEmpty
+              ? Center(
+                  child: Text('No Discount Available'),
+                )
+              : ListView.builder(
                   shrinkWrap: true,
                   itemCount: _data.length,
                   itemBuilder: (context, index) {
@@ -435,9 +482,9 @@ class _Discount_screenState extends State<Discount_screen> {
                                         if (_data[index]["DisEndDate"] !=
                                                 null &&
                                             _endDate!.isAfter(DateTime.now())) {
-                                               setState(() {
-                                                  loader = true;
-                                                });
+                                          setState(() {
+                                            loader = true;
+                                          });
                                           Api.FacilityDiscountInsert(
                                                   DiscountStartDate:
                                                       "${_startDate!.toLocal()}"
@@ -461,10 +508,10 @@ class _Discount_screenState extends State<Discount_screen> {
                                                     context: context,
                                                     message:
                                                         "Discount Activated successfully");
-                                               
+
                                                 Api.FacilityReport().then(
                                                   (value) {
-                                                     _data.clear();
+                                                    _data.clear();
                                                     _data = value;
                                                     setState(() {
                                                       loader = false;
@@ -481,7 +528,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                                 });
                                                 Api.FacilityReport().then(
                                                   (value) {
-                                                     _data.clear();
+                                                    _data.clear();
                                                     _data = value;
                                                     setState(() {
                                                       loader = false;
@@ -782,7 +829,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                       // });
                                       Api.FacilityReport().then(
                                         (value) {
-                                           _data.clear();
+                                          _data.clear();
                                           _data = value;
                                           setState(() {
                                             loader = false;
@@ -1167,6 +1214,10 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
 
   var address_con = TextEditingController(
       text: Api.User_info["Table"][0]["OrgAddress"] ?? "");
+  var Balance_con = TextEditingController();
+
+  var Reel_con = TextEditingController(
+      text: Api.User_info["Table"][0]["ReelCount"] ?? "00");
 
   var Template_con = TextEditingController();
   @override
@@ -1176,14 +1227,16 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
     if (Api.User_info["Table"][0]["AdsTemplate"] != null) {
       Template_con.text =
           Api.User_info["Table"][0]["AdsTemplate"].toInt().toString();
+    } else {
+      Template_con.text = "00";
+    }
+    if (Api.User_info["Table"][0]["SmsBalance"] != null) {
+      Balance_con.text =
+          Api.User_info["Table"][0]["SmsBalance"].toInt().toString();
+    } else {
+      Balance_con.text = "00";
     }
   }
-
-  var Balance_con = TextEditingController(
-      text: Api.User_info["Table"][0]["SmsBalance"].toInt().toString() ?? "");
-
-  var Reel_con =
-      TextEditingController(text: Api.User_info["Table"][0]["ReelCount"] ?? "");
 
   @override
   Widget build(BuildContext context) {
@@ -1538,37 +1591,76 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                   ],
                 ),
               ),
-              if (Api.User_info["Table"][0]["ReelCount"] != null &&
-                  Api.User_info["Table"][0]["ReelCount"] > 0)
-                IgnorePointer(
-                  ignoring: true,
-                  child: TextFormField(
-                    controller: Reel_con,
-                    decoration: InputDecoration(
-                      labelText: "Reel Quantity",
-                      labelStyle: TextStyle(
-                        color: Color(0xe5777474),
-                        fontFamily: 'sub-tittle',
-                        fontSize: 14,
-                      ),
-                      floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffC4A68B)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Color(0xffC4A68B), width: 2),
-                      ),
-                    ),
-                    style: TextStyle(
+              // if (Api.User_info["Table"][0]["ReelCount"] != null &&
+              //     Api.User_info["Table"][0]["ReelCount"] > 0)
+              IgnorePointer(
+                ignoring: true,
+                child: TextFormField(
+                  controller: Reel_con,
+                  decoration: InputDecoration(
+                    labelText: "Reel Quantity",
+                    labelStyle: TextStyle(
+                      color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
-                      fontSize: 16.0,
+                      fontSize: 14,
                     ),
-                    inputFormatters: [
-                      // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                    ],
+                    floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffC4A68B)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xffC4A68B), width: 2),
+                    ),
                   ),
+                  style: TextStyle(
+                    fontFamily: 'sub-tittle',
+                    fontSize: 16.0,
+                  ),
+                  inputFormatters: [
+                    // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                  ],
                 ),
+              ),
+
+              Api.User_info["Table"][0]["profileImage"] != null
+                  ? CachedNetworkImage(
+                      imageUrl: Api.User_info["Table"][0]["profileImage"],
+                      progressIndicatorBuilder: (context, url, progress) {
+                        return CircularProgressIndicator();
+                      },
+                      imageBuilder: (context, imageProvider) {
+                        return Container(
+                          height: 180,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: Api.User_info["Table"][0]
+                                          ["profileImage"] !=
+                                      null
+                                  ? imageProvider
+                                  : AssetImage(
+                                      "assets/images/main/User-Account-1024.png"),
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.black26,
+                          ),
+                        );
+                      },
+                    )
+                  : Container(
+                      height: 180,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                              "assets/images/main/User-Account-1024.png"),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black26,
+                      ),
+                    ),
             ],
           ),
         ),
@@ -2319,9 +2411,9 @@ class _MyServicesPageState extends State<MyServicesPage> {
       ),
       body: Stack(
         children: [
-          loader
+          _data.isEmpty
               ? Center(
-                  child: Text('No Data Available'),
+                  child: Text('No Service'),
                 )
               : ListView.builder(
                   shrinkWrap: true,

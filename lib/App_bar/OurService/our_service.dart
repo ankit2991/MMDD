@@ -110,9 +110,10 @@ class ProfileOption extends StatelessWidget {
             // ),
             builder: (BuildContext context) {
               return Container(
-                height: 600,
+                height: (MediaQuery.of(context).size.height/2)-55,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  
                   children: [
                     Expanded(
                       child: page,
@@ -290,6 +291,7 @@ class send_enquiry extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,      
         children: [
           // Custom AppBar with BoxShadow
           Container(
@@ -326,122 +328,123 @@ class send_enquiry extends StatelessWidget {
             ),
           ),
           // Body content
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                child: Column(
-                  children: [
-                    TextFormField(
-                      initialValue: service_name,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: "Service Name",
-                        labelStyle: TextStyle(
-                          color: Color(0xe5777474),
-                          fontSize: 14,
-                          fontFamily: 'sub-tittle',
-                        ),
-                        floatingLabelStyle: TextStyle(color: Color(0xe5777474)),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xe5777474)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xe5777474)),
-                        ),
-                      ),
-                      style: TextStyle(
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(top: 0,left: 0,right: 0,),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(children: [  TextFormField(
+                    initialValue: service_name,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      labelText: "Service Name",
+                      labelStyle: TextStyle(
+                        color: Color(0xe5777474),
+                        fontSize: 14,
                         fontFamily: 'sub-tittle',
-                        fontSize: 16.0,
-                        color:
-                            Colors.grey, // Set the initialValue color to gray
+                      ),
+                      floatingLabelStyle: TextStyle(color: Color(0xe5777474)),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xe5777474)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xe5777474)),
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    TextFormField(
-                      readOnly: true,
-                      initialValue: Api.User_info["Table"][0]["MemberName"],
-                      decoration: InputDecoration(
-                        labelText: "Name",
-                        labelStyle: TextStyle(
-                          color: Color(0xe5777474),
-                          fontFamily: 'sub-tittle',
-                          fontSize: 14,
-                        ),
-                        floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffC4A68B)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0xffC4A68B), width: 2),
-                        ),
-                      ),
-                      style: TextStyle(
+                    style: TextStyle(
+                      fontFamily: 'sub-tittle',
+                      fontSize: 16.0,
+                      color:
+                          Colors.grey, // Set the initialValue color to gray
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  TextFormField(
+                    readOnly: true,
+                    initialValue: Api.User_info["Table"][0]["MemberName"],
+                    decoration: InputDecoration(
+                      labelText: "Name",
+                      labelStyle: TextStyle(
+                        color: Color(0xe5777474),
                         fontFamily: 'sub-tittle',
-                        fontSize: 16.0,
+                        fontSize: 14,
+                      ),
+                      floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffC4A68B)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(0xffC4A68B), width: 2),
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    TextFormField(
-                      readOnly: true,
-                      initialValue: Api.User_info["Table"][0]["MobileNo"],
-                      decoration: InputDecoration(
-                        labelText: "Mobile Number",
-                        labelStyle: TextStyle(
-                          color: Color(0xe5777474),
-                          fontFamily: 'sub-tittle',
-                          fontSize: 14,
-                        ),
-                        floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                        border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey), // Default border
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color(0xffC4A68B),
-                              width: 2), // Border color when focused
-                        ),
-                      ),
-                      style: TextStyle(
+                    style: TextStyle(
+                      fontFamily: 'sub-tittle',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  TextFormField(
+                    readOnly: true,
+                    initialValue: Api.User_info["Table"][0]["MobileNo"],
+                    decoration: InputDecoration(
+                      labelText: "Mobile Number",
+                      labelStyle: TextStyle(
+                        color: Color(0xe5777474),
                         fontFamily: 'sub-tittle',
-                        fontSize: 16.0,
+                        fontSize: 14,
                       ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly // Only numbers
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xffC4A68B),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                        minimumSize: Size(double.infinity, 50),
+                      floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                      border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.grey), // Default border
                       ),
-                      onPressed: () {
-                          Api.ServiceEnquiryInsert(mobile:Api.User_info["Table"][0]["MobileNo"],personName:Api.User_info["Table"][0]["MemberName"],serviceName: service_name).then((value) {
-                            if (value) {
-                              Navigator.of(context).pop(); 
-                             
-                               Api.snack_bar(context: context, message: "Send enquiry");                            
-                            }else{
-                              Api.snack_bar(context: context, message: "Somthing went wrong");
-                            }
-                          },);
-                      },
-                      child: Text(
-                        'SEND ENQUIRY',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Fontmain',
-                        ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Color(0xffC4A68B),
+                            width: 2), // Border color when focused
                       ),
                     ),
-                  ],
-                ),
+                    style: TextStyle(
+                      fontFamily: 'sub-tittle',
+                      fontSize: 16.0,
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly // Only numbers
+                    ],
+                  ),
+                ],),),  const SizedBox(height: 15),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffC4A68B),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      minimumSize: Size(double.infinity, 50),
+                    ),
+                    onPressed: () {
+                        Api.ServiceEnquiryInsert(mobile:Api.User_info["Table"][0]["MobileNo"],personName:Api.User_info["Table"][0]["MemberName"],serviceName: service_name).then((value) {
+                          if (value) {
+                            Navigator.of(context).pop(); 
+                           
+                             Api.snack_bar(context: context, message: "Send enquiry");                            
+                          }else{
+                            Api.snack_bar(context: context, message: "Somthing went wrong");
+                          }
+                        },);
+                    },
+                    child: Text(
+                      'SEND ENQUIRY',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Fontmain',
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
