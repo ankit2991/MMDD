@@ -36,7 +36,7 @@ class _UserProfileState extends State<UserProfile> {
       appBar: AppBar(
         // elevation: 4.2,
         title: Text(
-          "Profile",
+          "Profile".tr,
           style: TextStyle(color: Colors.white, fontFamily: 'Fontmain'),
         ),
         centerTitle: true,
@@ -191,27 +191,27 @@ class _UserProfileState extends State<UserProfile> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   children: [
                     ProfileOption(
-                        title: "Account Document", page: Account_Document()),
+                        title: "Account Document".tr, page: Account_Document()),
                     ProfileOption(
-                        title: "Basic Information",
+                        title: "Basic Information".tr,
                         page: BasicInformationPage()),
                     ProfileOption(
-                        title: "Registration Information",
+                        title: "Registration Information".tr,
                         page: RegistrationInformationPage()),
                     ProfileOption(
-                        title: "Bank Information", page: BankInformationPage()),
-                    ProfileOption(title: "MMDD Orders", page: MMDDOrdersPage()),
-                    ProfileOption(title: "My Services", page: MyServicesPage()),
-                    ProfileOption(title: "Discount", page: Discount_screen()),
-                    ProfileOption(title: "Our Services", page: OurService()),
+                        title: "Bank Information".tr, page: BankInformationPage()),
+                    ProfileOption(title: "MMDD Orders".tr, page: MMDDOrdersPage()),
+                    ProfileOption(title: "My Services".tr, page: MyServicesPage()),
+                    ProfileOption(title: "Discount".tr, page: Discount_screen()),
+                    ProfileOption(title: "Our Services".tr, page: OurService()),
                     ProfileOption(
-                        title: "My Terms & Conditions",
+                        title: "My Terms & Conditions".tr,
                         page: TermsAndConditionsPage()),
-                    ProfileOption(title: "Review", page: ReviewPage()),
-                    ProfileOption(title: "Phone Diary", page: PhoneDiary()),
+                    ProfileOption(title: "Review".tr, page: ReviewPage()),
+                    ProfileOption(title: "Phone Diary".tr, page: PhoneDiary()),
                     ProfileOption(
-                        title: "Refer and Earn", page: referAndEarn()),
-                    ProfileOption(title: "Contact Us", page: ContactPage()),
+                        title: "Refer and Earn".tr, page: referAndEarn()),
+                    ProfileOption(title: "Contact Us".tr, page: ContactPage()),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 4, horizontal: 16),
@@ -230,7 +230,7 @@ class _UserProfileState extends State<UserProfile> {
                         ),
                         child: ListTile(
                           title: Text(
-                            "Log Out",
+                            "Log Out".tr,
                             style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'Fontmain',

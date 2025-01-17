@@ -91,7 +91,7 @@ class _MyVideoState extends State<MyVideo> {
           _Work_data.isEmpty
               ? Center(
                   child: Text(
-                    'No Data Available',
+                    'No Data Available'.tr,
                     style: TextStyle(
                         fontFamily: 'Fontmain', color: Color(0xe5777474)),
                   ),
@@ -191,7 +191,7 @@ class _MyVideoState extends State<MyVideo> {
                                                   color: Colors.white,
                                                 ),
                                                 Text(
-                                                  "Share",
+                                                  "Share".tr,
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       // fontSize: 25,
@@ -236,12 +236,12 @@ class _MyVideoState extends State<MyVideo> {
                                               ValueNotifier<bool> cancel =
                                                   ValueNotifier(false);
                                               return AlertDialog(
-                                                title: Text("Are You Sure",style: TextStyle(fontFamily: "Fontmain"),),
+                                                title: Text("Are You Sure".tr,style: TextStyle(fontFamily: "Fontmain"),),
                                                 actionsAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 content: Text(
-                                                    "Do you really want to delete this Video? The same cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
+                                                    "Do you really want to delete this Video? The same cannot be undo".tr,style: TextStyle(fontFamily: "Fontmain")),
                                                 actions: [
                                                   ValueListenableBuilder(
                                                     valueListenable: delete,
@@ -258,7 +258,7 @@ class _MyVideoState extends State<MyVideo> {
                                                           Api.DeleteImgvideo(Id: _Work_data[index]["Id"].toString()).then((value) {
                                                             if (value) {
                                                               
-                                                               Api.snack_bar2(context: context, message: "Item Deleted");
+                                                               Api.snack_bar2(context: context, message: "Video Deleted".tr);
                                                               _data.clear();
                                                               _Work_data.clear();
                                                               controllers.clear();
@@ -287,7 +287,7 @@ class _MyVideoState extends State<MyVideo> {
                                                       color: value? Colors.white: Color(0xffC4A68B)
                                                   
                                                     ),
-                                                    child: Text("Delete",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                    child: Text("Delete".tr,style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
                                                   ),
                                                 );
                                                     },
@@ -308,7 +308,7 @@ class _MyVideoState extends State<MyVideo> {
                                                       color: value? Colors.white: Color(0xffC4A68B)
                                                   
                                                     ),
-                                                    child: Text("Cancel",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                    child: Text("Cancel".tr,style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
                                                   ),
                                                 );
                                                     },
@@ -347,10 +347,10 @@ class _MyVideoState extends State<MyVideo> {
         // spacing: 50,
         children: [
           SizedBox(width: 5,),
-          Text("Max. 2 Clips can be uploaded Upto 2 MB",style: TextStyle(color: Colors.black38,fontSize:13 ),),
+          Text("Max. 2 Clips can be uploaded Upto 2 MB".tr,style: TextStyle(color: Colors.black38,fontSize:13 ),),
           FloatingActionButton(
             onPressed: () {
-              if (_Work_data.length<4) {
+              if (_Work_data.length<2) {
                    Api.pickImage(img: false, source: ImageSource.gallery).then(
                 (value) {
                   setState(() {
@@ -386,7 +386,7 @@ class _MyVideoState extends State<MyVideo> {
                         setState(() {
                           loader = false;
                         });
-                        Api.snack_bar(context: context, message: "Video Upload Done");
+                        Api.snack_bar(context: context, message: "Video Upload Done".tr);
                         print(_data);
                       });
                     },
@@ -396,13 +396,13 @@ class _MyVideoState extends State<MyVideo> {
                      setState(() {
                         loader = false;
                       });
-                    Api.snack_bar(context: context, message: "video size too large on 2 MB");
+                    Api.snack_bar(context: context, message: "Not select Video size more than 2 MB".tr);
                    }
                  },
               );
               
               }else{
-                Api.snack_bar(context: context, message: "Storage Full on this Section");
+                Api.snack_bar(context: context, message: "Storage Full on this Section".tr);
               }
                },
             child: Icon(Icons.add, color: Colors.white),

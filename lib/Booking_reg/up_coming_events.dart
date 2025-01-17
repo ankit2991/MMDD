@@ -201,7 +201,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
         appBar: AppBar(
           elevation: 2.4,
           title: widget.prev
-              ? Text('Due Register',
+              ? Text('Due Register'.tr,
                   style: TextStyle(color: Colors.white, fontFamily: 'Fontmain'))
               : Text('UpComing Events'.tr,
                   style:
@@ -220,7 +220,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
         body: Stack(
           children: [
             loder || _data.isEmpty
-                ? Center(child: Text("No data"))
+                ? Center(child: Text("No Data Available".tr))
                 : ListView.builder(
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                     itemCount: _data.length,
@@ -347,7 +347,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                   child: Column(
                                     children: [
                                       AppBar(
-                                        title: Text('Add Service',
+                                        title: Text('Add Service'.tr,
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontFamily: 'Fontmain',
@@ -483,7 +483,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                                                   context:
                                                                       context,
                                                                   message:
-                                                                      "palce select services");
+                                                                      "pleace select services".tr);
                                                             }
                                                           },
                                                           child: Container(
@@ -499,7 +499,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                                             color: Color(
                                                                 0xffC4A68B),
                                                             child: Text(
-                                                              "Submit",
+                                                              "Submit".tr,
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .white,
@@ -630,7 +630,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                                                             style:
                                                                                 TextStyle(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)),
                                                                             decoration: InputDecoration(
-                                                                                label: Text("Quantity"),
+                                                                                label: Text("Quantity".tr),
                                                                                 labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)),
                                                                                 enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145))),
                                                                                 focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)))),
@@ -658,7 +658,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                                                             style:
                                                                                 TextStyle(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)),
                                                                             decoration: InputDecoration(
-                                                                                labelText: "price",
+                                                                                labelText: "price".tr,
                                                                                 labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)),
                                                                                 enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145))),
                                                                                 focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)))),
@@ -686,7 +686,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                                                             keyboardType:
                                                                                 TextInputType.number,
                                                                             decoration: InputDecoration(
-                                                                                labelText: "Total",
+                                                                                labelText: "Total".tr,
                                                                                 labelStyle: TextStyle(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)),
                                                                                 enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145))),
                                                                                 focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)))),
@@ -719,7 +719,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                                                                 : const Color.fromARGB(255, 146, 145, 145)),
                                                                         decoration: InputDecoration(
                                                                             labelText:
-                                                                                "remark",
+                                                                                "remark".tr,
                                                                             labelStyle:
                                                                                 TextStyle(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)),
                                                                             enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145))),
@@ -786,7 +786,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                                                                 alignment: Alignment.center,
                                                                                 color: check.value ? Color(0xffC4A68B) : Color.fromARGB(139, 196, 166, 139),
                                                                                 child: Text(
-                                                                                  "SAVE",
+                                                                                  "SAVE".tr,
                                                                                   style: TextStyle(fontFamily: "Fontmain", color: Colors.white),
                                                                                 )),
                                                                           )
@@ -816,7 +816,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                         20,
                                     color: Color(0xffC4A68B),
                                     alignment: Alignment.center,
-                                    child: Text('ADD SERVICE',
+                                    child: Text('ADD SERVICE'.tr,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'Fontmain',
@@ -964,7 +964,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                                     keyboardType:
                                                         TextInputType.number,
                                                     decoration: InputDecoration(
-                                                        hintText: "Amount",
+                                                        hintText: "Amount".tr,
                                                         focusedBorder:
                                                             OutlineInputBorder(
                                                                 borderRadius:
@@ -990,7 +990,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                                     controller:
                                                         Payment_remark_con2,
                                                     decoration: InputDecoration(
-                                                        hintText: "Remark",
+                                                        hintText: "Remark".tr,
                                                         focusedBorder:
                                                             OutlineInputBorder(
                                                                 borderRadius:
@@ -1043,7 +1043,7 @@ Future<void> submit_service({required int i, required double tot,required Which_
                                                     color: Color(0xffC4A68B),
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                      "Save",
+                                                      "Save".tr,
                                                       style: TextStyle(
                                                           fontFamily:
                                                               'Fontmain',

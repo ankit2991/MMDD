@@ -183,13 +183,13 @@ class _AddBookingState extends State<AddBooking> {
                         controller: name_con,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Please enter your name";
+                            return "Please enter your name".tr;
                           }
                         },
                         decoration: InputDecoration(
                           errorBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.red)),
-                          labelText: "Name",
+                          labelText: "Name".tr,
                           labelStyle: TextStyle(
                             color: Color(0xe5777474),
                             fontFamily: 'sub-tittle',
@@ -224,7 +224,7 @@ class _AddBookingState extends State<AddBooking> {
                         controller: mob_con,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Please enter your Mobile Number";
+                            return "Please enter your Mobile Number".tr;
                           }
                         },
                         keyboardType: TextInputType.number,
@@ -232,7 +232,7 @@ class _AddBookingState extends State<AddBooking> {
                         decoration: InputDecoration(
                           errorBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.red)),
-                          labelText: "Mobile Number",
+                          labelText: "Mobile Number".tr,
                           labelStyle: TextStyle(
                             color: Color(0xe5777474),
                             fontFamily: 'sub-tittle',
@@ -276,7 +276,7 @@ class _AddBookingState extends State<AddBooking> {
                       decoration: InputDecoration(
                         errorBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.red)),
-                        labelText: "Optional Mobile Number",
+                        labelText: "Optional Mobile Number".tr,
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
                           fontFamily: 'sub-tittle',
@@ -308,7 +308,7 @@ class _AddBookingState extends State<AddBooking> {
                       ignoring: widget.update,
                       child: DropdownButtonFormField<String>(
                         decoration: InputDecoration(
-                          labelText: 'Event Category',
+                          labelText: 'Event Category'.tr,
                           border: OutlineInputBorder(),
                         ),
                         value: selectedItem,
@@ -330,7 +330,7 @@ class _AddBookingState extends State<AddBooking> {
                           });
                         },
                         validator: (value) => value == null
-                            ? 'Please select Event Category'
+                            ? 'Please select Event Category'.tr
                             : null,
                       ),
                     ),
@@ -343,7 +343,7 @@ class _AddBookingState extends State<AddBooking> {
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Please select Event Start Date";
+                          return "Please select Event Start Date".tr;
                         }
                       },
                       decoration: InputDecoration(
@@ -355,7 +355,7 @@ class _AddBookingState extends State<AddBooking> {
                             _selectDate(context, true);
                           },
                         ),
-                        labelText: "Event Start Date",
+                        labelText: "Event Start Date".tr,
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
                           fontFamily: 'sub-tittle',
@@ -386,7 +386,7 @@ class _AddBookingState extends State<AddBooking> {
                           Api.snack_bar(
                               context: context,
                               message:
-                                  "Please select Event Start Date then Select End date");
+                                  "Please select Event Start Date then Select End date".tr);
                         }
                       },
                       child: IgnorePointer(
@@ -397,7 +397,7 @@ class _AddBookingState extends State<AddBooking> {
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please select Event End Date";
+                              return "Please select Event End Date".tr;
                             }
                           },
                           decoration: InputDecoration(
@@ -409,7 +409,7 @@ class _AddBookingState extends State<AddBooking> {
                                 _selectDate(context, false);
                               },
                             ),
-                            labelText: "Event End Date",
+                            labelText: "Event End Date".tr,
                             labelStyle: TextStyle(
                               color: Color(0xe5777474),
                               fontFamily: 'sub-tittle',
@@ -441,7 +441,7 @@ class _AddBookingState extends State<AddBooking> {
                       onTap: () => _selectTime(context, true),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Please select Event Start Time";
+                          return "Please select Event Start Time".tr;
                         }
                       },
                       decoration: InputDecoration(
@@ -453,7 +453,7 @@ class _AddBookingState extends State<AddBooking> {
                             _selectTime(context, true);
                           },
                         ),
-                        labelText: "Event Start Time",
+                        labelText: "Event Start Time".tr,
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
                           fontFamily: 'sub-tittle',
@@ -483,11 +483,11 @@ class _AddBookingState extends State<AddBooking> {
                         if (_startDate == null && _endDate == null) {
                           Api.snack_bar(
                               context: context,
-                              message: "please select Start Date & End Date");
+                              message: "please select Start Date & End Date".tr);
                         } else if (_startTime == null) {
                           Api.snack_bar(
                               context: context,
-                              message: "please select Start Time");
+                              message: "please select Start Time".tr);
                         }
                       },
                       child: IgnorePointer(
@@ -499,7 +499,7 @@ class _AddBookingState extends State<AddBooking> {
                           onTap: () => _selectTime(context, false),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please select Event End Time";
+                              return "Please select Event End Time".tr;
                             }
                           },
                           decoration: InputDecoration(
@@ -509,7 +509,7 @@ class _AddBookingState extends State<AddBooking> {
                                 _selectTime(context, false);
                               },
                             ),
-                            labelText: "Event End Time",
+                            labelText: "Event End Time".tr,
                             labelStyle: TextStyle(
                               color: Color(0xe5777474),
                               fontFamily: 'sub-tittle',
@@ -540,12 +540,12 @@ class _AddBookingState extends State<AddBooking> {
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Please enter your Event Address";
+                          return "Please enter your Event Address".tr;
                         }
                       },
                       controller: event_address_con,
                       decoration: InputDecoration(
-                        labelText: "Event Address",
+                        labelText: "Event Address".tr,
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
                           fontFamily: 'sub-tittle',
@@ -605,11 +605,11 @@ class _AddBookingState extends State<AddBooking> {
                           controller: eventLocation_con,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please Tap this field and get location";
+                              return "Please Tap this field and get location".tr;
                             }
                           },
                           decoration: InputDecoration(
-                            labelText: "Set Your Bussiness Location",
+                            labelText: "Set Your Bussiness Location".tr,
                             labelStyle: TextStyle(
                               color: Color(0xe5777474),
                               fontFamily: 'sub-tittle',
@@ -642,7 +642,7 @@ class _AddBookingState extends State<AddBooking> {
                     TextFormField(
                       controller: remark_con,
                       decoration: InputDecoration(
-                        labelText: "Remark",
+                        labelText: "Remark".tr,
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
                           fontFamily: 'sub-tittle',
@@ -717,7 +717,7 @@ class _AddBookingState extends State<AddBooking> {
                           
                           
                             child: Text(
-                              'Save',
+                              'Save'.tr,
                               style: TextStyle(
                                   color: Colors.white, fontFamily: 'Fontmain'),
                             ),
@@ -822,7 +822,7 @@ class _AddBookingState extends State<AddBooking> {
                             decoration: BoxDecoration(color: Color(0xffC4A68B),),
                           
                             child: Text(
-                              widget.update?'CONFIRM BOOKING':"SUBMIT",
+                              widget.update?'CONFIRM BOOKING'.tr:"SUBMIT".tr,
                               style: TextStyle(
                                   color: Colors.white, fontFamily: 'Fontmain'),
                             ),

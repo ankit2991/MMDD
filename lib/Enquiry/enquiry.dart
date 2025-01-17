@@ -64,7 +64,7 @@ class _MyEnquiryState extends State<MyEnquiry> {
       Stack(
         children: [
          _data.isEmpty? Center(
-            child: Text('No Data Available', style: TextStyle(fontFamily: 'Fontmain', color: Color(0xe5777474)),),
+            child: Text('No Data Available'.tr, style: TextStyle(fontFamily: 'Fontmain', color: Color(0xe5777474)),),
           ):ListView.builder(
             padding: EdgeInsets.all(10),
             itemCount: _data.length,

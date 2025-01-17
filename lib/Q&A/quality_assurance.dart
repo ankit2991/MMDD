@@ -78,7 +78,7 @@ class _QualityAssState extends State<QualityAss> {
               child: loader
                   ? Center(
                       child: Text(
-                        "No Data Available",
+                        "No Data Available".tr,
                         style: TextStyle(fontFamily: 'Fontmain'),
                       ),
                     )
@@ -207,51 +207,6 @@ class _QualityAssState extends State<QualityAss> {
                                               ],
                                             ),
                                           );
-                                          // return RadioListTile<String>(
-                                          //   contentPadding: EdgeInsets.zero,
-                                          //   visualDensity: VisualDensity(
-                                          //       horizontal: -2, vertical: -4),
-
-                                          //   title: Text(
-
-                                          //       utf8.decode(Api
-                                          //           .H_Questions["Table1"]
-                                          //               [index]["Option" +
-                                          //                   "${index1 + 1}"]
-                                          //           .runes
-                                          //           .toList()),
-                                          //           textAlign: TextAlign.left,
-                                          //       style: Api.prefs.getInt(
-                                          //                   "is_Hindi") ==
-                                          //               0
-                                          //           ? TextStyle(
-                                          //               fontSize: 11,
-                                          //               fontFamily: 'Fontmain')
-                                          //           : TextStyle(
-                                          //               fontFamily:
-                                          //                   "hindi-font",
-                                          //               fontSize: 15)),
-                                          //   value: utf8.decode(Api
-                                          //       .H_Questions["Table1"][index]
-                                          //           ["Option" + "${index1 + 1}"]
-                                          //       .runes
-                                          //       .toList()),
-                                          //   // style: GoogleFonts.notoSansDevanagari(fontSize: 20),
-                                          //   groupValue: op_ans[index],
-
-                                          //   onChanged: (value) {
-                                          //     print(index1);
-                                          //     setState(() {
-                                          //       op_ans.removeAt(index);
-                                          //       op_ans_index.removeAt(index);
-                                          //       op_ans.insert(index, value);
-                                          //       op_ans_index.insert(
-                                          //           index, index1);
-                                          //       // selectedOption =
-                                          //       //     value; // Update the selected value
-                                          //     });
-                                          //   },
-                                          // );
                                         }
                                       },
                                     ),
@@ -520,7 +475,7 @@ class _QualityAssState extends State<QualityAss> {
                                               Api.snack_bar(
                                                   context: context,
                                                   message:
-                                                      "Select  one Option");
+                                                      "Select one Option".tr);
                                             });
                                           }
                                           print(op_ans);
@@ -577,7 +532,7 @@ class _QualityAssState extends State<QualityAss> {
                                             });
                                             Api.snack_bar(
                                                 context: context,
-                                                message: "select option");
+                                                message: "select option".tr);
                                           }
                                         } else if (Api.H_Questions["Table1"]
                                                 [index]["QuestionType"] ==
@@ -603,7 +558,7 @@ class _QualityAssState extends State<QualityAss> {
                                           } else {
                                             Api.snack_bar(
                                                 context: context,
-                                                message: "field Empty");
+                                                message: "field Empty".tr);
                                             setState(() {
                                               loader = false;
                                             });
@@ -612,15 +567,15 @@ class _QualityAssState extends State<QualityAss> {
                                       },
                                       child: Container(
                                         width:
-                                            MediaQuery.of(context).size.width /
-                                                2 *
-                                                1.7,
+                                            (MediaQuery.of(context).size.width)-20 ,
+                                                // 2 *
+                                                // 1.7,
                                         color: Color(0xffC4A68B),
                                         alignment: Alignment.center,
                                         padding:
                                             EdgeInsets.symmetric(vertical: 10),
                                         child: Text(
-                                          'Submit',
+                                          'Submit'.tr,
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontFamily: 'Fontmain'),

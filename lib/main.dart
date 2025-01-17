@@ -460,7 +460,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Column(
                                     children: [
                                       AppBar(
-                                        title: Text('Add Service',
+                                        title: Text('Add Service'.tr,
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontFamily: 'Fontmain',
@@ -611,8 +611,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       color: Color(0xffC4A68B),
                                                       child: Text(
                                                         service_data.isEmpty
-                                                            ? "Add Service"
-                                                            : "Submit",
+                                                            ? "Add Service".tr
+                                                            : "Submit".tr,
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontFamily:
@@ -770,7 +770,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               : const Color.fromARGB(255, 146, 145, 145)),
                                                                       decoration: InputDecoration(
                                                                           label: Text(
-                                                                              "Quantity"),
+                                                                              "Quantity".tr),
                                                                           labelStyle:
                                                                               TextStyle(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)),
                                                                           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145))),
@@ -806,7 +806,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               : const Color.fromARGB(255, 146, 145, 145)),
                                                                       decoration: InputDecoration(
                                                                           labelText:
-                                                                              "price",
+                                                                              "price".tr,
                                                                           labelStyle:
                                                                               TextStyle(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)),
                                                                           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145))),
@@ -843,7 +843,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               .number,
                                                                       decoration: InputDecoration(
                                                                           labelText:
-                                                                              "Total",
+                                                                              "Total".tr,
                                                                           labelStyle:
                                                                               TextStyle(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145)),
                                                                           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: check.value ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 146, 145, 145))),
@@ -891,7 +891,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               145)),
                                                                   decoration: InputDecoration(
                                                                       labelText:
-                                                                          "remark",
+                                                                          "remark".tr,
                                                                       labelStyle: TextStyle(
                                                                           color: check.value
                                                                               ? const Color.fromARGB(255, 0, 0,
@@ -973,7 +973,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         } else {
                                                                           Api.snack_bar(
                                                                               context: context,
-                                                                              message: "Enter Quantity");
+                                                                              message: "Enter Quantity".tr);
                                                                         }
                                                                       },
                                                                       child: Container(
@@ -983,7 +983,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           alignment: Alignment.center,
                                                                           color: check.value ? Color(0xffC4A68B) : Color.fromARGB(139, 196, 166, 139),
                                                                           child: Text(
-                                                                            "SAVE",
+                                                                            "SAVE".tr,
                                                                             style:
                                                                                 TextStyle(fontFamily: "Fontmain", color: Colors.white),
                                                                           )),
@@ -1065,11 +1065,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     valueListenable: loading,
                                     builder: (context, value, child) {
                                       return
-                                          //  loading.value
-                                          //     ? Center(
-                                          //         child:
-                                          //             CircularProgressIndicator())
-                                          //     :
                                           Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: SingleChildScrollView(
@@ -1170,7 +1165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     keyboardType:
                                                         TextInputType.number,
                                                     decoration: InputDecoration(
-                                                        hintText: "Amount",
+                                                        hintText: "Amount".tr,
                                                         focusedBorder:
                                                             OutlineInputBorder(
                                                                 borderRadius:
@@ -1196,7 +1191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     controller:
                                                         Payment_remark_con2,
                                                     decoration: InputDecoration(
-                                                        hintText: "Remark",
+                                                        hintText: "Remark".tr,
                                                         focusedBorder:
                                                             OutlineInputBorder(
                                                                 borderRadius:
@@ -1238,13 +1233,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         Api.snack_bar(
                                                             context: context,
                                                             message:
-                                                                "Invalid Amount");
+                                                                "Invalid Amount".tr);
                                                       }
                                                     } else {
                                                       Api.snack_bar(
                                                           context: context,
                                                           message:
-                                                              "Enter the Amount");
+                                                              "Enter the Amount".tr);
                                                     }
                                                   },
                                                   child: Container(
@@ -1252,7 +1247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     color: Color(0xffC4A68B),
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                      "Save",
+                                                      "Save".tr,
                                                       style: TextStyle(
                                                           fontFamily:
                                                               'Fontmain',

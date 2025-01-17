@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mddmerchant/Promoss and ads/CreatePromoss_ads/create_pro_ads.dart';
+// import 'package:mddmerchant/Promoss and ads/CreatePromoss_ads/create_pro_ads.dart';
 import 'package:mddmerchant/api/api.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -62,7 +62,7 @@ class _MyImageState extends State<MyImage> {
           _data.isEmpty
               ? Center(
                   child: Text(
-                    'No Data Available',
+                    'No Data Available'.tr,
                     style: TextStyle(
                         fontFamily: 'Fontmain', color: Color(0xe5777474)),
                   ),
@@ -160,7 +160,7 @@ class _MyImageState extends State<MyImage> {
                                                       //     BorderRadius.circular(
                                                       //         10)
                                                               ),
-                                                  child:Text("Set As Profile",style: TextStyle(
+                                                  child:Text("Set As Profile".tr,style: TextStyle(
                                                             color: Colors.white,
                                                             // fontSize: 25
                                                             fontFamily: "Fontmain"
@@ -200,7 +200,7 @@ class _MyImageState extends State<MyImage> {
                                                         color: Colors.white,
                                                       ),
                                                       Text(
-                                                        "Share",
+                                                        "Share".tr,
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             // fontSize: 25
@@ -246,11 +246,11 @@ class _MyImageState extends State<MyImage> {
                                             ValueNotifier<bool>delete =ValueNotifier(false);
                                             ValueNotifier<bool>cancel =ValueNotifier(false);
                                             return AlertDialog(
-                                              title: Text("Are You Sure",style: TextStyle(fontFamily: "Fontmain"),),
+                                              title: Text("Are You Sure".tr,style: TextStyle(fontFamily: "Fontmain"),),
                                               actionsAlignment:
                                                   MainAxisAlignment.spaceBetween,
                                               content: Text(
-                                                  "Do you really went to delete these Item? This process cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
+                                                  "Do you really want to delete this image? The same cannot be undo".tr,style: TextStyle(fontFamily: "Fontmain")),
                                               actions: [
                                                ValueListenableBuilder(valueListenable: delete, builder: (context, value, child) {
                                                  return    InkWell(
@@ -287,7 +287,7 @@ class _MyImageState extends State<MyImage> {
                                                                     _data[i]);
                                                               }
                                                             }
-                                                            Api.snack_bar2(context: context, message: "Item Deleted");
+                                                            Api.snack_bar2(context: context, message: "Image Deleted".tr);
                                                             setState(() {
                                                               loader = false;
                                                             });
@@ -301,7 +301,7 @@ class _MyImageState extends State<MyImage> {
                                                       color: value? Colors.white: Color(0xffC4A68B)
                                                   
                                                     ),
-                                                    child: Text("Delete",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                    child: Text("Delete".tr,style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
                                                   ),
                                                 );
                                                },),
@@ -318,7 +318,7 @@ class _MyImageState extends State<MyImage> {
                                                       color: value? Colors.white: Color(0xffC4A68B)
                                                   
                                                     ),
-                                                    child: Text("Cancel",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                    child: Text("Cancel".tr,style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
                                                   ),
                                                 );
                                               },) ],
@@ -361,11 +361,11 @@ class _MyImageState extends State<MyImage> {
                                             ValueNotifier<bool>delete =ValueNotifier(false);
                                             ValueNotifier<bool>cancel =ValueNotifier(false);
                                             return AlertDialog(
-                                              title: Text("Are You Sure",style: TextStyle(fontFamily: "Fontmain"),),
+                                              title: Text("Are You Sure".tr,style: TextStyle(fontFamily: "Fontmain"),),
                                               actionsAlignment:
                                                   MainAxisAlignment.spaceBetween,
                                               content: Text(
-                                                  "Do you really want to delete this image? The same cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
+                                                  "Do you really want to delete this image? The same cannot be undo".tr,style: TextStyle(fontFamily: "Fontmain")),
                                               actions: [
                                                ValueListenableBuilder(valueListenable: delete, builder: (context, value, child) {
                                                  return    InkWell(
@@ -402,7 +402,7 @@ class _MyImageState extends State<MyImage> {
                                                                     _data[i]);
                                                               }
                                                             }
-                                                            Api.snack_bar2(context: context, message: "Item Deleted");
+                                                            Api.snack_bar2(context: context, message: "Image Deleted".tr);
                                                             setState(() {
                                                               loader = false;
                                                             });
@@ -416,7 +416,7 @@ class _MyImageState extends State<MyImage> {
                                                       color: value? Colors.white: Color(0xffC4A68B)
                                                   
                                                     ),
-                                                    child: Text("Delete",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                    child: Text("Delete".tr,style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
                                                   ),
                                                 );
                                                },),
@@ -433,7 +433,7 @@ class _MyImageState extends State<MyImage> {
                                                       color: value? Colors.white: Color(0xffC4A68B)
                                                   
                                                     ),
-                                                    child: Text("Cancel",style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                                    child: Text("Cancel".tr,style: TextStyle(color: value?Colors.black:Colors.white,fontFamily: "Fontmain"),),
                                                   ),
                                                 );
                                               },) ],
@@ -471,7 +471,7 @@ class _MyImageState extends State<MyImage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           SizedBox(width: 5,),
-          Text("Max. 10 images can be uploaded",style: TextStyle(color: Colors.black38),),
+          Text("Max. 10 images can be uploaded".tr,style: TextStyle(color: Colors.black38),),
           FloatingActionButton(
             onPressed: () async {
           

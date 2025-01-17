@@ -52,7 +52,7 @@ class _CompletedEventsState extends State<CompletedEvents> {
       ),
       body: Stack(
         children: [
-          loder?Text(""):ListView.builder(
+          _data.isEmpty?Center(child: Text("No Data Available".tr)):ListView.builder(
             padding: EdgeInsets.symmetric(vertical: 5,horizontal: 8),
            itemCount: _data.length,
            shrinkWrap: true,

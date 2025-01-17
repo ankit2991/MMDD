@@ -86,7 +86,7 @@ class _PromissAdsState extends State<PromissAds> {
           _data.isEmpty
               ? Center(
                   child: Text(
-                    'No Data Available',
+                    'No Data Available'.tr,
                     style: TextStyle(
                         fontFamily: 'Fontmain', color: Color(0xe5777474)),
                   ),

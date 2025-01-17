@@ -137,7 +137,7 @@ var discount_con=TextEditingController();
                 TextFormField(
                   controller: b_name_con,
                   decoration: InputDecoration(
-                    labelText: "Business Name",
+                    labelText: "Business Name".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -168,7 +168,7 @@ var discount_con=TextEditingController();
                   maxLength: 10,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: "Mobile Number",
+                    labelText: "Mobile Number".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -201,7 +201,7 @@ var discount_con=TextEditingController();
                 TextFormField(
                   controller: address_con,
                   decoration: InputDecoration(
-                    labelText: "Address",
+                    labelText: "Address".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -243,7 +243,7 @@ var discount_con=TextEditingController();
                   },);
                     },
                     child: Text(
-                      'SELECT BACKGROUND IMAGE',
+                      'SELECT BACKGROUND IMAGE'.tr,
                       style: TextStyle(
                           color: Colors.white, fontFamily: 'Fontmain'),
                     )),
@@ -285,7 +285,7 @@ var discount_con=TextEditingController();
                       icon: Icon(Icons.calendar_today),
                       onPressed: () => _selectDate(context, true),
                     ),
-                    labelText: "Event Start Date",
+                    labelText: "Event Start Date".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -315,7 +315,7 @@ var discount_con=TextEditingController();
                       icon: Icon(Icons.calendar_today),
                       onPressed: () => _selectDate(context, false),
                     ),
-                    labelText: "Event End Date",
+                    labelText: "Event End Date".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -347,7 +347,7 @@ var discount_con=TextEditingController();
                   width: 150,
                   // color: Colors.amber,
                    child: ListTile(
-                               title: Text('white'),
+                               title: Text('white'.tr),
                                leading: Radio<String>(
                                  value: 'white',
                                  
@@ -364,7 +364,7 @@ var discount_con=TextEditingController();
                   width: 150,
                   // color: Colors.amber,
                    child: ListTile(
-                               title: Text('black'),
+                               title: Text('black'.tr),
                                leading: Radio<String>(
                                  value: 'black',
                                  groupValue: Text_color,
@@ -394,7 +394,7 @@ setState(() {
                       // img_convert(_image);
                     },
                     child: Text(
-                      'GENERATE AD',
+                      'GENERATE AD'.tr,
                       style: TextStyle(
                           color: Colors.white, fontFamily: 'Fontmain'),
                     )),
@@ -418,12 +418,12 @@ setState(() {
                         
                       },);                        
                       }else{
-                        Api.snack_bar(context: context, message: "Somthing Went Wrong");
+                        Api.snack_bar(context: context, message: "Somthing Went Wrong".tr);
                       }
 
                     },
                     child: Text(
-                      'UPLOAD AD',
+                      'UPLOAD AD'.tr,
                       style: TextStyle(
                           color: Colors.white, fontFamily: 'Fontmain'),
                     ))

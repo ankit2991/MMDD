@@ -33,6 +33,7 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^28.1.36
   another_flushbar: ^1.12.30
   webview_flutter: ^4.10.0
+  icons_launcher: ^3.0.0
   # google_fonts: ^6.2.1
 
 dev_dependencies:
@@ -40,10 +41,16 @@ dev_dependencies:
     sdk: flutter
 #  carousel_slider: ^4.2.0
   flutter_lints: ^4.0.0
-  flutter_launcher_icons: "^0.14.1"
+  # flutter_launcher_icons: "^0.14.1"
   # font_awesome_flutter: '>= 4.7.0'
 #  carousel_slider: ^4.2.0
-#
+icons_launcher:
+  image_path: "assets/logo/app logo.png"
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
 #  flutter_icons:
 #    android: true
 #    ios: true
