@@ -26,7 +26,7 @@ class OurService extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "My AddOn",
+          "My AddOn".tr,
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Fontmain',
@@ -47,21 +47,21 @@ class OurService extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.symmetric(vertical: 10),
               children: [
-                ProfileOption(title: "Business Category", page: BusiNessCare()),
-                ProfileOption(title: "SMS Package", page: send_enquiry(service_name: "SMS Package",)),
+                ProfileOption(title: "Business Category".tr, page: BusiNessCare()),
+                ProfileOption(title: "SMS Package".tr, page: send_enquiry(service_name: "SMS Package".tr,)),
                 ProfileOption(
-                    title: "Advertisement Template", page: send_enquiry(service_name: "Advertisement Template",)),
-                ProfileOption(title: "Catalogue Service", page: send_enquiry(service_name:"Catalogue Service" ,)),
+                    title: "Advertisement Template".tr, page: send_enquiry(service_name: "Advertisement Template".tr,)),
+                ProfileOption(title: "Catalogue Service".tr, page: send_enquiry(service_name:"Catalogue Service".tr ,)),
                 ProfileOption(
-                    title: "Terms And Conditions", page: send_enquiry(service_name: "Terms And Conditions",)),
-                ProfileOption(title: "Accounting Service", page: send_enquiry(service_name:"Accounting Service" ,)),
-                ProfileOption(title: "GST Registration", page: send_enquiry(service_name:"GST Registration" ,)),
-                ProfileOption(title: "FSSAI Registration", page: send_enquiry(service_name: "FSSAI Registration",)),
+                    title: "Terms And Conditions".tr, page: send_enquiry(service_name: "Terms And Conditions".tr,)),
+                ProfileOption(title: "Accounting Service".tr, page: send_enquiry(service_name:"Accounting Service".tr ,)),
+                ProfileOption(title: "GST Registration".tr, page: send_enquiry(service_name:"GST Registration".tr ,)),
+                ProfileOption(title: "FSSAI Registration".tr, page: send_enquiry(service_name: "FSSAI Registration".tr,)),
                 ProfileOption(
-                    title: "Nagar Nigam Registration", page: send_enquiry(service_name: "Nagar Nigam Registration",)),
-                ProfileOption(title: "Shop Registration", page: send_enquiry(service_name:"Shop Registration" ,)),
-                ProfileOption(title: "CA Consulting", page: send_enquiry(service_name: "CA Consulting",)),
-                ProfileOption(title: "Website Service", page: send_enquiry(service_name:"Website Service" ,)),
+                    title: "Nagar Nigam Registration".tr, page: send_enquiry(service_name: "Nagar Nigam Registration".tr,)),
+                ProfileOption(title: "Shop Registration".tr, page: send_enquiry(service_name:"Shop Registration".tr ,)),
+                ProfileOption(title: "CA Consulting".tr, page: send_enquiry(service_name: "CA Consulting".tr,)),
+                ProfileOption(title: "Website Service".tr, page: send_enquiry(service_name:"Website Service".tr ,)),
               ],
             ),
           ),
@@ -161,7 +161,7 @@ class _BusiNessCareState extends State<BusiNessCare> {
       appBar: AppBar(
         elevation: 3.4,
         title: Text(
-          'Business Category',
+          'Business Category'.tr,
           style: TextStyle(color: Colors.white, fontFamily: 'Fontmain'),
         ),
         backgroundColor: Color(0xffC4A68B),
@@ -252,7 +252,7 @@ class _BusiNessCareState extends State<BusiNessCare> {
                 BoxShadow(
                     color: const Color.fromARGB(166, 0, 0, 0), blurRadius: 5, offset: Offset(0, 2))
               ]),
-          child: Text("SAVE",style: TextStyle(color: Colors.white,fontFamily: "Fontmain",fontSize: 17),),
+          child: Text("SAVE".tr,style: TextStyle(color: Colors.white,fontFamily: "Fontmain",fontSize: 17),),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -311,7 +311,7 @@ class send_enquiry extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 elevation: 0, // Removes the default shadow
                 title: Text(
-                  'Service Enquiry',
+                  'Service Enquiry'.tr,
                   style: TextStyle(color: Colors.white, fontFamily: 'Fontmain'),
                 ),
                 centerTitle: true,
@@ -340,7 +340,7 @@ class send_enquiry extends StatelessWidget {
                     initialValue: service_name,
                     readOnly: true,
                     decoration: InputDecoration(
-                      labelText: "Service Name",
+                      labelText: "Service Name".tr,
                       labelStyle: TextStyle(
                         color: Color(0xe5777474),
                         fontSize: 14,
@@ -366,7 +366,7 @@ class send_enquiry extends StatelessWidget {
                     readOnly: true,
                     initialValue: Api.User_info["Table"][0]["MemberName"],
                     decoration: InputDecoration(
-                      labelText: "Name",
+                      labelText: "Name".tr,
                       labelStyle: TextStyle(
                         color: Color(0xe5777474),
                         fontFamily: 'sub-tittle',
@@ -391,7 +391,7 @@ class send_enquiry extends StatelessWidget {
                     readOnly: true,
                     initialValue: Api.User_info["Table"][0]["MobileNo"],
                     decoration: InputDecoration(
-                      labelText: "Mobile Number",
+                      labelText: "Mobile Number".tr,
                       labelStyle: TextStyle(
                         color: Color(0xe5777474),
                         fontFamily: 'sub-tittle',
@@ -430,14 +430,14 @@ class send_enquiry extends StatelessWidget {
                           if (value) {
                             Navigator.of(context).pop(); 
                            
-                             Api.snack_bar(context: context, message: "Send enquiry");                            
+                             Api.snack_bar(context: context, message: "Send enquiry".tr);                            
                           }else{
-                            Api.snack_bar(context: context, message: "Somthing went wrong");
+                            Api.snack_bar(context: context, message: "Somthing went wrong".tr);
                           }
                         },);
                     },
                     child: Text(
-                      'SEND ENQUIRY',
+                      'SEND ENQUIRY'.tr,
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Fontmain',

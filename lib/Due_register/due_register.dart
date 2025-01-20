@@ -22,7 +22,7 @@ class DueRegi extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Text('No Data Available', style: TextStyle(fontFamily: 'Fontmain', color: Color(0xe5777474)),),
+        child: Text('No Data Available'.tr, style: TextStyle(fontFamily: 'Fontmain', color: Color(0xe5777474)),),
       ),
     );
   }

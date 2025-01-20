@@ -217,7 +217,7 @@ class _subscription_planState extends State<subscription_plan> {
                           color: Color(0xffC4A68B),
                           alignment: Alignment.center,
                           child: Text(
-                            "Pay Amount",
+                            "Pay Amount".tr,
                             style: TextStyle(
                                 fontFamily: "Fontmain", color: Colors.white),
                           ),
@@ -328,7 +328,7 @@ class _subscription_planState extends State<subscription_plan> {
                             TextFormField(
                               controller: remark_con,
                               decoration: InputDecoration(
-                                  label: Text("Remark"),
+                                  label: Text("Remark".tr),
                                   enabledBorder: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.black)),
@@ -387,7 +387,7 @@ class _subscription_planState extends State<subscription_plan> {
                           color: Color(0xffC4A68B),
                           alignment: Alignment.center,
                           child: Text(
-                            "Pay Amount",
+                            "Pay Amount".tr,
                             style: TextStyle(
                                 fontFamily: "Fontmain", color: Colors.white),
                           ),

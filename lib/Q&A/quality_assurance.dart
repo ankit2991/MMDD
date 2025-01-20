@@ -546,8 +546,7 @@ class _QualityAssState extends State<QualityAss> {
                                                         .toList()),
                                                     Q_id: Api.H_Questions[
                                                         "Table1"][index]["Id"],
-                                                    Answer1: Text_answer[index]
-                                                        [0])
+                                                    Answer1: Text_answer[index])
                                                 .then(
                                               (value) {
                                                 setState(() {

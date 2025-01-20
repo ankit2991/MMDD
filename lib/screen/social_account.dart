@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:mddmerchant/api/api.dart';
 
 class social_account extends StatefulWidget {
@@ -35,7 +36,7 @@ class _social_accountState extends State<social_account> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Social Account',
+          'Social Account'.tr,
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Fontmain',
@@ -60,7 +61,7 @@ class _social_accountState extends State<social_account> {
               TextFormField(
                         controller: insta_con,
                         decoration: InputDecoration(
-                          labelText: "Instagram",
+                          labelText: "Instagram".tr,
                           labelStyle: TextStyle(
                             color: Color(0xe5777474),
                             fontFamily: 'sub-tittle',
@@ -87,7 +88,7 @@ class _social_accountState extends State<social_account> {
               TextFormField(
                         controller: Facebook_con,
                         decoration: InputDecoration(
-                          labelText: "Facebook",
+                          labelText: "Facebook".tr,
                           labelStyle: TextStyle(
                             color: Color(0xe5777474),
                             fontFamily: 'sub-tittle',
@@ -116,7 +117,7 @@ class _social_accountState extends State<social_account> {
                         controller: youtub_con,
                         decoration: InputDecoration(
                           // prefix:,
-                          labelText: "YouTube",
+                          labelText: "YouTube".tr,
                           labelStyle: TextStyle(
                             color: Color(0xe5777474),
                             fontFamily: 'sub-tittle',
@@ -174,7 +175,7 @@ class _social_accountState extends State<social_account> {
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 10,horizontal: 30),
                           decoration: BoxDecoration(color:  Color(0xffC4A68B)),
-                          child: Text("Save",style: TextStyle(fontFamily: "Fontmain",color: Colors.white,fontSize: 20),),),
+                          child: Text("Save".tr,style: TextStyle(fontFamily: "Fontmain",color: Colors.white,fontSize: 20),),),
                       )
            
             ],),

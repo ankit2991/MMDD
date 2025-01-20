@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mddmerchant/api/api.dart';
 import 'package:mddmerchant/constrans.dart';
 import 'package:flutter/services.dart';
@@ -13,13 +14,14 @@ class referAndEarn extends StatelessWidget {
         foregroundColor: Colors.white,
         backgroundColor: mainColor,
         title: Text(
-          "Refer and Earn",
+          "Refer and Earn".tr,
           style: TextStyle(fontFamily: "Fontmain"),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
+          physics: BouncingScrollPhysics(),
           // spacing: 5,
           children: [
             Text(

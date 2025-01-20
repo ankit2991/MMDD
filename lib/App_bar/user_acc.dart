@@ -332,7 +332,7 @@ class _Discount_screenState extends State<Discount_screen> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Discount",
+            "Discount".tr,
             style: TextStyle(fontFamily: "Fontmain"),
           ),
           elevation: 3.5,
@@ -343,7 +343,7 @@ class _Discount_screenState extends State<Discount_screen> {
         body: Stack(children: [
           _data.isEmpty
               ? Center(
-                  child: Text('No Discount Available'),
+                  child: Text('No Data Available'.tr),
                 )
               : ListView.builder(
                   shrinkWrap: true,
@@ -390,11 +390,11 @@ class _Discount_screenState extends State<Discount_screen> {
                               // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
                               Api.snack_bar(
                                   context: context,
-                                  message: "Discount Activated successfully");
+                                  message: "Discount Activated successfully".tr);
                             } else {
                               Api.snack_bar(
                                   context: context,
-                                  message: "Discount Deactivated successfully");
+                                  message: "Discount Deactivated successfully".tr);
                             }
                           },
                         );
@@ -507,7 +507,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                                 Api.snack_bar(
                                                     context: context,
                                                     message:
-                                                        "Discount Activated successfully");
+                                                        "Discount Activated successfully".tr);
 
                                                 Api.FacilityReport().then(
                                                   (value) {
@@ -522,7 +522,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                                 Api.snack_bar(
                                                     context: context,
                                                     message:
-                                                        "Discount Deactivated successfully");
+                                                        "Discount Deactivated successfully".tr);
                                                 setState(() {
                                                   loader = true;
                                                 });
@@ -564,7 +564,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                   initialValue:
                                       _data[index]["Amount"].toString(),
                                   decoration: InputDecoration(
-                                      label: Text("Amount"),
+                                      label: Text("Amount".tr),
                                       enabledBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -594,16 +594,16 @@ class _Discount_screenState extends State<Discount_screen> {
                                         showDialog(
                                           context: context,
                                           builder: (context) => AlertDialog(
-                                            title: Text("Something went wrong"),
+                                            title: Text("Something went wrong".tr),
                                             content: Text(
-                                                "Please remove extra amount"),
+                                                "Please remove extra amount".tr),
                                             actions: [
                                               TextButton(
                                                 onPressed: () {
                                                   Navigator.pop(
                                                       context); // Close dialog without doing anything
                                                 },
-                                                child: Text("Cancel"),
+                                                child: Text("Cancel".tr),
                                               ),
                                               TextButton(
                                                 onPressed: () {
@@ -612,7 +612,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                                   Navigator.pop(
                                                       context); // Close dialog after action
                                                 },
-                                                child: Text("Confirm"),
+                                                child: Text("Confirm".tr),
                                               ),
                                             ],
                                           ),
@@ -625,7 +625,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                   },
                                   readOnly: dis_read_only,
                                   decoration: InputDecoration(
-                                      labelText: "Discount",
+                                      labelText: "Discount".tr,
                                       enabledBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -648,7 +648,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                           text: total.value.toString()),
                                       readOnly: true,
                                       decoration: InputDecoration(
-                                          labelText: "Net Amount",
+                                          labelText: "Net Amount".tr,
                                           enabledBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10),
@@ -685,7 +685,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                         },
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return "Please select Discount Start Date";
+                                            return "select Discount Start Date".tr;
                                           }
                                         },
                                         decoration: InputDecoration(
@@ -698,7 +698,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                               _selectDate(context, true);
                                             },
                                           ),
-                                          labelText: "Start Discount Date",
+                                          labelText: "Start Discount Date".tr,
                                           labelStyle: TextStyle(
                                             color: Color(0xe5777474),
                                             fontFamily: 'sub-tittle',
@@ -739,12 +739,12 @@ class _Discount_screenState extends State<Discount_screen> {
                                             Api.snack_bar(
                                                 context: context,
                                                 message:
-                                                    "Please Select Start Date");
+                                                    "Select Start Date".tr);
                                           }
                                         },
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return "Please select Discount Start Date";
+                                            return "Please select Discount Start Date".tr;
                                           }
                                         },
                                         decoration: InputDecoration(
@@ -760,11 +760,11 @@ class _Discount_screenState extends State<Discount_screen> {
                                                 Api.snack_bar(
                                                     context: context,
                                                     message:
-                                                        "Please Select Start Date");
+                                                        "Select Start Date".tr);
                                               }
                                             },
                                           ),
-                                          labelText: "End Discount Date",
+                                          labelText: "End Discount Date".tr,
                                           labelStyle: TextStyle(
                                             color: Color(0xe5777474),
                                             fontFamily: 'sub-tittle',
@@ -823,7 +823,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                       Api.snack_bar(
                                           context: context,
                                           message:
-                                              "Discount Activated successfully");
+                                              "Discount Activated successfully".tr);
                                       //    setState(() {
                                       //   loader=true;
                                       // });
@@ -840,7 +840,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                       Api.snack_bar(
                                           context: context,
                                           message:
-                                              "Discount Deactivated successfully");
+                                              "Discount Deactivated successfully".tr);
                                       //    setState(() {
                                       //   loader=true;
                                       // });
@@ -865,7 +865,7 @@ class _Discount_screenState extends State<Discount_screen> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 10),
                                 child: Text(
-                                  "Save",
+                                  "Save".tr,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: "Fontmain"),
@@ -1105,7 +1105,7 @@ class _Account_DocumentState extends State<Account_Document> {
                     padding: EdgeInsets.all(10),
                     margin: EdgeInsets.all(10),
                     child: Text(
-                      "Gst Download pdf",
+                      "GST Download pdf".tr,
                       style: TextStyle(fontFamily: "Fontmain"),
                     ),
                   ),
@@ -1217,7 +1217,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
   var Balance_con = TextEditingController();
 
   var Reel_con = TextEditingController(
-      text: Api.User_info["Table"][0]["ReelCount"] ?? "00");
+      text: Api.User_info["Table"][0]["ReelCount"] ?? "0");
 
   var Template_con = TextEditingController();
   @override
@@ -1228,13 +1228,13 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
       Template_con.text =
           Api.User_info["Table"][0]["AdsTemplate"].toInt().toString();
     } else {
-      Template_con.text = "00";
+      Template_con.text = "0";
     }
     if (Api.User_info["Table"][0]["SmsBalance"] != null) {
       Balance_con.text =
           Api.User_info["Table"][0]["SmsBalance"].toInt().toString();
     } else {
-      Balance_con.text = "00";
+      Balance_con.text = "0";
     }
   }
 
@@ -1243,7 +1243,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Basic Information',
+          'Basic Information'.tr,
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Fontmain',
@@ -1269,7 +1269,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                 child: TextFormField(
                   controller: nam_con,
                   decoration: InputDecoration(
-                    labelText: "Owner Name",
+                    labelText: "Owner Name".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -1298,7 +1298,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                 child: TextFormField(
                   controller: B_nam_con,
                   decoration: InputDecoration(
-                    labelText: "Business Name",
+                    labelText: "Business Name".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -1327,7 +1327,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                 child: TextFormField(
                   controller: mob_con,
                   decoration: InputDecoration(
-                    labelText: "Mobile Number",
+                    labelText: "Mobile Number".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -1393,7 +1393,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                 child: TextFormField(
                   controller: email_con,
                   decoration: InputDecoration(
-                    labelText: "Email",
+                    labelText: "Email".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -1422,7 +1422,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                 child: TextFormField(
                   controller: state_con,
                   decoration: InputDecoration(
-                    labelText: "State",
+                    labelText: "State".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -1451,7 +1451,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                 child: TextFormField(
                   controller: city_con,
                   decoration: InputDecoration(
-                    labelText: "City",
+                    labelText: "City".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -1480,7 +1480,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                 child: TextFormField(
                   controller: loc_con,
                   decoration: InputDecoration(
-                    labelText: "Locality Area",
+                    labelText: "Locality Area".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -1509,7 +1509,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                 child: TextFormField(
                   controller: address_con,
                   decoration: InputDecoration(
-                    labelText: "Address",
+                    labelText: "Address".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -1538,7 +1538,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                 child: TextFormField(
                   controller: Template_con,
                   decoration: InputDecoration(
-                    labelText: "Ads Template",
+                    labelText: "Ads Template".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -1567,7 +1567,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                 child: TextFormField(
                   controller: Balance_con,
                   decoration: InputDecoration(
-                    labelText: "Balance",
+                    labelText: "Balance".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -1598,7 +1598,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                 child: TextFormField(
                   controller: Reel_con,
                   decoration: InputDecoration(
-                    labelText: "Reel Quantity",
+                    labelText: "Reel Quantity".tr,
                     labelStyle: TextStyle(
                       color: Color(0xe5777474),
                       fontFamily: 'sub-tittle',
@@ -1705,7 +1705,7 @@ class _RegistrationInformationPageState
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Business Info',
+          'Business Info'.tr,
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Fontmain',
@@ -1735,7 +1735,7 @@ class _RegistrationInformationPageState
                     child: TextFormField(
                       controller: gst_no_con,
                       decoration: InputDecoration(
-                        labelText: "GST No",
+                        labelText: "GST No".tr,
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
                           fontFamily: 'sub-tittle',
@@ -1765,7 +1765,7 @@ class _RegistrationInformationPageState
                     child: TextFormField(
                       controller: other_lic_con,
                       decoration: InputDecoration(
-                        labelText: "Other License",
+                        labelText: "Other License".tr,
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
                           fontFamily: 'sub-tittle',
@@ -1795,7 +1795,7 @@ class _RegistrationInformationPageState
                     child: TextFormField(
                       controller: fss_con,
                       decoration: InputDecoration(
-                        labelText: "FSSAI",
+                        labelText: "FSSAI".tr,
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
                           fontFamily: 'sub-tittle',
@@ -1860,21 +1860,21 @@ class _RegistrationInformationPageState
                                   );
                                   Navigator.of(context).pop();
                                   Api.snack_bar(
-                                      context: context, message: "Save");
+                                      context: context, message: "Save".tr);
                                 } else {
                                   Api.snack_bar(
                                       context: context,
-                                      message: "Something Went Wrong");
+                                      message: "Something Went Wrong".tr);
                                 }
                               },
                             );
                           } else {
                             Api.snack_bar(
-                                context: context, message: "fill all fields");
+                                context: context, message: "fill all fields".tr);
                           }
                         },
                         child: Text(
-                          'SAVE',
+                          'SAVE'.tr,
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Fontmain',
@@ -1931,7 +1931,7 @@ class BankInformationPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Bank Info',
+          'Bank Info'.tr,
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Fontmain',
@@ -1953,7 +1953,7 @@ class BankInformationPage extends StatelessWidget {
               TextFormField(
                 controller: bnk_name_con,
                 decoration: InputDecoration(
-                  labelText: "Bank Name",
+                  labelText: "Bank Name".tr,
                   labelStyle: TextStyle(
                     color: Color(0xe5777474),
                     fontFamily: 'sub-tittle',
@@ -1979,7 +1979,7 @@ class BankInformationPage extends StatelessWidget {
               TextFormField(
                 controller: acc_holder_name_con,
                 decoration: InputDecoration(
-                  labelText: "Account Holder Name",
+                  labelText: "Account Holder Name".tr,
                   labelStyle: TextStyle(
                     color: Color(0xe5777474),
                     fontFamily: 'sub-tittle',
@@ -2007,7 +2007,7 @@ class BankInformationPage extends StatelessWidget {
                 // keyboardType: TextInputType.number,
                 maxLength: 20,
                 decoration: InputDecoration(
-                  labelText: "Account Number",
+                  labelText: "Account Number".tr,
                   labelStyle: TextStyle(
                     color: Color(0xe5777474),
                     fontFamily: 'sub-tittle',
@@ -2036,7 +2036,7 @@ class BankInformationPage extends StatelessWidget {
                 maxLength: 11,
 
                 decoration: InputDecoration(
-                  labelText: "IFSC Code",
+                  labelText: "IFSC Code".tr,
                   labelStyle: TextStyle(
                     color: Color(0xe5777474),
                     fontFamily: 'sub-tittle',
@@ -2075,7 +2075,7 @@ class BankInformationPage extends StatelessWidget {
                     // Api.downloadPdf("https://tourism.gov.in/sites/default/files/2019-04/dummy-pdf_2.pdf", "abc.pdf");
                   },
                   child: Text(
-                    'SAVE',
+                    'SAVE'.tr,
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Fontmain',
@@ -2305,7 +2305,7 @@ class _MMDDOrdersPageState extends State<MMDDOrdersPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'MMDD Orders',
+          'MMDD Orders'.tr,
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Fontmain',
@@ -2330,7 +2330,7 @@ class _MMDDOrdersPageState extends State<MMDDOrdersPage> {
                   shrinkWrap: true,
                 )
               : Center(
-                  child: Text("No data"),
+                  child: Text("No Data Available".tr),
                 ),
           if (loader)
             Container(
@@ -2392,7 +2392,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'My Services',
+          'My Services'.tr,
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Fontmain',
@@ -2413,7 +2413,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
         children: [
           _data.isEmpty
               ? Center(
-                  child: Text('No Service'),
+                  child: Text('No Service'.tr),
                 )
               : ListView.builder(
                   shrinkWrap: true,
@@ -2588,14 +2588,17 @@ class _AddServiceState extends State<AddService> {
   String? _selectedCategory;
   List<dynamic> _data = [];
   int? selectted_service_id;
+  bool _loader=false;
   @override
   void initState() {
     loading = true;
+    _loader=true;
     // TODO: implement initState
     super.initState();
     Api.service(Api.User_info["Table"][0]["ServiceID"].toString()).then(
       (value) {
         _data = value;
+        _loader=false;
         setState(() {
           loading = false;
         });
@@ -2610,7 +2613,7 @@ class _AddServiceState extends State<AddService> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Add Service',
+          'Add Service'.tr,
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Fontmain',
@@ -2627,191 +2630,205 @@ class _AddServiceState extends State<AddService> {
               Navigator.pop(context);
             }),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-          child: Column(
-            spacing: 15,
-            children: [
-              // const SizedBox(height: 15),
-              if (Api.User_info["Table"][0]["IsEcom"] == true)
-                GestureDetector(
-                  onTap: () {
-                    Api.pickImage(source: ImageSource.gallery, img: true).then(
-                      (value) {
-                        setState(() {
-                          _image = value["file"];
-                          ext = value["ext"];
-                        });
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              child: Column(
+                spacing: 15,
+                children: [
+                  // const SizedBox(height: 15),
+                  if (Api.User_info["Table"][0]["IsEcom"] == true)
+                    GestureDetector(
+                      onTap: () {
+                        Api.pickImage(source: ImageSource.gallery, img: true).then(
+                          (value) {
+                            setState(() {
+                              _image = value["file"];
+                              ext = value["ext"];
+                            });
+                          },
+                        );
                       },
-                    );
-                  },
-                  child: Container(
-                    height: 200,
-                    width: 600,
-                    decoration: BoxDecoration(
-                        color: Colors.grey,
-                        image: DecorationImage(
-                            image: _image != null
-                                ? FileImage(_image!)
-                                : AssetImage("assets/images/main/img.jpg"),
-                            fit: BoxFit.fill)),
-                  ),
-                ),
-              DropdownButtonFormField<String>(
-                value: _selectedCategory,
-                // iconSize: 20,
-                isExpanded: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Business Category',
-                ),
-
-                onChanged: (String? newValue) async {
-                  int index = _data!
-                      .indexWhere((map) => map['SubCategoryName'] == newValue);
-                  setState(() {
-                    _selectedCategory = newValue!;
-                    selectted_service_id = index;
-                  });
-                },
-                items: _data!.map<DropdownMenuItem<String>>((var value) {
-                  return DropdownMenuItem<String>(
-                    value: value["SubCategoryName"] ?? "",
-                    child: Text(value["SubCategoryName"] ?? ""),
-                  );
-                }).toList(),
-              ),
-              TextFormField(
-                controller: service_name_con,
-                decoration: InputDecoration(
-                  labelText: "Service Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
-                    fontFamily: 'sub-tittle',
-                    fontSize: 14,
-                  ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
-                ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
-              ),
-              TextFormField(
-                controller: amount_con,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: "Service Amount",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
-                    fontFamily: 'sub-tittle',
-                    fontSize: 14,
-                  ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
-                ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
-              ),
-              // const SizedBox(height: 15),
-              TextFormField(
-                controller: service_con,
-                decoration: InputDecoration(
-                  labelText: "Service Details",
-                  labelStyle: TextStyle(
-                    color: Color(0xe5777474),
-                    fontFamily: 'sub-tittle',
-                    fontSize: 14,
-                  ),
-                  floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
-                  ),
-                ),
-                style: TextStyle(
-                  fontFamily: 'sub-tittle',
-                  fontSize: 16.0,
-                ),
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
-                ],
-              ),
-              // const SizedBox(height: 15),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xffC4A68B),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0)),
-                    minimumSize: Size(650, 45),
-                  ),
-                  onPressed: () async {
-                    if (Api.User_info["Table"][0]["IsEcom"] == true) {
-                      // List<int> fileBytes = await _image!.readAsBytes();
-                      // String base64File = base64Encode(fileBytes);
-                      Api.FacilityInsert(
-                        Amount: amount_con.text.trim(),
-                        Description: service_con.text.trim(),
-                        F_SubServiceCategory: selectted_service_id.toString(),
-                        FacilityName: service_name_con.text.trim(),
-                        ext: "." + ext ?? "",
-                        img: _image,
-                        context: context,
-                      ).then(
-                        (value) {
-                          widget.refresh();
-                          Navigator.of(context).pop();
-                        },
-                      );
-                    } else {
-                      Api.FacilityInsert_nonimg(
-                        Amount: amount_con.text.trim(),
-                        Description: service_con.text.trim(),
-                        F_SubServiceCategory: selectted_service_id.toString(),
-                        FacilityName: service_name_con.text.trim(),
-                        // FacilityImg: base64File
-                      ).then(
-                        (value) {
-                          if (value) {
-                            widget.refresh();
-                            Navigator.of(context).pop();
-                          }
-                        },
-                      );
-                    }
-                  },
-                  child: Text(
-                    'SAVE',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Fontmain',
+                      child: Container(
+                        height: 200,
+                        width: 600,
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            image: DecorationImage(
+                                image: _image != null
+                                    ? FileImage(_image!)
+                                    : AssetImage("assets/images/main/img.jpg"),
+                                fit: BoxFit.fill)),
+                      ),
                     ),
-                  ))
-            ],
+                  DropdownButtonFormField<String>(
+                    value: _selectedCategory,
+                    // iconSize: 20,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Business Category'.tr,
+                    ),
+          
+                    onChanged: (String? newValue) async {
+                      int index = _data!
+                          .indexWhere((map) => map['SubCategoryName'] == newValue);
+                      setState(() {
+                        _selectedCategory = newValue!;
+                        selectted_service_id = index;
+                      });
+                    },
+                    items: _data!.map<DropdownMenuItem<String>>((var value) {
+                      return DropdownMenuItem<String>(
+                        value: value["SubCategoryName"] ?? "",
+                        child: Text(value["SubCategoryName"] ?? ""),
+                      );
+                    }).toList(),
+                  ),
+                  TextFormField(
+                    controller: service_name_con,
+                    decoration: InputDecoration(
+                      labelText: "Service Name".tr,
+                      labelStyle: TextStyle(
+                        color: Color(0xe5777474),
+                        fontFamily: 'sub-tittle',
+                        fontSize: 14,
+                      ),
+                      floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffC4A68B)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      ),
+                    ),
+                    style: TextStyle(
+                      fontFamily: 'sub-tittle',
+                      fontSize: 16.0,
+                    ),
+                    inputFormatters: [
+                      // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                    ],
+                  ),
+                  TextFormField(
+                    controller: amount_con,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: "Service Amount".tr,
+                      labelStyle: TextStyle(
+                        color: Color(0xe5777474),
+                        fontFamily: 'sub-tittle',
+                        fontSize: 14,
+                      ),
+                      floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffC4A68B)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      ),
+                    ),
+                    style: TextStyle(
+                      fontFamily: 'sub-tittle',
+                      fontSize: 16.0,
+                    ),
+                    inputFormatters: [
+                      // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                    ],
+                  ),
+                  // const SizedBox(height: 15),
+                  TextFormField(
+                    controller: service_con,
+                    decoration: InputDecoration(
+                      labelText: "Service Details".tr,
+                      labelStyle: TextStyle(
+                        color: Color(0xe5777474),
+                        fontFamily: 'sub-tittle',
+                        fontSize: 14,
+                      ),
+                      floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffC4A68B)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                      ),
+                    ),
+                    style: TextStyle(
+                      fontFamily: 'sub-tittle',
+                      fontSize: 16.0,
+                    ),
+                    inputFormatters: [
+                      // FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                    ],
+                  ),
+                  // const SizedBox(height: 15),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xffC4A68B),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0)),
+                        minimumSize: Size(650, 45),
+                      ),
+                      onPressed: () async {
+                        if (Api.User_info["Table"][0]["IsEcom"] == true) {
+                          // List<int> fileBytes = await _image!.readAsBytes();
+                          // String base64File = base64Encode(fileBytes);
+                          Api.FacilityInsert(
+                            Amount: amount_con.text.trim(),
+                            Description: service_con.text.trim(),
+                            F_SubServiceCategory: selectted_service_id.toString(),
+                            FacilityName: service_name_con.text.trim(),
+                            ext: "." + ext ?? "",
+                            img: _image,
+                            context: context,
+                          ).then(
+                            (value) {
+                              widget.refresh();
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        } else {
+                          Api.FacilityInsert_nonimg(
+                            Amount: amount_con.text.trim(),
+                            Description: service_con.text.trim(),
+                            F_SubServiceCategory: selectted_service_id.toString(),
+                            FacilityName: service_name_con.text.trim(),
+                            // FacilityImg: base64File
+                          ).then(
+                            (value) {
+                              if (value) {
+                                widget.refresh();
+                                Navigator.of(context).pop();
+                              }
+                            },
+                          );
+                        }
+                      },
+                      child: Text(
+                        'SAVE'.tr,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Fontmain',
+                        ),
+                      ))
+                ],
+              ),
+            ),
           ),
-        ),
+        if (_loader)
+              Container(
+                color: Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: SpinKitCircle(
+                    color: Colors.white,
+                    size: 50.0,
+                  ),
+                ),
+              ),
+        ],
       ),
     );
   }
@@ -2884,7 +2901,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Add Terms',
+          'Add Terms'.tr,
           style: TextStyle(color: Colors.white, fontFamily: 'Fontmain'),
         ),
         backgroundColor: Color(0xffC4A68B),
@@ -2918,7 +2935,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                         // },
                         maxLines: 5,
                         decoration: InputDecoration(
-                          hintText: "Write your Terms & Conditions...",
+                          hintText: "Write your Terms & Conditions...".tr,
                           border: OutlineInputBorder(),
                           fillColor: Colors.white,
                           filled: true,
@@ -2953,7 +2970,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                             );
                           },
                           child: Text(
-                            'SAVE',
+                            'SAVE'.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'Fontmain',
@@ -3012,7 +3029,7 @@ class _ReviewPageState extends State<ReviewPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Review',
+          'Review'.tr,
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Fontmain',
@@ -3220,7 +3237,7 @@ class _PhoneDiaryState extends State<PhoneDiary> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Phone Diary',
+          'Phone Diary'.tr,
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Fontmain',
@@ -3239,7 +3256,7 @@ class _PhoneDiaryState extends State<PhoneDiary> {
           loader
               ? Center(
                   child: Text(
-                    'No Data Awailable',
+                    'No Data Available'.tr,
                     style: TextStyle(
                         fontFamily: 'Fontmain', color: Color(0xe5777474)),
                   ),
@@ -3327,7 +3344,7 @@ class ContactPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Contact Us',
+            'Contact Us'.tr,
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'Fontmain',
@@ -3359,7 +3376,7 @@ class ContactPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Call Us : 18005700102",
+                    "${"Call Us".tr} : 18005700102",
                     style: TextStyle(fontFamily: "Fontmain", fontSize: 15),
                   ),
                   IconButton(
@@ -3389,7 +3406,7 @@ class ContactPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Mail Us :",
+                        Text("${"Mail Us".tr} :",
                             style: TextStyle(
                                 fontFamily: "Fontmain", fontSize: 15)),
                         Text("suport@makemydreamday.in",
