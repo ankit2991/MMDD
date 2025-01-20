@@ -1515,8 +1515,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 )),
                                       );
                                     } else if (Api.User_info["Table"][0]
-                                            ["F_SubscriberMaster"] ==
-                                        1) {
+                                            ["F_SubscriberMaster"] >=1) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(

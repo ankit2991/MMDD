@@ -363,6 +363,11 @@ class _QualityAssState extends State<QualityAss> {
                                                       Answer2: op_ans[index])
                                                   .then(
                                                 (value) {
+                                                  for(int i=0;i<op_ans.length;i++){
+                                                    if(op_ans[i]!=null){
+                                                      op_ans[i]=null;
+                                                    }
+                                                  }
                                                   setState(() {
                                                     loader = false;
                                                   });
@@ -383,6 +388,11 @@ class _QualityAssState extends State<QualityAss> {
                                                       Answer3: op_ans[index])
                                                   .then(
                                                 (value) {
+                                                  for(int i=0;i<op_ans.length;i++){
+                                                    if(op_ans[i]!=null){
+                                                      op_ans[i]=null;
+                                                    }
+                                                  }
                                                   setState(() {
                                                     loader = false;
                                                   });
@@ -403,6 +413,11 @@ class _QualityAssState extends State<QualityAss> {
                                                       Answer4: op_ans[index])
                                                   .then(
                                                 (value) {
+                                                  for(int i=0;i<op_ans.length;i++){
+                                                    if(op_ans[i]!=null){
+                                                      op_ans[i]=null;
+                                                    }
+                                                  }
                                                   setState(() {
                                                     loader = false;
                                                   });
@@ -423,6 +438,11 @@ class _QualityAssState extends State<QualityAss> {
                                                       Answer5: op_ans[index])
                                                   .then(
                                                 (value) {
+                                                  for(int i=0;i<op_ans.length;i++){
+                                                    if(op_ans[i]!=null){
+                                                      op_ans[i]=null;
+                                                    }
+                                                  }
                                                   setState(() {
                                                     loader = false;
                                                   });
@@ -443,6 +463,11 @@ class _QualityAssState extends State<QualityAss> {
                                                       Answer6: op_ans[index])
                                                   .then(
                                                 (value) {
+                                                  for(int i=0;i<op_ans.length;i++){
+                                                    if(op_ans[i]!=null){
+                                                      op_ans[i]=null;
+                                                    }
+                                                  }
                                                   setState(() {
                                                     loader = false;
                                                   });
@@ -463,6 +488,11 @@ class _QualityAssState extends State<QualityAss> {
                                                       Answer7: op_ans[index])
                                                   .then(
                                                 (value) {
+                                                  for(int i=0;i<op_ans.length;i++){
+                                                    if(op_ans[i]!=null){
+                                                      op_ans[i]=null;
+                                                    }
+                                                  }
                                                   setState(() {
                                                     loader = false;
                                                   });

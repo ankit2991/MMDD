@@ -1216,8 +1216,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
       text: Api.User_info["Table"][0]["OrgAddress"] ?? "");
   var Balance_con = TextEditingController();
 
-  var Reel_con = TextEditingController(
-      text: Api.User_info["Table"][0]["ReelCount"] ?? "0");
+  var Reel_con = TextEditingController();
 
   var Template_con = TextEditingController();
   @override
@@ -1229,6 +1228,9 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
           Api.User_info["Table"][0]["AdsTemplate"].toInt().toString();
     } else {
       Template_con.text = "0";
+    }
+    if(Api.User_info["Table"][0]["ReelCount"]!=null ){
+      Reel_con.text=Api.User_info["Table"][0]["ReelCount"].toInt().toString();
     }
     if (Api.User_info["Table"][0]["SmsBalance"] != null) {
       Balance_con.text =
@@ -2505,39 +2507,55 @@ class _MyServicesPageState extends State<MyServicesPage> {
                               ),
                             ),
                           )
-                        : Container(
-                            margin: EdgeInsets.all(10),
-                            height: 80,
-                            // color: Colors.amber,
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 1,
-                                    color: const Color.fromARGB(146, 0, 0, 0),
+                        : GestureDetector(
+                          onTap: (){
+                            if(_data[index]["DisEndDate"]!=null){
+                            var end_date= DateTime.parse(_data[index]["DisEndDate"]);
+                            if(_data[index]["IsDiscount"]==false &&end_date.isBefore(DateTime.now())){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => AddService(refresh: refresh,edit: true,old_data: _data[index]),));
+                            }else{
+                              Api.snack_bar(context: context, message: "No Edit ( service Available on Discount )");
+                            }
+
+                            }else{
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => AddService(refresh: refresh,edit: true,old_data: _data[index],),));
+
+                            }
+                          },
+                          child: Container(
+                              margin: EdgeInsets.all(10),
+                              height: 80,
+                              // color: Colors.amber,
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 1,
+                                      color: const Color.fromARGB(146, 0, 0, 0),
+                                    )
+                                  ]),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _data[index]["FacilityName"],
+                                    style: TextStyle(
+                                        fontFamily: "Fontmain",
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    _data[index]["Amount"].toString(),
+                                    style: TextStyle(
+                                        fontFamily: "Fontmain",
+                                        fontWeight: FontWeight.normal),
                                   )
-                                ]),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _data[index]["FacilityName"],
-                                  style: TextStyle(
-                                      fontFamily: "Fontmain",
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  _data[index]["Amount"].toString(),
-                                  style: TextStyle(
-                                      fontFamily: "Fontmain",
-                                      fontWeight: FontWeight.normal),
-                                )
-                              ],
+                                ],
+                              ),
                             ),
-                          );
+                        );
                   },
                 ),
           if (loader)
@@ -2575,7 +2593,9 @@ class _MyServicesPageState extends State<MyServicesPage> {
 
 class AddService extends StatefulWidget {
   Function refresh;
-  AddService({required this.refresh});
+  bool? edit=false;
+  Map ?old_data={};
+  AddService({required this.refresh,this.edit,this.old_data});
   @override
   State<AddService> createState() => _AddServiceState();
 }
@@ -2598,6 +2618,28 @@ class _AddServiceState extends State<AddService> {
     Api.service(Api.User_info["Table"][0]["ServiceID"].toString()).then(
       (value) {
         _data = value;
+        if(widget.edit==true){
+          print("Edit...........");
+          print(widget.old_data);
+          if(widget.old_data!["FacilityName"]!=null){
+          service_name_con.text=widget.old_data!["FacilityName"];
+          }
+          if(widget.old_data!["Amount"]!=null){
+          amount_con.text=widget.old_data!["Amount"].toString();
+          }
+          if(widget.old_data!["Description"]!=null){
+          service_con.text=widget.old_data!["Description"];
+          }
+          if(widget.old_data!["F_SubServiceCategory"]!=null){
+             int index = _data!
+                          .indexWhere((map) => map['ID'] == widget.old_data!["F_SubServiceCategory"].toInt()); 
+                          if(index!=-1){
+                          _selectedCategory=_data[index]["SubCategoryName"];
+                          }                         
+          // selectted_service_id = _data[index]["ID"];
+          }
+
+        }
         _loader=false;
         setState(() {
           loading = false;
@@ -2663,29 +2705,32 @@ class _AddServiceState extends State<AddService> {
                                 fit: BoxFit.fill)),
                       ),
                     ),
-                  DropdownButtonFormField<String>(
-                    value: _selectedCategory,
-                    // iconSize: 20,
-                    isExpanded: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Business Category'.tr,
+                  IgnorePointer(
+                    ignoring: widget.edit==true&&_selectedCategory!=null?true:false,
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedCategory,
+                      // iconSize: 20,
+                      isExpanded: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Business Category'.tr,
+                      ),
+                              
+                      onChanged: (String? newValue) async {
+                        int index = _data!
+                            .indexWhere((map) => map['SubCategoryName'] == newValue);
+                        setState(() {
+                          _selectedCategory = newValue!;
+                          selectted_service_id = index;
+                        });
+                      },
+                      items: _data!.map<DropdownMenuItem<String>>((var value) {
+                        return DropdownMenuItem<String>(
+                          value: value["SubCategoryName"] ?? "",
+                          child: Text(value["SubCategoryName"] ?? ""),
+                        );
+                      }).toList(),
                     ),
-          
-                    onChanged: (String? newValue) async {
-                      int index = _data!
-                          .indexWhere((map) => map['SubCategoryName'] == newValue);
-                      setState(() {
-                        _selectedCategory = newValue!;
-                        selectted_service_id = index;
-                      });
-                    },
-                    items: _data!.map<DropdownMenuItem<String>>((var value) {
-                      return DropdownMenuItem<String>(
-                        value: value["SubCategoryName"] ?? "",
-                        child: Text(value["SubCategoryName"] ?? ""),
-                      );
-                    }).toList(),
                   ),
                   TextFormField(
                     controller: service_name_con,
@@ -2776,10 +2821,11 @@ class _AddServiceState extends State<AddService> {
                         if (Api.User_info["Table"][0]["IsEcom"] == true) {
                           // List<int> fileBytes = await _image!.readAsBytes();
                           // String base64File = base64Encode(fileBytes);
-                          Api.FacilityInsert(
+                          if(widget.edit==false ||widget.edit==null){
+                            Api.FacilityInsert(
                             Amount: amount_con.text.trim(),
                             Description: service_con.text.trim(),
-                            F_SubServiceCategory: selectted_service_id.toString(),
+                            F_SubServiceCategory: _data[selectted_service_id!]["ID"].toString(),
                             FacilityName: service_name_con.text.trim(),
                             ext: "." + ext ?? "",
                             img: _image,
@@ -2790,11 +2836,19 @@ class _AddServiceState extends State<AddService> {
                               Navigator.of(context).pop();
                             },
                           );
+                          }else{
+                            Api.FacilityUpdate(FacilityId: widget.old_data!["Id"], FacilityName: service_name_con.text.trim(), Amount: amount_con.text.trim(), F_SubServiceCategory: _data[selectted_service_id!]["ID"].toString()).then((value) {
+                               widget.refresh();
+                              Navigator.of(context).pop();
+                            },);
+                          }
                         } else {
-                          Api.FacilityInsert_nonimg(
+                          if(widget.edit==false||widget.edit==null){
+                            Api.FacilityInsert_nonimg(
                             Amount: amount_con.text.trim(),
                             Description: service_con.text.trim(),
-                            F_SubServiceCategory: selectted_service_id.toString(),
+                            F_SubServiceCategory: _data[selectted_service_id!]["ID"].toString(),
+                            // F_SubServiceCategory: selectted_service_id.toString(),
                             FacilityName: service_name_con.text.trim(),
                             // FacilityImg: base64File
                           ).then(
@@ -2805,6 +2859,12 @@ class _AddServiceState extends State<AddService> {
                               }
                             },
                           );
+                          }else{
+                             Api.FacilityUpdate(FacilityId: widget.old_data!["Id"].toString(), FacilityName: service_name_con.text.trim(), Amount: amount_con.text.trim(),F_SubServiceCategory:_data[selectted_service_id!]["ID"].toString()).then((value) {
+                               widget.refresh();
+                              Navigator.of(context).pop();
+                            },);
+                          }
                         }
                       },
                       child: Text(

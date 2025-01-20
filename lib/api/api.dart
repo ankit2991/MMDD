@@ -1883,6 +1883,26 @@ pw.Text("* This is computer generated invoice does not require signatures *",
       throw ("Error........ BannerReport Api ");
     }
   }
+  // ________________________________________________________________________________________
+  static Future<void> FacilityUpdate({required String FacilityId,required String FacilityName,required String Amount,required String F_SubServiceCategory}) async {
+    //  List<int> imageBytes = await img.readAsBytes();
+    //   String base64String = base64Encode(imageBytes);
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"FacilityId":"$FacilityId",F_SubServiceCategory:"$F_SubServiceCategory","FacilityName":"$FacilityName","MerchantId":\"${User_info["Table"][0]["Id"].toInt()}\","Amount":"$Amount","ApiAdd":"FacilityUpdate","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=FacilityUpdate';
+    print(url);
+    var res = await http.get(Uri.parse(url));
+
+    if (res.statusCode == 200) {
+      log("FacilityUpdate Api Call.............");
+      var data = jsonDecode(res.body);
+      log("FacilityUpdate Api DATA .............");
+      print(data);
+      // return data["Table1"];
+    } else {
+      log("Error........ FacilityUpdate Api ");
+      throw ("Error........ FacilityUpdate Api ");
+    }
+  }
 
   // _____________________________________________________________________________________(get logo)
   static Future<void> getLogo({required String url}) async {

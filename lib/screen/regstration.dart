@@ -648,17 +648,21 @@ class _CheckboxExampleState extends State<RegisTration> {
                           isError: isChecked?false:true,
                           onChanged: (bool? value) {
                             setState(() {
-                              isChecked = value!;
-                              if (isChecked) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => read_TermsAndConditation(),));                                
-                              }
+                              isChecked = value!;                              
                             });
                           },
                           activeColor: Color(0xffC4A68B),
                         ),
-                        Text(
-                          'I Agree Terms & Conditions',
-                          style: TextStyle(fontFamily: 'Fontmain'),
+                        GestureDetector(
+                          onTap: (){
+                            if (isChecked) {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => read_TermsAndConditation(),));                                
+                              }
+                          },
+                          child: Text(
+                            'I Agree Terms & Conditions',
+                            style: TextStyle(fontFamily: 'Fontmain'),
+                          ),
                         ),
                       ],
                     ),
