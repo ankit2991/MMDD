@@ -7,6 +7,8 @@ import 'package:mddmerchant/api/api.dart';
 
 
 class MyEnquiry extends StatefulWidget {
+  Function add_booking;
+  MyEnquiry({required this.add_booking });
   @override
   State<MyEnquiry> createState() => _MyEnquiryState();
 }
@@ -74,7 +76,7 @@ class _MyEnquiryState extends State<MyEnquiry> {
               onTap: (){
                  Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "0",refresh: refresh,update: true,data: _data[index],add_booking: (){},)),
+            MaterialPageRoute(builder: (context) => AddBooking(Isbooking: "0",refresh: refresh,update: true,data: _data[index],add_booking: widget.add_booking,)),
           );
               },
               child: Container(

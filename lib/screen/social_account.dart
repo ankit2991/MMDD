@@ -173,6 +173,9 @@ class _social_accountState extends State<social_account> {
                           }
                         },
                         child: Container(
+                          alignment: Alignment.center,
+                          width: double.infinity,
+                          margin: EdgeInsets.all(5),
                           padding: EdgeInsets.symmetric(vertical: 10,horizontal: 30),
                           decoration: BoxDecoration(color:  Color(0xffC4A68B)),
                           child: Text("Save".tr,style: TextStyle(fontFamily: "Fontmain",color: Colors.white,fontSize: 20),),),

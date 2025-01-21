@@ -171,9 +171,13 @@ class AppTranslations extends Translations {
           'Instagram':'Instagram',
           'Facebook':'Facebook',
           'YouTube':'YouTube',
+          'No Edit ( service Available on Discount )':'No Edit ( service Available on Discount )',
+          'Complete Event':'Complete Event',
           
         },
         'hi_IN': {
+          'Complete Event':'पूर्ण इवेंट',
+          'No Edit ( service Available on Discount )':'कोई संपादन नहीं (सेवा छूट पर उपलब्ध)',
           'YouTube':'यूट्यूब',
           'Facebook':'फेसबुक',
           'Instagram':'इंस्टाग्राम',

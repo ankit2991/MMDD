@@ -66,6 +66,7 @@ var discount_con=TextEditingController();
           iconSize: 30.0, // Adjust the size of the icon
         ),
       ),
+    
       body: SingleChildScrollView(
         child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
@@ -84,45 +85,66 @@ var discount_con=TextEditingController();
                     decoration: BoxDecoration( color: Colors.grey,
                       image: DecorationImage(image:_image != null ? FileImage(_image!):AssetImage("assets/images/main/img.jpg"),fit: BoxFit.fill)
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Stack(
                       children: [
-                        Row(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                          if(discount_con.text.isNotEmpty)
-                            Container(
-                              alignment: Alignment.center,
-                              height: 60,
-                              width: 60,
-                             decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/main/discount.png"))),
-                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                               children: [
-                                 Text("${discount_con.text}%\nOFF",style: TextStyle(color:Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain"),),
-                                
-                               ],
-                             ),
-                            ),
-                          Container(
-                            child: Column(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                if(mob_con.text.isNotEmpty)
-                                  Text(mob_con.text,style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain")),
-                                if(address_con.text.isNotEmpty)
-                                  Text(address_con.text,style: TextStyle(color:Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain")),
-                              ],
-                            ),
-                          )
+                              
+                              Container(
+                                padding: EdgeInsets.only(right: 5),
+                                child: Column(
+                                  children: [
+                                    if(mob_con.text.isNotEmpty)
+                                      Text(mob_con.text,style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain")),
+                                     ],
+                                ),
+                              )
+                              
+                                
+                                
+                            ],)
+                            ,
+                            // if(b_name_con.text.isNotEmpty)
+                            //   Row(
+                            //     children: [
+                                 
+                            //     ],
+                            //   ),
+                           Column(children: [
+                             if( _startDate != null&&_endDate != null)
+                              Text("Valid:${_startDate!.toLocal()}".split(' ')[0]+" To "+"${_endDate!.toLocal()}".split(' ')[0],style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain",fontSize: 10)),
+                          if(address_con.text.isNotEmpty)
+                                      Text(address_con.text,style: TextStyle(color:Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain",fontSize: 10)),
+                           
+                           ],)      
+                          ],
+                        ),
+                         if(discount_con.text.isNotEmpty)
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: 5),
+                                    alignment: Alignment.center,
+                                    height: 60,
+                                    width: 60,
+                                   decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/main/discount.png"))),
+                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                     children: [
+                                       Text("${discount_con.text}%\nOFF",style: TextStyle(color:Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain"),),
+                                      
+                                     ],
+                                   ),
+                                  ),
+                                ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(b_name_con.text, textAlign: TextAlign.center, style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain",fontSize: 14))),
                           
-                            
-                            
-                        ],)
-                        ,
-                        if(b_name_con.text.isNotEmpty)
-                          Text(b_name_con.text,style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain")),
-                        if( _startDate != null&&_endDate != null)
-                          Text("Valid:${_startDate!.toLocal()}".split(' ')[0]+" To "+"${_endDate!.toLocal()}".split(' ')[0],style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain")),
                       ],
                     ),
                 //     child: _picker!=null ? Image.file(,fit: BoxFit.contain,)

@@ -30,19 +30,19 @@ class _QualityAssState extends State<QualityAss> {
     // TODO: implement initState
     super.initState();
     // if (Api.H_Questions.isEmpty) {}
-    // loader = true;
-    // Api.Service_Question_List().then(
-    //   (value) {
-    //     setState(() {
-    //       loader = false;
-    //     });
-    //   },
-    // );
+    loader = true;
+    Api.Service_Question_List().then(
+      (value) {
+        setState(() {
+          loader = false;
+        });
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (Api.H_Questions["Table1"].isEmpty) {
+    if (Api.H_Questions!=null&&Api.H_Questions.isNotEmpty&& Api.H_Questions["Table1"].isEmpty) {
       Api.Mpin_check(
               mob_no: Api.prefs.getString("mobile_no") ?? "",
               Mpin: Api.prefs.getString("mpin") ?? "")
@@ -75,14 +75,16 @@ class _QualityAssState extends State<QualityAss> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-              child: loader
+              child: 
+              Api.H_Questions!=null&&Api.H_Questions.isEmpty
                   ? Center(
                       child: Text(
                         "No Data Available".tr,
                         style: TextStyle(fontFamily: 'Fontmain'),
                       ),
                     )
-                  : ListView.builder(
+                  : 
+                  ListView.builder(
                       itemCount: Api.H_Questions["Table1"].length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
@@ -91,7 +93,7 @@ class _QualityAssState extends State<QualityAss> {
                         check_box_ans_bool.add([false]);
                         check_box_ans.add([""]);
                         Text_answer.add("");
-
+                        var ans_con=TextEditingController();
                         return Container(
                             margin:
                                 EdgeInsets.only(top: 10, right: 0, left: 0),
@@ -214,7 +216,9 @@ class _QualityAssState extends State<QualityAss> {
                                 if (Api.H_Questions["Table1"][index]
                                         ["QuestionType"] ==
                                     "Input Type")
+                                    // var ans_con=TextEditingController();dddddddddddddddddddddddddddddd
                                   TextFormField(
+                                    controller: ans_con,
                                     maxLines: 3,
                                     minLines: 1,
                                     onChanged: (value) {
@@ -579,6 +583,8 @@ class _QualityAssState extends State<QualityAss> {
                                                     Answer1: Text_answer[index])
                                                 .then(
                                               (value) {
+                                                Text_answer.removeAt(index);
+                                      Text_answer.insert(index, "");
                                                 setState(() {
                                                   loader = false;
                                                 });

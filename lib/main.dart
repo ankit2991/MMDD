@@ -24,12 +24,12 @@ import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:mddmerchant/show_pdf.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+// import 'package:open_filex/open_filex.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +73,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 bool loading = false;
+bool loading1 = false;
+bool loading2 = false;
+bool loading3 = false;
 
 List<dynamic> _banners_data = [];
 List<Widget> _banners_images = [];
@@ -105,9 +108,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     loading = true;
+    loading1 = true;
+    loading2 = true;
+    loading3 = true;
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        if (Api.prefs.getInt("is_Hindi") == 0) {
+        if (Api.prefs.getInt("is_Hindi") == 0|| Api.prefs.getInt("is_Hindi")==null) {
           Get.updateLocale(Locale('en', 'US'));
         } else {
           Get.updateLocale(Locale('hi', 'IN'));
@@ -147,46 +153,94 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Container(
             decoration: BoxDecoration(
-                image: DecorationImage(
+                image: DecorationImage(fit: BoxFit.cover,
                     image: AssetImage("assets/images/main/img.jpg.jpeg"))),
           ),
         ));
-        Api.EventBookingDetailsList(
-                Is_booking: "1",
-                Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
-                    "TodayEvent")
-            .then(
-          (value) {
-            _data = value;
+        if(loading1==false&&loading2==false&&loading3==false){
+        setState(() {
+        loading=false;          
+        });
+        }else{
+        loading=false;          
+        }
+        // Api.EventBookingDetailsList(
+        //         Is_booking: "1",
+        //         Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
+        //             "TodayEvent")
+        //     .then(
+        //   (value) {
+        //     _data = value;
 
-            Api.Service_Question_List().then(
-              (value) {
-                Api.get_Merchent_Trem_And_Condition().then(
-                  (value) {
-                    if (Api.User_info["Table"][0]["LogoImg"] != null) {
-                      Api.getLogo(url: Api.User_info["Table"][0]["LogoImg"])
-                          .then(
-                        (value) {
-                          setState(() {
-                            loading = false;
-                          });
-                        },
-                      );
-                    } else {
-                      setState(() {
-                        loading = false;
-                      });
-                    }
-                  },
-                );
-              },
-            );
+        //     Api.Service_Question_List().then(
+        //       (value) {
+        //         Api.get_Merchent_Trem_And_Condition().then(
+        //           (value) {
+        //             if (Api.User_info["Table"][0]["LogoImg"] != null) {
+        //               Api.getLogo(url: Api.User_info["Table"][0]["LogoImg"])
+        //                   .then(
+        //                 (value) {
+        //                   setState(() {
+        //                     loading = false;
+        //                   });
+        //                 },
+        //               );
+        //             } else {
+        //               setState(() {
+        //                 loading = false;
+        //               });
+        //             }
+        //           },
+        //         );
+        //       },
+        //     );
 
-            // print(value);
-          },
-        );
+        //     // print(value);
+        //   },
+        // );
       },
     );
+    Api.EventBookingDetailsList(
+                Is_booking: "1",
+                Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
+                    "TodayEvent").then((value) {
+                      _data = value;
+                        if(loading==false&&loading2==false&&loading3==false){
+        setState(() {
+        loading1=false;          
+        });
+        }else{
+        loading1=false;          
+        }
+                      // setState(() {
+                      // loading1=false;
+                        
+                      // });
+                    },);
+    Api.get_Merchent_Trem_And_Condition().then((value) {
+        if(loading1==false&&loading==false&&loading3==false){
+        setState(() {
+        loading2=false;          
+        });
+        }else{
+        loading2=false;          
+        }
+    },);
+     if (Api.User_info["Table"][0]["LogoImg"] != null) {
+                      Api.getLogo(url: Api.User_info["Table"][0]["LogoImg"]).then((value) {
+                          if(loading1==false&&loading2==false&&loading==false){
+        setState(() {
+        loading3=false;          
+        });
+        }else{
+        loading3=false;          
+        }
+                      },);
+     }else{
+      setState(() {
+        loading3=false;          
+        });
+     }
   }
 
   bool add_booking = false;
@@ -335,9 +389,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     for (var i = 0; i < _data.length; i++) {
       today_event.add(Container(
-        padding: EdgeInsets.only(top: 5, right: 5, left: 5, bottom: 15),
+        padding: EdgeInsets.only(top: 5, right: 5, left: 5, bottom: 20),
         margin: EdgeInsets.only(top: 5, right: 5, left: 5, bottom: 10),
         //  height: 100,
+        
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -1285,6 +1340,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             )
+            // ,Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //   GestureDetector(
+            //     onTap: (){
+            //       print("Complete event");
+            //     },
+            //     child: Container(
+            //       alignment: Alignment.center,
+            //       height: 45,width: (MediaQuery.of(context).size.width) - 55,
+            //                  decoration: BoxDecoration( color: Color(0xffC4A68B),),
+            //                  child: Text("Complete Event".tr,style: TextStyle(fontSize: 11,color: Colors.white,fontFamily: "Fontmain"),textAlign: TextAlign.center,),
+            //     ),
+            //   )
+            // ],)
           ],
         ),
       ));
@@ -1386,8 +1456,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(10),
                                 child: Container(
                                   height:
-                                      (MediaQuery.of(context).size.height / 3) -
-                                          20,
+                                      (MediaQuery.of(context).size.height /3)-20,
                                   width: double.infinity,
                                   margin: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
@@ -1494,18 +1563,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // ),
                                 InkWell(
                                   onTap: () {
-                                    if (((Api.User_info["Table"][0]
-                                                ["IsQuestionSubmited"] !=
-                                            null) &&
-                                        (Api.User_info["Table"][0]
-                                                ["IsQuestionSubmited"] ==
-                                            true) &&
-                                        (Api.User_info["Table"][0]
-                                                    ["F_SubscriberMaster"] ==
-                                                0 ||
-                                            Api.User_info["Table"][0]
-                                                    ["F_SubscriberMaster"] ==
-                                                null))) {
+                                    if (((Api.User_info["Table"][0]["IsQuestionSubmited"] !=null) &&(Api.User_info["Table"][0]["IsQuestionSubmited"] ==true) &&(Api.User_info["Table"][0]["F_SubscriberMaster"] ==0 ||Api.User_info["Table"][0]["F_SubscriberMaster"] ==null))) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1514,8 +1572,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ref: ref,
                                                 )),
                                       );
-                                    } else if (Api.User_info["Table"][0]
-                                            ["F_SubscriberMaster"] >=1) {
+                                    } else if (Api.User_info["Table"][0]["F_SubscriberMaster"]!=null&&Api.User_info["Table"][0]["F_SubscriberMaster"] >=1) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1564,15 +1621,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Spacer(),
                                         Image.asset(
-                                          Api.H_Questions.isNotEmpty
-                                            ? ((Api.User_info["Table"][0][
+                                         ((Api.User_info["Table"][0][
                                                             "IsQuestionSubmited"] !=
                                                         null) &&
                                                     (Api.User_info["Table"][0][
                                                             "IsQuestionSubmited"] ==
                                                         true))
                                                 ? "assets/images/main/social-media (3).png":
-                                          "assets/images/main/q&a.png":"assets/images/main/q&a.png",
+                                          "assets/images/main/q&a.png",
                                           width:
                                               100, // Adjust the width as needed
                                           height:
@@ -1581,8 +1637,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .cover, // Optional: Adjusts how the image is fitted
                                         ),
                                         Spacer(),
-                                        Api.H_Questions.isNotEmpty
-                                            ? ((Api.User_info["Table"][0][
+                                        ((Api.User_info["Table"][0][
                                                             "IsQuestionSubmited"] !=
                                                         null) &&
                                                     (Api.User_info["Table"][0][
@@ -1606,12 +1661,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       // fontWeight: FontWeight.w700
                                                     ), // Slightly reduced font size
                                                   )
-                                            : Text("Q&A".tr,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontFamily: 'Fontmain',
-                                                )),
+                                            // : Text("Q&A".tr,
+                                            //     textAlign: TextAlign.center,
+                                            //     style: TextStyle(
+                                            //       fontSize: 15,
+                                            //       fontFamily: 'Fontmain',
+                                            //     )),
                                       ],
                                     ),
                                   ),
@@ -1711,8 +1766,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => MyEnquiry()),
-                                    );
+                                          builder: (context) => MyEnquiry(add_booking: update_booking,)),
+                                    ).then((value) {
+                                        if (add_booking) {
+                                          setState(() {
+                                            loading = true;
+                                          });
+                                          Api.EventBookingDetailsList(
+                                                  Is_booking: "1",
+                                                  Which_APIcall_CompleteEvent_UpcomingEvent_TodayEvent:
+                                                      "TodayEvent")
+                                              .then(
+                                            (value) {
+                                              _data = value;
+
+                                              Api.Service_Question_List().then(
+                                                (value) {
+                                                  Api.get_Merchent_Trem_And_Condition()
+                                                      .then(
+                                                    (value) {
+                                                      setState(() {
+                                                        loading = false;
+                                                        add_booking = false;
+                                                      });
+                                                    },
+                                                  );
+                                                },
+                                              );
+
+                                              // print(value);
+                                            },
+                                          );
+                                        }
+                                    },);
                                   },
                                   child: Container(
                                     width: 100, // Set your desired width
@@ -1937,7 +2023,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ]))),
-        if (loading || service_data_loder)
+        if (loading || service_data_loder||loading1||loading2||loading3)
           Container(
             color: Colors.black.withOpacity(0.5),
             child: Center(

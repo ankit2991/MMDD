@@ -1313,7 +1313,7 @@ class Api {
                         if(user_logo==null)
                             pw.SizedBox(width: 50),
 
-                            pw.SizedBox(width: 110),
+                            pw.SizedBox(width: 10),
                         pw.Text(
                           compny_name,
                           style: pw.TextStyle(
@@ -1908,6 +1908,7 @@ pw.Text("* This is computer generated invoice does not require signatures *",
   static Future<void> getLogo({required String url}) async {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
+      // user_logo=
       user_logo = response.bodyBytes;
       log("Get logo Api call ......... Make by me");
     } else {

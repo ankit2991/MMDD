@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:mddmerchant/api/api.dart';
+import 'package:mddmerchant/screen/map_Screen.dart';
 
 class AddBooking extends StatefulWidget {
   @override
@@ -578,6 +579,11 @@ class _AddBookingState extends State<AddBooking> {
                         });
                         print("object");
                         try {
+                          // Navigator.push(context, MaterialPageRoute(builder: (context) => map_Screen(),)).then((value) {
+                          //   setState(() {
+                          //       loader = false;
+                          //     });
+                          // },);
                           Api.get_loc(context, loding).then(
                             (value) {
                               print("----------------------");
@@ -750,6 +756,7 @@ class _AddBookingState extends State<AddBooking> {
                                 (value) {
                                   if (value) {
                                      setState(() {
+                                      widget.add_booking(true);
                                     loader=false;
                                   });
                                     widget.refresh();

@@ -84,13 +84,16 @@ class _UserProfileState extends State<UserProfile> {
                                                 "")
                                         .then(
                                       (value) {
-                                        setState(() {
+                                        Api.getLogo(url: Api.User_info["Table"][0]["LogoImg"]).then((value) {
+                                          setState(() {
                                           loader = false;
                                         });
                                         Api.snack_bar2(
                                             context: context,
                                             message:
                                                 "successfully Logo Update");
+                                        },);
+                                        
                                       },
                                     );
                                   },
@@ -2514,7 +2517,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                             if(_data[index]["IsDiscount"]==false &&end_date.isBefore(DateTime.now())){
                               Navigator.push(context, MaterialPageRoute(builder: (context) => AddService(refresh: refresh,edit: true,old_data: _data[index]),));
                             }else{
-                              Api.snack_bar(context: context, message: "No Edit ( service Available on Discount )");
+                              Api.snack_bar(context: context, message: "No Edit ( service Available on Discount )".tr);
                             }
 
                             }else{

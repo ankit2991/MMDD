@@ -655,9 +655,9 @@ class _CheckboxExampleState extends State<RegisTration> {
                         ),
                         GestureDetector(
                           onTap: (){
-                            if (isChecked) {
+                            // if (isChecked) {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => read_TermsAndConditation(),));                                
-                              }
+                              
                           },
                           child: Text(
                             'I Agree Terms & Conditions',
@@ -726,6 +726,9 @@ class _CheckboxExampleState extends State<RegisTration> {
                           });
                           Api.snack_bar(context: context, message: "Something Went Wrong");
                         }
+                          }else{
+                          Api.snack_bar(context: context, message: "Please Agree Terms & Conditions");
+
                           }
                         }
                       },
