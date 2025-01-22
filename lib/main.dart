@@ -382,7 +382,7 @@ class _HomeScreenState extends State<HomeScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => AddService(
-              refresh: ref,
+              ref: ref,
             ),
           ));
     }
@@ -1387,13 +1387,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   await Api.prefs.setInt('is_Hindi', 0);
                   Get.updateLocale(Locale('en', 'US'));
                 }
-                Api.Service_Question_List().then(
-                  (value) {
-                    setState(() {
+                // Api.Service_Question_List().then(
+                //   (value) {
+                //     setState(() {
+                //       loading = false;
+                //     });
+                //   },
+                // );
+                 setState(() {
                       loading = false;
                     });
-                  },
-                );
                 print(Api.prefs.getInt('is_Hindi'));
               },
               icon: Icon(Icons.g_translate_rounded,

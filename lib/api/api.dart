@@ -659,11 +659,11 @@ class Api {
       var data = await res.stream.bytesToString();
       log("ImageInsert Api DATA .............");
       print(data);
-      if (data.contains("R200")) {
-        snack_bar(context: context, message: "Duplicate pdf");
-      } else {
-        snack_bar(context: context, message: "Image Upload Done");
-      }
+      // if (data.contains("R200")) {
+      //   snack_bar(context: context, message: "Duplicate pdf");
+      // } else {
+      //   snack_bar(context: context, message: "Image Upload Done");
+      // }
       // return data["Table1"];
     } else {
       log("Error........ ImageInsert Api ");
@@ -750,6 +750,7 @@ class Api {
   // ____________________________________________________________________   (add service in event )
   static Future<bool> CustomerRegistration(
       {required String Mobile,
+      required String OMobile,
       required String CName,
       required String Email,
       required String Remarks,
@@ -767,7 +768,7 @@ class Api {
       required String DueAmount,
       context}) async {
     String url =
-        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"Mobile":"$Mobile","CName":"$CName","Email":"$Email","ServiceId":"0","MerchantId":'
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"Mobile":"$Mobile","Mobile1":"$Mobile","CName":"$CName","Email":"$Email","ServiceId":"0","MerchantId":'
         "\"${User_info["Table"][0]["Id"].toInt()}\""
         ',"Isbooking":"$Isbooking","EventName":"$EventName","Longitude":"$Longitude","Latitude":"$Latitude","EventAddress":"$EventAddress","EventStartDate":"$EventStartDate","EventEndDate":"$EventEndDate","EventStartTime":"$EventStartTime","EventEndTime":"$EventEndTime","TotalAmount":"$TotalAmount","BookingAmount":"$BookingAmount","DueAmount":"$DueAmount","Remarks":"$Remarks","F_VoucherTypeMaster":"1","ApiAdd":"CustomerRegistration","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=CustomerRegistration';
     print(url);

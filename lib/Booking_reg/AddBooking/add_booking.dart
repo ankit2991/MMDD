@@ -19,8 +19,7 @@ class AddBooking extends StatefulWidget {
       required this.refresh,
       required this.update,
       required this.data,
-      required this.add_booking
-      });
+      required this.add_booking});
   _AddBookingState createState() => _AddBookingState();
 }
 
@@ -56,8 +55,8 @@ class _AddBookingState extends State<AddBooking> {
     // TODO: implement initState
     super.initState();
     if (widget.update) {
-      name_con.text = widget.data["CustomerName"];
-      mob_con.text = widget.data["MobileNo"];
+      name_con.text = widget.data["CustomerName"] ?? "";
+      mob_con.text = widget.data["MobileNo"] ?? "";
       _startDate = DateTime.parse(widget.data["EventStartDate"]);
       _endDate = DateTime.parse(widget.data["EventEndDate"]);
       List<String> Start_time = widget.data["EventStartTime"].split(":");
@@ -70,11 +69,21 @@ class _AddBookingState extends State<AddBooking> {
         hour: int.parse(End_time[0]),
         minute: int.parse(End_time[1]),
       );
-      selectedItem = widget.data["EventName"];
+      selectedItem = widget.data["EventName"] ?? "";
+      if (widget.data["WhatsappMobile"] != null) {
+        Omob_con.text = widget.data["WhatsappMobile"].toInt().toString() ?? "";
+      }
+      if (widget.data["EventAddress"] != null) {
+        event_address_con.text = widget.data["EventAddress"] ?? "";
+      }
+      if (widget.data["Latitude"] != null && widget.data["Longitude"] != null) {
+        lett = widget.data["Latitude"] ?? "";
+        lott = widget.data["Longitude"] ?? "";
+        String address = "${lett},${lott}";
+        eventLocation_con.text = address;
+      }
 
-// Omob_con.text=widget.data["CustomerName"];
-// event_address_con.text=widget.data["CustomerName"];
-      remark_con.text = widget.data["Remarks"];
+      remark_con.text = widget.data["Remarks"] ?? "";
       // eventLocation_con.text = widget.data["CustomerName"];
     }
   }
@@ -387,7 +396,8 @@ class _AddBookingState extends State<AddBooking> {
                           Api.snack_bar(
                               context: context,
                               message:
-                                  "Please select Event Start Date then Select End date".tr);
+                                  "Please select Event Start Date then Select End date"
+                                      .tr);
                         }
                       },
                       child: IgnorePointer(
@@ -484,7 +494,8 @@ class _AddBookingState extends State<AddBooking> {
                         if (_startDate == null && _endDate == null) {
                           Api.snack_bar(
                               context: context,
-                              message: "please select Start Date & End Date".tr);
+                              message:
+                                  "please select Start Date & End Date".tr);
                         } else if (_startTime == null) {
                           Api.snack_bar(
                               context: context,
@@ -611,7 +622,8 @@ class _AddBookingState extends State<AddBooking> {
                           controller: eventLocation_con,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please Tap this field and get location".tr;
+                              return "Please Tap this field and get location"
+                                  .tr;
                             }
                           },
                           decoration: InputDecoration(
@@ -677,65 +689,69 @@ class _AddBookingState extends State<AddBooking> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if(widget.update)
-                        GestureDetector(
-                          onTap: (){
-                               if (_formKey.currentState!.validate()) {
-                              if (widget.update) {
-                                Api.EventBooking(
-                                  IsBooking: "0",
-                                  BookingAmount: "",
-                                  DueAmount: "",
-                                  EventEndDate:
-                                      "${_endDate!.toLocal()}".split(' ')[0],
-                                  EventStartDate:
-                                      "${_startDate!.toLocal()}".split(' ')[0],
-                                  EventId: widget.data["id"].toInt().toString(),
-                                  EventEndTime:
-                                      "${_endTime!.hour}:${_endTime!.minute}",
-                                  EventStartTime:
-                                      "${_startTime!.hour}:${_startTime!.minute}",
-                                  TotalAmount: "",
-                                  Remarks: remark_con.text,
-                                ).then(
-                                (value) {
-                                  if (value) {
-                                    widget.refresh();
-                                    Navigator.of(context).pop();
-                                  } else {
-                                    name_con.clear();
-                                    mob_con.clear();
-                                    Omob_con.clear();
-                                    event_address_con.clear();
-                                    remark_con.clear();
-                                    eventLocation_con.clear();
-                                  }
-                                },
-                              );
-                            }
-                          }},
-                          child: Container(
-                            margin: EdgeInsets.only(right: 5),
-                            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
-                            alignment: Alignment.center,
-                            width: (MediaQuery.of(context).size.width/2)-20,
-                            decoration: BoxDecoration(color: Color(0xffC4A68B),),
-                          
-                          
-                            child: Text(
-                              'Save'.tr,
-                              style: TextStyle(
-                                  color: Colors.white, fontFamily: 'Fontmain'),
+                        if (widget.update)
+                          GestureDetector(
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                if (widget.update) {
+                                  Api.EventBooking(
+                                    IsBooking: "0",
+                                    BookingAmount: "",
+                                    DueAmount: "",
+                                    EventEndDate:
+                                        "${_endDate!.toLocal()}".split(' ')[0],
+                                    EventStartDate: "${_startDate!.toLocal()}"
+                                        .split(' ')[0],
+                                    EventId:
+                                        widget.data["id"].toInt().toString(),
+                                    EventEndTime:
+                                        "${_endTime!.hour}:${_endTime!.minute}",
+                                    EventStartTime:
+                                        "${_startTime!.hour}:${_startTime!.minute}",
+                                    TotalAmount: "",
+                                    Remarks: remark_con.text,
+                                  ).then(
+                                    (value) {
+                                      if (value) {
+                                        widget.refresh();
+                                        Navigator.of(context).pop();
+                                      } else {
+                                        name_con.clear();
+                                        mob_con.clear();
+                                        Omob_con.clear();
+                                        event_address_con.clear();
+                                        remark_con.clear();
+                                        eventLocation_con.clear();
+                                      }
+                                    },
+                                  );
+                                }
+                              }
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 5),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 5),
+                              alignment: Alignment.center,
+                              width:
+                                  (MediaQuery.of(context).size.width / 2) - 20,
+                              decoration: BoxDecoration(
+                                color: Color(0xffC4A68B),
+                              ),
+                              child: Text(
+                                'Save'.tr,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Fontmain'),
+                              ),
                             ),
                           ),
-                        ),
-                    
                         GestureDetector(
-                          onTap: (){
-                                if (_formKey.currentState!.validate()) {
-                                  setState(() {
-                                    loader=true;
-                                  });
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                loader = true;
+                              });
                               if (widget.update) {
                                 Api.EventBooking(
                                   IsBooking: "1",
@@ -753,89 +769,94 @@ class _AddBookingState extends State<AddBooking> {
                                   TotalAmount: "",
                                   Remarks: remark_con.text,
                                 ).then(
-                                (value) {
-                                  if (value) {
-                                     setState(() {
+                                  (value) {
+                                    if (value) {
+                                      setState(() {
+                                        widget.add_booking(true);
+                                        loader = false;
+                                      });
+                                      widget.refresh();
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      name_con.clear();
+                                      mob_con.clear();
+                                      Omob_con.clear();
+                                      event_address_con.clear();
+                                      remark_con.clear();
+                                      eventLocation_con.clear();
+                                      setState(() {
+                                        loader = false;
+                                      });
+                                    }
+                                  },
+                                );
+                              } else {
+                                Api.CustomerRegistration(
+                                        OMobile: Omob_con.text.trim(),
+                                        Isbooking: widget.Isbooking,
+                                        BookingAmount: "",
+                                        CName: name_con.text,
+                                        DueAmount: "",
+                                        Email: "",
+                                        EventAddress: event_address_con.text,
+                                        EventEndDate: "${_endDate!.toLocal()}"
+                                            .split(' ')[0],
+                                        EventStartDate:
+                                            "${_startDate!.toLocal()}"
+                                                .split(' ')[0],
+                                        EventStartTime:
+                                            "${_startTime!.hour}:${_startTime!.minute}",
+                                        EventEndTime:
+                                            "${_endTime!.hour}:${_endTime!.minute}",
+                                        EventName: selectedItem ?? "",
+                                        Latitude: lett ?? "",
+                                        Longitude: lott ?? "",
+                                        Mobile: mob_con.text,
+                                        Remarks: remark_con.text,
+                                        TotalAmount: "",
+                                        context: context)
+                                    .then(
+                                  (value) {
+                                    if (value) {
+                                      setState(() {
+                                        loader = false;
+                                      });
+                                      widget.refresh();
                                       widget.add_booking(true);
-                                    loader=false;
-                                  });
-                                    widget.refresh();
-                                    Navigator.of(context).pop();
-                                  } else {
-                                    name_con.clear();
-                                    mob_con.clear();
-                                    Omob_con.clear();
-                                    event_address_con.clear();
-                                    remark_con.clear();
-                                    eventLocation_con.clear();
-                                          setState(() {
-                                    loader=false;
-                                  });
-                                  }
-                                },
-                              );
-                              }else{
-                              Api.CustomerRegistration(
-                                      Isbooking: widget.Isbooking,
-                                      BookingAmount: "",
-                                      CName: name_con.text,
-                                      DueAmount: "",
-                                      Email: "",
-                                      EventAddress: event_address_con.text,
-                                      EventEndDate:
-                                          "${_endDate!.toLocal()}".split(' ')[0],
-                                      EventStartDate:
-                                          "${_startDate!.toLocal()}".split(' ')[0],
-                                      EventStartTime:
-                                          "${_startTime!.hour}:${_startTime!.minute}",
-                                      EventEndTime:
-                                          "${_endTime!.hour}:${_endTime!.minute}",
-                                      EventName: selectedItem ?? "",
-                                      Latitude: lett ?? "",
-                                      Longitude: lott ?? "",
-                                      Mobile: mob_con.text,
-                                      Remarks: remark_con.text,
-                                      TotalAmount: "",
-                                      context: context)
-                                  .then(
-                                (value) {
-                                  if (value) {
-                                          setState(() {
-                                    loader=false;
-                                  });
-                                    widget.refresh();
-                                    widget.add_booking(true);
-                                    Navigator.of(context).pop();
-                                  } else {
-                                    name_con.clear();
-                                    mob_con.clear();
-                                    Omob_con.clear();
-                                    event_address_con.clear();
-                                    remark_con.clear();
-                                    eventLocation_con.clear();
-                                          setState(() {
-                                    loader=false;
-                                  });
-                                  }
-                                },
-                              );
-                            }}
-                         
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      name_con.clear();
+                                      mob_con.clear();
+                                      Omob_con.clear();
+                                      event_address_con.clear();
+                                      remark_con.clear();
+                                      eventLocation_con.clear();
+                                      setState(() {
+                                        loader = false;
+                                      });
+                                    }
+                                  },
+                                );
+                              }
+                            }
                           },
                           child: Container(
-                             padding: EdgeInsets.symmetric(vertical: 10,horizontal: 4),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 4),
                             alignment: Alignment.center,
-                            width: (MediaQuery.of(context).size.width/2)-20,
-                            decoration: BoxDecoration(color: Color(0xffC4A68B),),
-                          
+                            width: (MediaQuery.of(context).size.width / 2) - 20,
+                            decoration: BoxDecoration(
+                              color: Color(0xffC4A68B),
+                            ),
                             child: Text(
-                              widget.update?'CONFIRM BOOKING'.tr:"SUBMIT".tr,
+                              widget.update
+                                  ? 'CONFIRM BOOKING'.tr
+                                  : "SUBMIT".tr,
                               style: TextStyle(
                                   color: Colors.white, fontFamily: 'Fontmain'),
                             ),
                           ),
                         ),
-                    
                       ],
                     ),
                   ],

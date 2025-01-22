@@ -84,16 +84,20 @@ class _UserProfileState extends State<UserProfile> {
                                                 "")
                                         .then(
                                       (value) {
-                                        Api.getLogo(url: Api.User_info["Table"][0]["LogoImg"]).then((value) {
-                                          setState(() {
-                                          loader = false;
-                                        });
-                                        Api.snack_bar2(
-                                            context: context,
-                                            message:
-                                                "successfully Logo Update");
-                                        },);
-                                        
+                                        Api.getLogo(
+                                                url: Api.User_info["Table"][0]
+                                                    ["LogoImg"])
+                                            .then(
+                                          (value) {
+                                            setState(() {
+                                              loader = false;
+                                            });
+                                            Api.snack_bar2(
+                                                context: context,
+                                                message:
+                                                    "successfully Logo Update");
+                                          },
+                                        );
                                       },
                                     );
                                   },
@@ -202,10 +206,14 @@ class _UserProfileState extends State<UserProfile> {
                         title: "Registration Information".tr,
                         page: RegistrationInformationPage()),
                     ProfileOption(
-                        title: "Bank Information".tr, page: BankInformationPage()),
-                    ProfileOption(title: "MMDD Orders".tr, page: MMDDOrdersPage()),
-                    ProfileOption(title: "My Services".tr, page: MyServicesPage()),
-                    ProfileOption(title: "Discount".tr, page: Discount_screen()),
+                        title: "Bank Information".tr,
+                        page: BankInformationPage()),
+                    ProfileOption(
+                        title: "MMDD Orders".tr, page: MMDDOrdersPage()),
+                    ProfileOption(
+                        title: "My Services".tr, page: MyServicesPage()),
+                    ProfileOption(
+                        title: "Discount".tr, page: Discount_screen()),
                     ProfileOption(title: "Our Services".tr, page: OurService()),
                     ProfileOption(
                         title: "My Terms & Conditions".tr,
@@ -393,11 +401,13 @@ class _Discount_screenState extends State<Discount_screen> {
                               // if( int.parse(amount_con.text)-int.parse(discount_con.text)>=0){
                               Api.snack_bar(
                                   context: context,
-                                  message: "Discount Activated successfully".tr);
+                                  message:
+                                      "Discount Activated successfully".tr);
                             } else {
                               Api.snack_bar(
                                   context: context,
-                                  message: "Discount Deactivated successfully".tr);
+                                  message:
+                                      "Discount Deactivated successfully".tr);
                             }
                           },
                         );
@@ -510,7 +520,8 @@ class _Discount_screenState extends State<Discount_screen> {
                                                 Api.snack_bar(
                                                     context: context,
                                                     message:
-                                                        "Discount Activated successfully".tr);
+                                                        "Discount Activated successfully"
+                                                            .tr);
 
                                                 Api.FacilityReport().then(
                                                   (value) {
@@ -525,7 +536,8 @@ class _Discount_screenState extends State<Discount_screen> {
                                                 Api.snack_bar(
                                                     context: context,
                                                     message:
-                                                        "Discount Deactivated successfully".tr);
+                                                        "Discount Deactivated successfully"
+                                                            .tr);
                                                 setState(() {
                                                   loader = true;
                                                 });
@@ -597,9 +609,11 @@ class _Discount_screenState extends State<Discount_screen> {
                                         showDialog(
                                           context: context,
                                           builder: (context) => AlertDialog(
-                                            title: Text("Something went wrong".tr),
+                                            title:
+                                                Text("Something went wrong".tr),
                                             content: Text(
-                                                "Please remove extra amount".tr),
+                                                "Please remove extra amount"
+                                                    .tr),
                                             actions: [
                                               TextButton(
                                                 onPressed: () {
@@ -688,7 +702,8 @@ class _Discount_screenState extends State<Discount_screen> {
                                         },
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return "select Discount Start Date".tr;
+                                            return "select Discount Start Date"
+                                                .tr;
                                           }
                                         },
                                         decoration: InputDecoration(
@@ -747,7 +762,8 @@ class _Discount_screenState extends State<Discount_screen> {
                                         },
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return "Please select Discount Start Date".tr;
+                                            return "Please select Discount Start Date"
+                                                .tr;
                                           }
                                         },
                                         decoration: InputDecoration(
@@ -826,7 +842,8 @@ class _Discount_screenState extends State<Discount_screen> {
                                       Api.snack_bar(
                                           context: context,
                                           message:
-                                              "Discount Activated successfully".tr);
+                                              "Discount Activated successfully"
+                                                  .tr);
                                       //    setState(() {
                                       //   loader=true;
                                       // });
@@ -843,7 +860,8 @@ class _Discount_screenState extends State<Discount_screen> {
                                       Api.snack_bar(
                                           context: context,
                                           message:
-                                              "Discount Deactivated successfully".tr);
+                                              "Discount Deactivated successfully"
+                                                  .tr);
                                       //    setState(() {
                                       //   loader=true;
                                       // });
@@ -1232,8 +1250,8 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
     } else {
       Template_con.text = "0";
     }
-    if(Api.User_info["Table"][0]["ReelCount"]!=null ){
-      Reel_con.text=Api.User_info["Table"][0]["ReelCount"].toInt().toString();
+    if (Api.User_info["Table"][0]["ReelCount"] != null) {
+      Reel_con.text = Api.User_info["Table"][0]["ReelCount"].toInt().toString();
     }
     if (Api.User_info["Table"][0]["SmsBalance"] != null) {
       Balance_con.text =
@@ -1875,7 +1893,8 @@ class _RegistrationInformationPageState
                             );
                           } else {
                             Api.snack_bar(
-                                context: context, message: "fill all fields".tr);
+                                context: context,
+                                message: "fill all fields".tr);
                           }
                         },
                         child: Text(
@@ -2362,7 +2381,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
   @override
   List<dynamic> _data = [];
   bool loader = false;
-  void refresh() {
+  void refresh(bool a) {
     setState(() {
       loader = true;
     });
@@ -2391,6 +2410,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
       },
     );
   }
+  // bool _debugLocked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -2425,107 +2445,161 @@ class _MyServicesPageState extends State<MyServicesPage> {
                   itemCount: _data.length,
                   itemBuilder: (context, index) {
                     return Api.User_info["Table"][0]["IsEcom"] == true
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              tileColor:
-                                  const Color.fromARGB(255, 235, 233, 233),
-                              leading: GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
+                        ? GestureDetector(
+                          onTap: (){
+                            if (_data[index]["DisEndDate"] != null) {
+                                var end_date =
+                                    DateTime.parse(_data[index]["DisEndDate"]);
+                                if (_data[index]["IsDiscount"] == false &&
+                                    end_date.isBefore(DateTime.now())) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AddService(
+                                            ref: refresh,
+                                            edit: true,
+                                            old_data: _data[index]),
+                                      ));
+                                } else {
+                                  Api.snack_bar(
+                                      context: context,
+                                      message:
+                                          "No Edit ( service Available on Discount )"
+                                              .tr);
+                                }
+                              } else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AddService(
+                                        ref: refresh,
+                                        edit: true,
+                                        old_data: _data[index],
+                                      ),
+                                    ));
+                              }
+                          },
+                          child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                tileColor:
+                                    const Color.fromARGB(255, 235, 233, 233),
+                                leading: GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return Container(
+                                          height: 300,
+                                          width: 300,
+                                          child: CachedNetworkImage(
+                                            imageUrl: _data[index]["FacilityImg"],
+                                            errorWidget: (context, url, error) {
+                                              return Container(
+                                                height: 80,
+                                                width: 80,
+                                                color: Colors.red,
+                                              );
+                                            },
+                                            progressIndicatorBuilder:
+                                                (context, url, progress) {
+                                              return CupertinoActivityIndicator();
+                                            },
+                                            imageBuilder:
+                                                (context, imageProvider) {
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                    // color: Colors.amber,
+                                                    borderRadius:
+                                                        BorderRadius.circular(10),
+                                                    image: DecorationImage(
+                                                      image: imageProvider,
+                                                    )),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: CachedNetworkImage(
+                                    imageUrl: _data[index]["FacilityImg"],
+                                    errorWidget: (context, url, error) {
                                       return Container(
-                                        height: 300,
-                                        width: 300,
-                                        child: CachedNetworkImage(
-                                          imageUrl: _data[index]["FacilityImg"],
-                                          errorWidget: (context, url, error) {
-                                            return Container(
-                                              height: 80,
-                                              width: 80,
-                                              color: Colors.red,
-                                            );
-                                          },
-                                          progressIndicatorBuilder:
-                                              (context, url, progress) {
-                                            return CupertinoActivityIndicator();
-                                          },
-                                          imageBuilder:
-                                              (context, imageProvider) {
-                                            return Container(
-                                              decoration: BoxDecoration(
-                                                  // color: Colors.amber,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  image: DecorationImage(
-                                                    image: imageProvider,
-                                                  )),
-                                            );
-                                          },
-                                        ),
+                                        height: 80,
+                                        width: 80,
+                                        color: Colors.red,
                                       );
                                     },
-                                  );
-                                },
-                                child: CachedNetworkImage(
-                                  imageUrl: _data[index]["FacilityImg"],
-                                  errorWidget: (context, url, error) {
-                                    return Container(
-                                      height: 80,
-                                      width: 80,
-                                      color: Colors.red,
-                                    );
-                                  },
-                                  progressIndicatorBuilder:
-                                      (context, url, progress) {
-                                    return CupertinoActivityIndicator();
-                                  },
-                                  imageBuilder: (context, imageProvider) {
-                                    return Container(
-                                      height: 80,
-                                      width: 80,
-                                      decoration: BoxDecoration(
-                                          color: Colors.amber,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover)),
-                                    );
-                                  },
+                                    progressIndicatorBuilder:
+                                        (context, url, progress) {
+                                      return CupertinoActivityIndicator();
+                                    },
+                                    imageBuilder: (context, imageProvider) {
+                                      return Container(
+                                        height: 80,
+                                        width: 80,
+                                        decoration: BoxDecoration(
+                                            color: Colors.amber,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover)),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                title: Text(
+                                  _data[index]["FacilityName"],
+                                  style: TextStyle(
+                                      fontFamily: "Fontmain",
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text(
+                                  _data[index]["Amount"].toString(),
+                                  style: TextStyle(
+                                      fontFamily: "Fontmain",
+                                      fontWeight: FontWeight.normal),
                                 ),
                               ),
-                              title: Text(
-                                _data[index]["FacilityName"],
-                                style: TextStyle(
-                                    fontFamily: "Fontmain",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text(
-                                _data[index]["Amount"].toString(),
-                                style: TextStyle(
-                                    fontFamily: "Fontmain",
-                                    fontWeight: FontWeight.normal),
-                              ),
                             ),
-                          )
+                        )
                         : GestureDetector(
-                          onTap: (){
-                            if(_data[index]["DisEndDate"]!=null){
-                            var end_date= DateTime.parse(_data[index]["DisEndDate"]);
-                            if(_data[index]["IsDiscount"]==false &&end_date.isBefore(DateTime.now())){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => AddService(refresh: refresh,edit: true,old_data: _data[index]),));
-                            }else{
-                              Api.snack_bar(context: context, message: "No Edit ( service Available on Discount )".tr);
-                            }
-
-                            }else{
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => AddService(refresh: refresh,edit: true,old_data: _data[index],),));
-
-                            }
-                          },
-                          child: Container(
+                            onTap: () {
+                              if (_data[index]["DisEndDate"] != null) {
+                                var end_date =
+                                    DateTime.parse(_data[index]["DisEndDate"]);
+                                if (_data[index]["IsDiscount"] == false &&
+                                    end_date.isBefore(DateTime.now())) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AddService(
+                                            ref: refresh,
+                                            edit: true,
+                                            old_data: _data[index]),
+                                      ));
+                                } else {
+                                  Api.snack_bar(
+                                      context: context,
+                                      message:
+                                          "No Edit ( service Available on Discount )"
+                                              .tr);
+                                }
+                              } else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AddService(
+                                        ref: refresh,
+                                        edit: true,
+                                        old_data: _data[index],
+                                      ),
+                                    ));
+                              }
+                            },
+                            child: Container(
                               margin: EdgeInsets.all(10),
                               height: 80,
                               // color: Colors.amber,
@@ -2540,7 +2614,8 @@ class _MyServicesPageState extends State<MyServicesPage> {
                                     )
                                   ]),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -2558,7 +2633,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                                 ],
                               ),
                             ),
-                        );
+                          );
                   },
                 ),
           if (loader)
@@ -2575,11 +2650,12 @@ class _MyServicesPageState extends State<MyServicesPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          //  assert(!_debugLocked);
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => AddService(
-                      refresh: refresh,
+                      ref: refresh,
                     )),
           );
         },
@@ -2595,10 +2671,10 @@ class _MyServicesPageState extends State<MyServicesPage> {
 }
 
 class AddService extends StatefulWidget {
-  Function refresh;
-  bool? edit=false;
-  Map ?old_data={};
-  AddService({required this.refresh,this.edit,this.old_data});
+  Function ref;
+  bool? edit = false;
+  Map? old_data = {};
+  AddService({required this.ref, this.edit, this.old_data});
   @override
   State<AddService> createState() => _AddServiceState();
 }
@@ -2611,39 +2687,43 @@ class _AddServiceState extends State<AddService> {
   String? _selectedCategory;
   List<dynamic> _data = [];
   int? selectted_service_id;
-  bool _loader=false;
+  bool _loader = false;
+   String ? Old_img;
   @override
   void initState() {
     loading = true;
-    _loader=true;
+    _loader = true;
+   
     // TODO: implement initState
     super.initState();
     Api.service(Api.User_info["Table"][0]["ServiceID"].toString()).then(
       (value) {
         _data = value;
-        if(widget.edit==true){
+        if (widget.edit == true) {
           print("Edit...........");
           print(widget.old_data);
-          if(widget.old_data!["FacilityName"]!=null){
-          service_name_con.text=widget.old_data!["FacilityName"];
+          if (widget.old_data!["FacilityName"] != null) {
+            service_name_con.text = widget.old_data!["FacilityName"];
           }
-          if(widget.old_data!["Amount"]!=null){
-          amount_con.text=widget.old_data!["Amount"].toString();
+          if (widget.old_data!["Amount"] != null) {
+            amount_con.text = widget.old_data!["Amount"].toString();
           }
-          if(widget.old_data!["Description"]!=null){
-          service_con.text=widget.old_data!["Description"];
+          if(widget.old_data!["FacilityImg"]!=null){
+            Old_img=widget.old_data!["FacilityImg"];
           }
-          if(widget.old_data!["F_SubServiceCategory"]!=null){
-             int index = _data!
-                          .indexWhere((map) => map['ID'] == widget.old_data!["F_SubServiceCategory"].toInt()); 
-                          if(index!=-1){
-                          _selectedCategory=_data[index]["SubCategoryName"];
-                          }                         
-          // selectted_service_id = _data[index]["ID"];
+          if (widget.old_data!["Description"] != null) {
+            service_con.text = widget.old_data!["Description"];
           }
-
+          if (widget.old_data!["F_SubServiceCategory"] != null) {
+            int index = _data!.indexWhere((map) =>
+                map['ID'] == widget.old_data!["F_SubServiceCategory"].toInt());
+            if (index != -1) {
+              _selectedCategory = _data[index]["SubCategoryName"];
+            selectted_service_id = index;
+            }
+          }
         }
-        _loader=false;
+        _loader = false;
         setState(() {
           loading = false;
         });
@@ -2687,7 +2767,12 @@ class _AddServiceState extends State<AddService> {
                   if (Api.User_info["Table"][0]["IsEcom"] == true)
                     GestureDetector(
                       onTap: () {
-                        Api.pickImage(source: ImageSource.gallery, img: true).then(
+                        if(widget.edit==true){
+                          Api.snack_bar(context: context, message: "Can't Change Image");
+                        }else{
+                          
+                        Api.pickImage(source: ImageSource.gallery, img: true)
+                            .then(
                           (value) {
                             setState(() {
                               _image = value["file"];
@@ -2695,6 +2780,7 @@ class _AddServiceState extends State<AddService> {
                             });
                           },
                         );
+                        }
                       },
                       child: Container(
                         height: 200,
@@ -2702,14 +2788,16 @@ class _AddServiceState extends State<AddService> {
                         decoration: BoxDecoration(
                             color: Colors.grey,
                             image: DecorationImage(
-                                image: _image != null
+                                image:Old_img!=null? NetworkImage(Old_img!): _image != null
                                     ? FileImage(_image!)
                                     : AssetImage("assets/images/main/img.jpg"),
                                 fit: BoxFit.fill)),
                       ),
                     ),
                   IgnorePointer(
-                    ignoring: widget.edit==true&&_selectedCategory!=null?true:false,
+                    ignoring: widget.edit == true && _selectedCategory != null
+                        ? true
+                        : false,
                     child: DropdownButtonFormField<String>(
                       value: _selectedCategory,
                       // iconSize: 20,
@@ -2718,10 +2806,10 @@ class _AddServiceState extends State<AddService> {
                         border: OutlineInputBorder(),
                         labelText: 'Business Category'.tr,
                       ),
-                              
+
                       onChanged: (String? newValue) async {
-                        int index = _data!
-                            .indexWhere((map) => map['SubCategoryName'] == newValue);
+                        int index = _data!.indexWhere(
+                            (map) => map['SubCategoryName'] == newValue);
                         setState(() {
                           _selectedCategory = newValue!;
                           selectted_service_id = index;
@@ -2749,7 +2837,8 @@ class _AddServiceState extends State<AddService> {
                         borderSide: BorderSide(color: Color(0xffC4A68B)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                        borderSide:
+                            BorderSide(color: Color(0xffC4A68B), width: 2),
                       ),
                     ),
                     style: TextStyle(
@@ -2775,7 +2864,8 @@ class _AddServiceState extends State<AddService> {
                         borderSide: BorderSide(color: Color(0xffC4A68B)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                        borderSide:
+                            BorderSide(color: Color(0xffC4A68B), width: 2),
                       ),
                     ),
                     style: TextStyle(
@@ -2801,7 +2891,8 @@ class _AddServiceState extends State<AddService> {
                         borderSide: BorderSide(color: Color(0xffC4A68B)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                        borderSide:
+                            BorderSide(color: Color(0xffC4A68B), width: 2),
                       ),
                     ),
                     style: TextStyle(
@@ -2821,52 +2912,141 @@ class _AddServiceState extends State<AddService> {
                         minimumSize: Size(650, 45),
                       ),
                       onPressed: () async {
-                        if (Api.User_info["Table"][0]["IsEcom"] == true) {
-                          // List<int> fileBytes = await _image!.readAsBytes();
-                          // String base64File = base64Encode(fileBytes);
-                          if(widget.edit==false ||widget.edit==null){
-                            Api.FacilityInsert(
-                            Amount: amount_con.text.trim(),
-                            Description: service_con.text.trim(),
-                            F_SubServiceCategory: _data[selectted_service_id!]["ID"].toString(),
-                            FacilityName: service_name_con.text.trim(),
-                            ext: "." + ext ?? "",
-                            img: _image,
-                            context: context,
-                          ).then(
-                            (value) {
-                              widget.refresh();
-                              Navigator.of(context).pop();
-                            },
-                          );
-                          }else{
-                            Api.FacilityUpdate(FacilityId: widget.old_data!["Id"], FacilityName: service_name_con.text.trim(), Amount: amount_con.text.trim(), F_SubServiceCategory: _data[selectted_service_id!]["ID"].toString()).then((value) {
-                               widget.refresh();
-                              Navigator.of(context).pop();
-                            },);
+                        if (amount_con.text.isNotEmpty &&
+                            service_name_con.text.isNotEmpty &&
+                            _selectedCategory != null&&(_image!=null||widget.edit==true||Api.User_info["Table"][0]["IsEcom"] != true)) {
+                          if (Api.User_info["Table"][0]["IsEcom"] == true) {
+                            setState(() {
+                              _loader = true;
+                            });
+                            // List<int> fileBytes = await _image!.readAsBytes();
+                            // String base64File = base64Encode(fileBytes);
+                            if (widget.edit == false || widget.edit == null) {
+                              await Api.FacilityInsert(
+                                Amount: amount_con.text.trim(),
+                                Description: service_con.text.trim(),
+                                F_SubServiceCategory:
+                                    _data[selectted_service_id!]["ID"]
+                                        .toString(),
+                                FacilityName: service_name_con.text.trim(),
+                                ext: "." + ext ?? "",
+                                img: _image,
+                                context: context,
+                              ).then(
+                                (value) {
+                                  widget.ref(true);
+                                  setState(() {
+                                    _loader = false;
+                                  });
+                                  Api.snack_bar2(
+                                          context: context,
+                                          message: "Successfully Add Service".tr)
+                                      .then(
+                                    (value) {
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop();
+                                    },
+                                  );
+                                  // Get.back();
+                                },
+                              );
+                            } else {
+                              Api.FacilityUpdate(
+                                      FacilityId: widget.old_data!["Id"].toString(),
+                                      FacilityName:
+                                          service_name_con.text.trim(),
+                                      Amount: amount_con.text.trim(),
+                                      F_SubServiceCategory:_data[selectted_service_id!]["ID"]
+                                        .toString()
+                                             )
+                                  .then(
+                                (value) {
+                                  widget.ref(true);
+                                  // Navigator.of(context).pop();
+                                  setState(() {
+                                    _loader = false;
+                                  });
+                                   Api.snack_bar2(
+                                          context: context,
+                                          message: "Successfully Update Service".tr)
+                                      .then(
+                                    (value) {
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop();
+                                    },
+                                  );
+                                },
+                              );
+                            }
+                          } else {
+                            if (widget.edit == false || widget.edit == null) {
+                              Api.FacilityInsert_nonimg(
+                                Amount: amount_con.text.trim(),
+                                Description: service_con.text.trim(),
+                                F_SubServiceCategory:
+                                    _data[selectted_service_id!]["ID"]
+                                        .toString(),
+                                // F_SubServiceCategory: selectted_service_id.toString(),
+                                FacilityName: service_name_con.text.trim(),
+                                // FacilityImg: base64File
+                              ).then(
+                                (value) {
+                                  if (value) {
+                                    widget.ref(true);
+                                    setState(() {
+                                      _loader = false;
+                                    });
+                                    Navigator.of(context).pop();
+                                  }
+                                },
+                              );
+                            } else {
+                              Api.FacilityUpdate(
+                                      FacilityId:
+                                          widget.old_data!["Id"].toString(),
+                                      FacilityName:
+                                          service_name_con.text.trim(),
+                                      Amount: amount_con.text.trim(),
+                                      F_SubServiceCategory:
+                                          _data[selectted_service_id!]["ID"]
+                                              .toString())
+                                  .then(
+                                (value) {
+                                  widget.ref(true);
+                                  setState(() {
+                                    _loader = false;
+                                  });
+                                  Api.snack_bar2(
+                                          context: context,
+                                          message: "Successfully Update Service".tr)
+                                      .then(
+                                    (value) {
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop();
+                                    },
+                                  );
+                                },
+                              );
+                            }
                           }
                         } else {
-                          if(widget.edit==false||widget.edit==null){
-                            Api.FacilityInsert_nonimg(
-                            Amount: amount_con.text.trim(),
-                            Description: service_con.text.trim(),
-                            F_SubServiceCategory: _data[selectted_service_id!]["ID"].toString(),
-                            // F_SubServiceCategory: selectted_service_id.toString(),
-                            FacilityName: service_name_con.text.trim(),
-                            // FacilityImg: base64File
-                          ).then(
-                            (value) {
-                              if (value) {
-                                widget.refresh();
-                                Navigator.of(context).pop();
-                              }
-                            },
-                          );
-                          }else{
-                             Api.FacilityUpdate(FacilityId: widget.old_data!["Id"].toString(), FacilityName: service_name_con.text.trim(), Amount: amount_con.text.trim(),F_SubServiceCategory:_data[selectted_service_id!]["ID"].toString()).then((value) {
-                               widget.refresh();
-                              Navigator.of(context).pop();
-                            },);
+                          if(_image==null){
+                            Api.snack_bar(
+                                context: context,
+                                message: "Select Image".tr);
+                          }else
+                          if (_selectedCategory == null) {
+                            Api.snack_bar(
+                                context: context,
+                                message: "Select Business Category".tr);
+                          } else if (service_name_con.text.isEmpty) {
+                            Api.snack_bar(
+                                context: context,
+                                message: "Enter Service Name".tr);
+                          } else if (amount_con.text.isEmpty) {
+                            Api.snack_bar(
+                                context: context,
+                                message: "Enter Service Amount".tr);
                           }
                         }
                       },
@@ -2881,16 +3061,16 @@ class _AddServiceState extends State<AddService> {
               ),
             ),
           ),
-        if (_loader)
-              Container(
-                color: Colors.black.withOpacity(0.5),
-                child: Center(
-                  child: SpinKitCircle(
-                    color: Colors.white,
-                    size: 50.0,
-                  ),
+          if (_loader)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: 50.0,
                 ),
               ),
+            ),
         ],
       ),
     );

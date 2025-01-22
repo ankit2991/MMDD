@@ -501,7 +501,7 @@ class _MyImageState extends State<MyImage> {
                               _Work_data.add(_data[i]);
                             }
                           }
-                         Api.snack_bar2(context: context, message: "Image Upload Done");
+                         Api.snack_bar2(context: context, message: "Image Upload Done".tr);
                           setState(() {
                             loader = false;
                           });
