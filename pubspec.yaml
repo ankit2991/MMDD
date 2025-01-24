@@ -35,6 +35,8 @@ dependencies:
   webview_flutter: ^4.10.0
   icons_launcher: ^3.0.0
   google_maps_flutter: ^2.10.0
+  payu_checkoutpro_flutter: ^1.2.5
+  crypto: ^3.0.6
   # google_fonts: ^6.2.1
 
 dev_dependencies:

@@ -1749,12 +1749,16 @@ pw.Text("* This is computer generated invoice does not require signatures *",
   static Future<String> SubscriptionInsert(
       {required String PaymentMode,
       required String SubscriberId,
+      required String mod_1_2,
       required String Remarks,
       required String Amount,
       required String TransctionNo,
+      required String TStatus,
+      required String SendRequest,
+      required String Response,
       required String BankRefNo}) async {
     String url =
-        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MemberId":\"${User_info["Table"][0]["Id"].toInt()}\","F_LedgerDr":"-1","PaymentMode":"$PaymentMode","SubscriberId":"$SubscriberId","Remarks":"$Remarks","Amount":"$Amount","TransctionNo":"$TransctionNo","BankRefNo":"$BankRefNo","ApiAdd":"SubscriptionInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=SubscriptionInsert';
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MemberId":\"${User_info["Table"][0]["Id"].toInt()}\","F_LedgerDr":"$mod_1_2","PaymentMode":"$PaymentMode","SubscriberId":"$SubscriberId","Remarks":"$Remarks","Amount":"$Amount","TransctionNo":"$TransctionNo","BankRefNo":"$BankRefNo","TStatus":"$TStatus","SendRequest":"$SendRequest","Response":"$Response","ApiAdd":"SubscriptionInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=SubscriptionInsert';
     print(url);
     var res = await http.get(Uri.parse(url));
 
