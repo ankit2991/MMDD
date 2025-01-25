@@ -1940,6 +1940,25 @@ pw.Text("* This is computer generated invoice does not require signatures *",
       throw ("Error........ MMDDOrderList Api ");
     }
   }
+  // ____________________________________________________________________   (Show Payment history )
+  static Future<List<dynamic>> PaymentList() async {
+    String url =
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"MerchantId":\"${User_info["Table"][0]["Id"].toInt()}\","ApiAdd":"PaymentList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=PaymentList';
+    print(url);
+    var res = await http.get(Uri.parse(url));
+
+    if (res.statusCode == 200) {
+      log("PaymentList Api Call.............");
+      var data = jsonDecode(res.body);
+      log("PaymentList Api DATA .............");
+      print(data);
+      return data["Table1"];
+    } else {
+      log("Error........ PaymentList Api ");
+      throw ("Error........ PaymentList Api ");
+    }
+  }
+
 // ______________________________________________________________________________   ( social account api)
 static Future<void> AddSocialAccount({required String FacebookLink,required String InstagramLink,required String YouTudeLink,}) async {
     //  List<int> imageBytes = await img.readAsBytes();

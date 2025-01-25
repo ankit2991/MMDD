@@ -49,16 +49,16 @@ class _subscription_planState extends State<subscription_plan>
             _package_list = value;
             int index = _data.indexWhere((item) =>
                 item['ID'] == Api.User_info["Table"][0]["F_SubscriberMaster"]);
-            if (Api.User_info["Table"][0]["F_SubscriberMaster"] != null &&
-                Api.User_info["Table"][0]["F_SubscriberMaster"] != 0) {
-              buttom_sheet(
-                  SubscriberId: Api.User_info["Table"][0]["F_SubscriberMaster"]
-                      .toString(),
-                  SubscriptionCharge:
-                      Api.User_info["Table"][0]["AccountBalance"].toString(),
-                  SubscriptionName: _data[index]["SubscriptionName"],
-                  sub: false);
-            }
+            // if (Api.User_info["Table"][0]["F_SubscriberMaster"] != null &&
+            //     Api.User_info["Table"][0]["F_SubscriberMaster"] != 0) {
+            //   buttom_sheet(
+            //       SubscriberId: Api.User_info["Table"][0]["F_SubscriberMaster"]
+            //           .toString(),
+            //       SubscriptionCharge:
+            //           Api.User_info["Table"][0]["AccountBalance"].toString(),
+            //       SubscriptionName: _data[index]["SubscriptionName"],
+            //       sub: false);
+            // }
 
             setState(() {
               loader = false;
@@ -434,11 +434,11 @@ class _subscription_planState extends State<subscription_plan>
                                       Api.snack_bar(
                                           context: context,
                                           message:
-                                              "Activated successfully this plan");
+                                              "Activated successfully this plan".tr);
                                     } else if (value == "R200") {
                                       Api.snack_bar(
                                           context: context,
-                                          message: "successfully Add on plan");
+                                          message: "successfully Add on plan".tr);
                                     }
                                     Api.Mpin_check(
                                             mob_no: Api.prefs
@@ -458,7 +458,7 @@ class _subscription_planState extends State<subscription_plan>
                               } else {
                                 Api.snack_bar(
                                     context: context,
-                                    message: "Please Select Amount");
+                                    message: "Please Select Amount".tr);
                               }
                             } else if (p_mod == "Online") {
                               if (amount_con.text.isNotEmpty) {
@@ -525,7 +525,7 @@ class _subscription_planState extends State<subscription_plan>
                           } else {
                             Api.snack_bar(
                                 context: context,
-                                message: "Please Select Payment Mode");
+                                message: "Please Select Payment Mode".tr);
                           }
                         },
                         child: Container(

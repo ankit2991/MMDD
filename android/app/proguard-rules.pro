@@ -1,0 +1,13 @@
+-dontwarn com.payu.cardscanner.PayU
+-dontwarn com.payu.cardscanner.callbacks.PayUCardListener
+-dontwarn com.payu.olamoney.OlaMoney
+-dontwarn com.payu.olamoney.callbacks.OlaMoneyCallback
+-dontwarn com.payu.olamoney.utils.PayUOlaMoneyParams
+-dontwarn com.payu.olamoney.utils.PayUOlaMoneyPaymentParams
+-dontwarn com.payu.ppiscanner.PayUQRScanner
+-dontwarn com.payu.ppiscanner.PayUScannerConfig
+-dontwarn com.payu.ppiscanner.interfaces.PayUScannerListener
+-dontwarn org.bouncycastle.jsse.BCSSLParameters
+-dontwarn org.bouncycastle.jsse.BCSSLSocket
+-dontwarn org.conscrypt.Conscrypt
+-dontwarn org.slf4j.impl.StaticLoggerBinder

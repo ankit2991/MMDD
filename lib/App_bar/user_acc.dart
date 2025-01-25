@@ -14,6 +14,7 @@ import 'package:mddmerchant/App_bar/OurService/our_service.dart';
 import 'package:mddmerchant/main.dart';
 import 'package:mddmerchant/screen/Mpinpage.dart';
 import 'package:mddmerchant/screen/otp.dart';
+import 'package:mddmerchant/screen/payment_history.dart';
 import 'package:mddmerchant/screen/refer_and_earn.dart';
 import 'package:open_filex/open_filex.dart';
 import 'dart:developer' as developer;
@@ -215,6 +216,7 @@ class _UserProfileState extends State<UserProfile> {
                     ProfileOption(
                         title: "Discount".tr, page: Discount_screen()),
                     ProfileOption(title: "Our Services".tr, page: OurService()),
+                    ProfileOption(title: "Payment History".tr, page: payment_history()),
                     ProfileOption(
                         title: "My Terms & Conditions".tr,
                         page: TermsAndConditionsPage()),

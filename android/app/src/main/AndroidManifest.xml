@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -7,10 +8,18 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <application
+    <!-- <application
+        android:label="mddmerchant"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
->
+> -->
+    <application
+        
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher" 
+        android:label="mddmerchant"
+        tools:replace="android:label"   
+     >
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="857d95614b3e5237"/>
         <activity
