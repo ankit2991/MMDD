@@ -471,7 +471,7 @@ class _MyImageState extends State<MyImage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           SizedBox(width: 5,),
-          Text("Max. 10 images can be uploaded".tr,style: TextStyle(color: Colors.black38),),
+          Text("Max.10 images can be uploaded".tr,style: TextStyle(color: Colors.black38),),
           FloatingActionButton(
             onPressed: () async {
           

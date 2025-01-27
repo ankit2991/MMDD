@@ -124,7 +124,7 @@ class _OtpPageState extends State<OtpPage> {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                'Enter Your OTP for verify your mobile number.',
+                                'Please Enter the OTP to verify your mobile number.',
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.white,

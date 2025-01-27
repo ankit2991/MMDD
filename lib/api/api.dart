@@ -1686,7 +1686,7 @@ pw.Text("* This is computer generated invoice does not require signatures *",
       required String DiscountEndDate,
       required String IsDiscount}) async {
     String url =
-        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"DiscountStartDate":"2025-01-01","DiscountEndDate":"2025-01-31","FacilityId":"$FacilityId","IsDiscount":"$IsDiscount","DiscountAmount":"$DiscountAmount","ApiAdd":"FacilityDiscountInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=FacilityDiscountInsert';
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"DiscountStartDate":"$DiscountStartDate","DiscountEndDate":"$DiscountEndDate","FacilityId":"$FacilityId","IsDiscount":"$IsDiscount","DiscountAmount":"$DiscountAmount","ApiAdd":"FacilityDiscountInsert","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=FacilityDiscountInsert';
     print(url);
     var res = await http.get(Uri.parse(url));
 

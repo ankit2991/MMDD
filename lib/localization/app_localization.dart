@@ -25,7 +25,7 @@ class AppTranslations extends Translations {
           'Add Service': 'Add Service',
           'ADD PAYMENT': 'ADD PAYMENT',
           'Add Payment': 'Add Payment',
-          'Max. 10 images can be uploaded': 'Max. 10 images can be uploaded',
+          'Max.10 images can be uploaded': 'Max.10 images can be uploaded',
           'No Data Available': 'No Data Available',
           'Set As Profile': 'Set As Profile',
           'Profile': 'Profile',
@@ -36,8 +36,8 @@ class AppTranslations extends Translations {
           'Image Deleted': 'Image Deleted',
           'Delete': 'Delete',
           'Cancel': 'Cancel',
-          'Max. 2 Clips can be uploaded Upto 2 MB':
-              'Max. 2 Clips can be uploaded Upto 2 MB',
+          'Max.2 Clips can be uploaded Upto 2 MB':
+              'Max.2 Clips can be uploaded Upto 2 MB',
           'Do you really want to delete this Video? The same cannot be undo':
               'Do you really want to delete this Video? The same cannot be undo',
           'Video Deleted': 'Video Deleted',
@@ -312,8 +312,8 @@ class AppTranslations extends Translations {
           'Add Service': 'सेवा जोड़ें',
           'ADD PAYMENT': 'भुगतान जोड़ें',
           'Add Payment': 'भुगतान जोड़ें',
-          'Max. 10 images can be uploaded':
-              'अधिकतम 10 छवियाँ अपलोड की जा सकती हैं',
+          'Max.10 images can be uploaded':
+              'अधिकतम10 छवियाँ अपलोड की जा सकती हैं',
           'No Data Available': 'कोई डेटा मौजूद नहीं',
           'Set As Profile': 'प्रोफ़ाइल सेट करें',
           'Share': 'शेयर',
@@ -325,7 +325,7 @@ class AppTranslations extends Translations {
           'Cancel': 'रद्द करना',
           'Do you really want to delete this image? The same cannot be undo':
               'क्या आप सचमुच इस छवि को हटाना चाहते हैं? इसे पूर्ववत नहीं किया जा सकता',
-          'Max. 2 Clips can be uploaded Upto 2 MB':
+          'Max.2 Clips can be uploaded Upto 2 MB':
               'अधिकतम 2 क्लिप्स 2 एमबी तक अपलोड की जा सकती हैं',
           'Do you really want to delete this Video? The same cannot be undo':
               'क्या आप सचमुच इस वीडियो को हटाना चाहते हैं? इसे पूर्ववत नहीं किया जा सकता',

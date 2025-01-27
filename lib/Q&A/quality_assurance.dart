@@ -268,6 +268,12 @@ class _QualityAssState extends State<QualityAss> {
                                       // check_box_ans[index].removeAt(index2);
                                       check_box_ans_bool[index].add(false);
                                       check_box_ans[index].add("");
+                                      check_box_ans[index].add("");
+                                      check_box_ans[index].add("");
+                                      check_box_ans[index].add("");
+                                      check_box_ans[index].add("");
+                                      check_box_ans[index].add("");
+                                      check_box_ans[index].add("");
                                       if (Api.H_Questions["Table1"][index]
                                               ["Option" + "${index2 + 1}"] !=
                                           null) {
@@ -289,8 +295,7 @@ class _QualityAssState extends State<QualityAss> {
                                                   : TextStyle(
                                                       fontFamily: "hindi-font",
                                                       fontSize: 10)),
-                                          value: check_box_ans_bool[index]
-                                              [index2],
+                                          value: check_box_ans_bool[index].isEmpty||check_box_ans_bool[index][index2]==true?true:false,
                                           onChanged: (bool? value) {
                                             setState(() {
                                               check_box_ans_bool[index]
@@ -516,22 +521,7 @@ class _QualityAssState extends State<QualityAss> {
                                         } else if (Api.H_Questions["Table1"]
                                                 [index]["QuestionType"] ==
                                             "Multipal Optional") {
-                                          if (check_box_ans[index]
-                                                      [0]
-                                                  .isNotEmpty ||
-                                              check_box_ans[index]
-                                                      [2]
-                                                  .isNotEmpty ||
-                                              check_box_ans[index]
-                                                      [3]
-                                                  .isNotEmpty ||
-                                              check_box_ans[index]
-                                                      [4]
-                                                  .isNotEmpty ||
-                                              check_box_ans[index][5]
-                                                  .isNotEmpty ||
-                                              check_box_ans[index][6]
-                                                  .isNotEmpty) {
+                                          if (check_box_ans[index][0].isNotEmpty ||check_box_ans[index][1].isNotEmpty||check_box_ans[index][2].isNotEmpty ||check_box_ans[index][3].isNotEmpty ||check_box_ans[index][4].isNotEmpty ||check_box_ans[index][5].isNotEmpty ||check_box_ans[index][6].isNotEmpty) {
                                             Api.MerchantAnswareInsert(
                                                     Question: utf8.decode(Api
                                                         .H_Questions["Table1"]
@@ -555,6 +545,7 @@ class _QualityAssState extends State<QualityAss> {
                                                     Answer7: check_box_ans[index][6])
                                                 .then(
                                               (value) {
+                                                check_box_ans_bool[index].clear();
                                                 setState(() {
                                                   loader = false;
                                                 });

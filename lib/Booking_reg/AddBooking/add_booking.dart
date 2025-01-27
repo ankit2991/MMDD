@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mddmerchant/api/api.dart';
 import 'package:mddmerchant/screen/map_Screen.dart';
 
@@ -384,7 +385,7 @@ class _AddBookingState extends State<AddBooking> {
                       ),
                       controller: TextEditingController(
                         text: _startDate != null
-                            ? "${_startDate!.toLocal()}".split(' ')[0]
+                            ? "${DateFormat('dd/MM/yyyy').format(_startDate!)}"
                             : '',
                       ),
                       readOnly: true,
@@ -440,7 +441,7 @@ class _AddBookingState extends State<AddBooking> {
                           ),
                           controller: TextEditingController(
                             text: _endDate != null
-                                ? "${_endDate!.toLocal()}".split(' ')[0]
+                                ? "${DateFormat('dd/MM/yyyy').format(_endDate!)}"
                                 : '',
                           ),
                           readOnly: true,
@@ -700,8 +701,7 @@ class _AddBookingState extends State<AddBooking> {
                                     DueAmount: "",
                                     EventEndDate:
                                         "${_endDate!.toLocal()}".split(' ')[0],
-                                    EventStartDate: "${_startDate!.toLocal()}"
-                                        .split(' ')[0],
+                                    EventStartDate: "${_startDate!.toLocal()}".split(' ')[0],
                                     EventId:
                                         widget.data["id"].toInt().toString(),
                                     EventEndTime:
@@ -799,11 +799,11 @@ class _AddBookingState extends State<AddBooking> {
                                         DueAmount: "",
                                         Email: "",
                                         EventAddress: event_address_con.text,
-                                        EventEndDate: "${_endDate!.toLocal()}"
-                                            .split(' ')[0],
+                                        EventEndDate: "${_endDate!.toLocal()}".split(' ')[0]
+                                            ,
                                         EventStartDate:
-                                            "${_startDate!.toLocal()}"
-                                                .split(' ')[0],
+                                            "${_startDate!.toLocal()}".split(' ')[0]
+                                                ,
                                         EventStartTime:
                                             "${_startTime!.hour}:${_startTime!.minute}",
                                         EventEndTime:

@@ -1624,14 +1624,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Spacer(),
                                         Image.asset(
-                                         ((Api.User_info["Table"][0][
-                                                            "IsQuestionSubmited"] !=
-                                                        null) &&
-                                                    (Api.User_info["Table"][0][
-                                                            "IsQuestionSubmited"] ==
-                                                        true))
-                                                ? "assets/images/main/social-media (3).png":
-                                          "assets/images/main/q&a.png",
+                                         ((Api.User_info["Table"][0]["IsQuestionSubmited"] !=null) &&(Api.User_info["Table"][0]["IsQuestionSubmited"] ==true))? "assets/images/main/social-media (3).png":"assets/images/main/q&a.png",
                                           width:
                                               100, // Adjust the width as needed
                                           height:

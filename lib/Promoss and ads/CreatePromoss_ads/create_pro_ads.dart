@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'dart:io';
 
 import 'package:mddmerchant/api/api.dart';
@@ -18,21 +19,21 @@ class CreateProAds extends StatefulWidget {
 class _CreateProAdsState extends State<CreateProAds> {
   DateTime? _startDate;
   DateTime? _endDate;
-  String ext="";
-  String ?Text_color="white";
+  String ext = "";
+  String? Text_color = "white";
 
   // TimeOfDay? _startTime;
   // TimeOfDay? _endTime;
-var b_name_con=TextEditingController();
-var mob_con=TextEditingController();
-var address_con=TextEditingController();
-var discount_con=TextEditingController();
+  var b_name_con = TextEditingController();
+  var mob_con = TextEditingController();
+  var address_con = TextEditingController();
+  var discount_con = TextEditingController();
 // var discount_con=TextEditingController();
   Future<void> _selectDate(BuildContext context, bool isStart) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
+      initialDate: _startDate,
+      firstDate: _startDate ?? DateTime.now(),
       lastDate: DateTime(2100),
     );
     if (pickedDate != null) {
@@ -46,6 +47,54 @@ var discount_con=TextEditingController();
     }
   }
 
+//  Future<void> _selectDate(
+//                         BuildContext context, bool isStart) async {
+//                       final DateTime? pickedDate;
+//                       if (isStart) {
+//                         pickedDate = await showDatePicker(
+//                           context: context,
+//                           initialDate: DateTime.now(),
+//                           firstDate: DateTime.now(),
+//                           lastDate: DateTime(2100),
+//                         );
+//                       } else {
+//                         pickedDate = await showDatePicker(
+//                           context: context,
+//                           initialDate: _startDate,
+//                           firstDate: _startDate ?? DateTime.now(),
+//                           lastDate: DateTime(2100),
+//                         );
+//                       }
+
+//                       if (pickedDate != null) {
+//                         if (isStart) {
+//                           _startDate = pickedDate;
+//                           date_ref.value =
+//                               date_ref.value == true ? false : true;
+//                         } else {
+//                           _endDate = pickedDate;
+//                           date_ref.value =
+//                               date_ref.value == true ? false : true;
+//                         }
+//                       }
+//                     }
+
+//                     bool dis_read_only = false;
+//                     bool dis_date_only = false;
+//                     if (bools[index] == true) {
+//                       if (_endDate != null) {
+//                         if (_endDate!.isBefore(DateTime.now())) {
+//                           dis_read_only = false;
+//                           dis_date_only = false;
+//                         } else {
+//                           dis_read_only = true;
+//                           dis_date_only = true;
+//                         }
+//                       }
+//                     } else {
+//                       dis_read_only = true;
+//                       dis_date_only = true;
+//                     }
   File? _image;
   final GlobalKey _globalKey = GlobalKey();
   @override
@@ -66,94 +115,127 @@ var discount_con=TextEditingController();
           iconSize: 30.0, // Adjust the size of the icon
         ),
       ),
-    
       body: SingleChildScrollView(
         child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
             child: Column(
               children: [
-               RepaintBoundary(
-                key: _globalKey,
-                child:  GestureDetector(
-                  onTap: ()async{
-                    print("object");
-                 
-                  },
-                  child: Container(
-                    height: 200,
-                    width: 600,                   
-                    decoration: BoxDecoration( color: Colors.grey,
-                      image: DecorationImage(image:_image != null ? FileImage(_image!):AssetImage("assets/images/main/img.jpg"),fit: BoxFit.fill)
-                    ),
-                    child: Stack(
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                              
-                              Container(
-                                padding: EdgeInsets.only(right: 5),
-                                child: Column(
-                                  children: [
-                                    if(mob_con.text.isNotEmpty)
-                                      Text(mob_con.text,style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain")),
-                                     ],
-                                ),
+                RepaintBoundary(
+                  key: _globalKey,
+                  child: GestureDetector(
+                    onTap: () async {
+                      print("object");
+                    },
+                    child: Container(
+                      height: 200,
+                      width: 600,
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          image: DecorationImage(
+                              image: _image != null
+                                  ? FileImage(_image!)
+                                  : AssetImage("assets/images/main/img.jpg"),
+                              fit: BoxFit.fill)),
+                      child: Stack(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(right: 5),
+                                    child: Column(
+                                      children: [
+                                        if (mob_con.text.isNotEmpty)
+                                          Text(mob_con.text,
+                                              style: TextStyle(
+                                                  color: Text_color == "black"
+                                                      ? Colors.black
+                                                      : Colors.white,
+                                                  fontFamily: "Fontmain")),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              // if(b_name_con.text.isNotEmpty)
+                              //   Row(
+                              //     children: [
+
+                              //     ],
+                              //   ),
+                              Column(
+                                children: [
+                                  if (_startDate != null && _endDate != null)
+                                    Text(
+                                        "Valid:${DateFormat('dd-MM-yyyy').format(_startDate!)}" +
+                                            " To " +
+                                            "${DateFormat('dd-MM-yyyy').format(_endDate!)}",
+                                        style: TextStyle(
+                                            color: Text_color == "black"
+                                                ? Colors.black
+                                                : Colors.white,
+                                            fontFamily: "Fontmain",
+                                            fontSize: 10)),
+                                  if (address_con.text.isNotEmpty)
+                                    Text(address_con.text,
+                                        style: TextStyle(
+                                            color: Text_color == "black"
+                                                ? Colors.black
+                                                : Colors.white,
+                                            fontFamily: "Fontmain",
+                                            fontSize: 10)),
+                                ],
                               )
-                              
-                                
-                                
-                            ],)
-                            ,
-                            // if(b_name_con.text.isNotEmpty)
-                            //   Row(
-                            //     children: [
-                                 
-                            //     ],
-                            //   ),
-                           Column(children: [
-                             if( _startDate != null&&_endDate != null)
-                              Text("Valid:${_startDate!.toLocal()}".split(' ')[0]+" To "+"${_endDate!.toLocal()}".split(' ')[0],style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain",fontSize: 10)),
-                          if(address_con.text.isNotEmpty)
-                                      Text(address_con.text,style: TextStyle(color:Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain",fontSize: 10)),
-                           
-                           ],)      
-                          ],
-                        ),
-                         if(discount_con.text.isNotEmpty)
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                    margin: EdgeInsets.only(left: 5),
-                                    alignment: Alignment.center,
-                                    height: 60,
-                                    width: 60,
-                                   decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/main/discount.png"))),
-                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                     children: [
-                                       Text("${discount_con.text}%\nOFF",style: TextStyle(color:Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain"),),
-                                      
-                                     ],
-                                   ),
-                                  ),
-                                ),
+                            ],
+                          ),
+                          if (discount_con.text.isNotEmpty)
                             Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                margin: EdgeInsets.only(left: 5),
+                                alignment: Alignment.center,
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/images/main/discount.png"))),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "${discount_con.text}%\nOFF",
+                                      style: TextStyle(
+                                          color: Text_color == "black"
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontFamily: "Fontmain"),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          Align(
                               alignment: Alignment.center,
-                              child: Text(b_name_con.text, textAlign: TextAlign.center, style: TextStyle(color: Text_color=="black"? Colors.black:Colors.white,fontFamily: "Fontmain",fontSize: 14))),
-                          
-                      ],
+                              child: Text(b_name_con.text,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Text_color == "black"
+                                          ? Colors.black
+                                          : Colors.white,
+                                      fontFamily: "Fontmain",
+                                      fontSize: 14))),
+                        ],
+                      ),
+                      //     child: _picker!=null ? Image.file(,fit: BoxFit.contain,)
+                      // : Text("No image selected."),
                     ),
-                //     child: _picker!=null ? Image.file(,fit: BoxFit.contain,)
-                // : Text("No image selected."),
                   ),
                 ),
-            
-               ),
-                   SizedBox(
+                SizedBox(
                   height: 15,
                 ),
                 TextFormField(
@@ -257,12 +339,15 @@ var discount_con=TextEditingController();
                       minimumSize: Size(650, 45),
                     ),
                     onPressed: () {
-                        Api.pickImage(source: ImageSource.gallery,img: true).then((value) {
-                    setState(() {
-                      _image=value["file"];
-                      ext=value["ext"];
-                    });
-                  },);
+                      Api.pickImage(source: ImageSource.gallery, img: true)
+                          .then(
+                        (value) {
+                          setState(() {
+                            _image = value["file"];
+                            ext = value["ext"];
+                          });
+                        },
+                      );
                     },
                     child: Text(
                       'SELECT BACKGROUND IMAGE'.tr,
@@ -302,6 +387,9 @@ var discount_con=TextEditingController();
                   height: 15,
                 ),
                 TextFormField(
+                  onTap: (){
+                     _selectDate(context, true);
+                  },
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
                       icon: Icon(Icons.calendar_today),
@@ -325,17 +413,30 @@ var discount_con=TextEditingController();
                   ),
                   controller: TextEditingController(
                     text: _startDate != null
-                        ? "${_startDate!.toLocal()}".split(' ')[0]
+                        ? "${DateFormat('dd-MM-yyyy').format(_startDate!)}"
                         : '',
                   ),
                   readOnly: true,
                 ),
                 const SizedBox(height: 15),
                 TextFormField(
+                  onTap: (){
+                    if(_startDate!=null){
+                    _selectDate(context, false);
+                    }else{
+                      Api.snack_bar(context: context,message:"Select Start Date".tr);
+                    }
+                    },
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
                       icon: Icon(Icons.calendar_today),
-                      onPressed: () => _selectDate(context, false),
+                      onPressed: () {
+                          if(_startDate!=null){
+                    _selectDate(context, false);
+                    }else{
+                      Api.snack_bar(context: context,message:"Select Start Date".tr);
+                    }
+                      },
                     ),
                     labelText: "Event End Date".tr,
                     labelStyle: TextStyle(
@@ -355,7 +456,8 @@ var discount_con=TextEditingController();
                   ),
                   controller: TextEditingController(
                     text: _endDate != null
-                        ? "${_endDate!.toLocal()}".split(' ')[0]
+                        ? "${DateFormat('dd-MM-yyyy').format(_endDate!)}"
+                            .split(' ')[0]
                         : '',
                   ),
                   readOnly: true,
@@ -365,40 +467,38 @@ var discount_con=TextEditingController();
                 ),
                 Row(
                   children: [
-                     Container(
-                  width: 150,
-                  // color: Colors.amber,
-                   child: ListTile(
-                               title: Text('white'.tr),
-                               leading: Radio<String>(
-                                 value: 'white',
-                                 
-                                 groupValue: Text_color,
-                                 onChanged: (String? value) {
-                                   setState(() {
-                    Text_color = value;
-                                   });
-                                 },
-                               ),
-                             ),
-                 ),
-                 Container(
-                  width: 150,
-                  // color: Colors.amber,
-                   child: ListTile(
-                               title: Text('black'.tr),
-                               leading: Radio<String>(
-                                 value: 'black',
-                                 groupValue: Text_color,
-                                 onChanged: (String? value) {
-                                   setState(() {
-                    Text_color = value;
-                                   });
-                                 },
-                               ),
-                             ),
-                 ),
-               
+                    Container(
+                      width: 150,
+                      // color: Colors.amber,
+                      child: ListTile(
+                        title: Text('white'.tr),
+                        leading: Radio<String>(
+                          value: 'white',
+                          groupValue: Text_color,
+                          onChanged: (String? value) {
+                            setState(() {
+                              Text_color = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 150,
+                      // color: Colors.amber,
+                      child: ListTile(
+                        title: Text('black'.tr),
+                        leading: Radio<String>(
+                          value: 'black',
+                          groupValue: Text_color,
+                          onChanged: (String? value) {
+                            setState(() {
+                              Text_color = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 ElevatedButton(
@@ -409,10 +509,7 @@ var discount_con=TextEditingController();
                       minimumSize: Size(650, 45),
                     ),
                     onPressed: () {
-                      
-setState(() {
-  
-});
+                      setState(() {});
                       // img_convert(_image);
                     },
                     child: Text(
@@ -431,18 +528,35 @@ setState(() {
                       minimumSize: Size(650, 45),
                     ),
                     onPressed: () {
-                      if (_image!=null&& b_name_con.text.isNotEmpty &&mob_con.text.isNotEmpty&&address_con.text.isNotEmpty&&discount_con.text.isNotEmpty&& _endDate!=null&&_startDate!=null) {
-                      Api.widget_to_img(_globalKey).then((value) {
-                       Api.ImageInsert(img: value,DocType: "3",ext: "."+ext,MemberAgreementUpload_UploadFile2:"UploadFile2",context: context ).then((value) {
-                         widget.refresh();
-                         Navigator.of(context).pop();
-                       },);
-                        
-                      },);                        
-                      }else{
-                        Api.snack_bar(context: context, message: "Somthing Went Wrong".tr);
+                      if (_image != null &&
+                          b_name_con.text.isNotEmpty &&
+                          mob_con.text.isNotEmpty &&
+                          address_con.text.isNotEmpty &&
+                          discount_con.text.isNotEmpty &&
+                          _endDate != null &&
+                          _startDate != null) {
+                        Api.widget_to_img(_globalKey).then(
+                          (value) {
+                            Api.ImageInsert(
+                                    img: value,
+                                    DocType: "3",
+                                    ext: "." + ext,
+                                    MemberAgreementUpload_UploadFile2:
+                                        "UploadFile2",
+                                    context: context)
+                                .then(
+                              (value) {
+                                widget.refresh();
+                                Navigator.of(context).pop();
+                              },
+                            );
+                          },
+                        );
+                      } else {
+                        Api.snack_bar(
+                            context: context,
+                            message: "Somthing Went Wrong".tr);
                       }
-
                     },
                     child: Text(
                       'UPLOAD AD'.tr,

@@ -235,11 +235,11 @@ class _PromissAdsState extends State<PromissAds> {
                                             ValueNotifier<bool>delete =ValueNotifier(false);
                                             ValueNotifier<bool>cancel =ValueNotifier(false);
                                             return AlertDialog(
-                                              title: Text("Are You Sure",style: TextStyle(fontFamily: "Fontmain"),),
+                                              title: Text("Are You Sure".tr,style: TextStyle(fontFamily: "Fontmain"),),
                                               actionsAlignment:
                                                   MainAxisAlignment.spaceBetween,
                                               content: Text(
-                                                  "Do you really went to delete these Item? This process cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
+                                                  "Do you really want to delete this image? The same cannot be undo".tr,style: TextStyle(fontFamily: "Fontmain")),
                                               actions: [
                                                ValueListenableBuilder(valueListenable: delete, builder: (context, value, child) {
                                                  return    InkWell(
@@ -345,7 +345,7 @@ class _PromissAdsState extends State<PromissAds> {
                                               actionsAlignment:
                                                   MainAxisAlignment.spaceBetween,
                                               content: Text(
-                                                  "Do you really went to delete these Item? This process cannot be undo",style: TextStyle(fontFamily: "Fontmain")),
+                                                  "Do you really want to delete this image? The same cannot be undo".tr,style: TextStyle(fontFamily: "Fontmain")),
                                               actions: [
                                                ValueListenableBuilder(valueListenable: delete, builder: (context, value, child) {
                                                  return    InkWell(

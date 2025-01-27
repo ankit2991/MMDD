@@ -17,7 +17,7 @@
         
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher" 
-        android:label="mddmerchant"
+        android:label="MMDD Merchant"
         tools:replace="android:label"   
      >
         <meta-data android:name="com.google.android.geo.API_KEY"

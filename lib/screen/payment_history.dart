@@ -45,7 +45,7 @@ class _payment_historyState extends State<payment_history>
         _data = value;
         print(_data);
 
-        if (_data[0]["DueAmount"] > 0) {
+        if (_data.isNotEmpty&& _data[0]["DueAmount"] > 0) {
           buttom_sheet(
             DueAmount:"${_data[0]["DueAmount"]}" ,
               SubscriberId: _data[0]["F_SubscriberMaster"].toString(),

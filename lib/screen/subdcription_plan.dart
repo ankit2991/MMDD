@@ -465,7 +465,7 @@ class _subscription_planState extends State<subscription_plan>
                                 sub_id = SubscriberId;
                                 log("my transactionId= ${generateTransactionId()}");
                                 request["payUPaymentParams"]={
-                                  "${PayUPaymentParamKey.amount}": "10",
+                                  "${PayUPaymentParamKey.amount}": amount_con.text,
                                  "${ PayUPaymentParamKey.firstName}":
                                       Api.User_info["Table"][0]["MemberName"],
                                   PayUPaymentParamKey.email:
@@ -487,8 +487,8 @@ class _subscription_planState extends State<subscription_plan>
                                     .openCheckoutScreen(
                                       
                                     payUPaymentParams: {
-                                  // PayUPaymentParamKey.key: "nxmgUi",
-                                  PayUPaymentParamKey.key: "UiVBn1",
+                                  PayUPaymentParamKey.key: "nxmgUi",
+                                  // PayUPaymentParamKey.key: "UiVBn1",
                                   // PayUPaymentParamKey.amount: "10",
                                   PayUPaymentParamKey.amount: amount_con.text,
                                   PayUPaymentParamKey.productInfo: "Payu",
@@ -498,7 +498,7 @@ class _subscription_planState extends State<subscription_plan>
                                       Api.User_info["Table"][0]["EmailId"],
                                   PayUPaymentParamKey.phone:
                                       Api.User_info["Table"][0]["MobileNo"],
-                                  PayUPaymentParamKey.environment: "1",
+                                  PayUPaymentParamKey.environment: "0",
                                   // String - "0" for Production and "1" for Test
                                   PayUPaymentParamKey.transactionId:
                                       generateTransactionId(),

@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:mddmerchant/constrans.dart';
 import 'package:mddmerchant/App_bar/OurService/our_service.dart';
 import 'package:mddmerchant/main.dart';
@@ -502,11 +503,11 @@ class _Discount_screenState extends State<Discount_screen> {
                                           });
                                           Api.FacilityDiscountInsert(
                                                   DiscountStartDate:
-                                                      "${_startDate!.toLocal()}"
-                                                          .split(' ')[0],
+                                                      "${_startDate!.toLocal()}".split(' ')[0]
+                                                         ,
                                                   DiscountEndDate:
-                                                      "${_endDate!.toLocal()}"
-                                                          .split(' ')[0],
+                                                      "${_endDate!.toLocal()}".split(' ')[0]
+                                                         ,
                                                   DiscountAmount:
                                                       discount_con.text,
                                                   FacilityId: _data[index]["Id"]
@@ -806,8 +807,8 @@ class _Discount_screenState extends State<Discount_screen> {
                                         ),
                                         controller: TextEditingController(
                                           text: _endDate != null
-                                              ? "${_endDate!.toLocal()}"
-                                                  .split(' ')[0]
+                                              ? "${_endDate!.toLocal()}".split(' ')[0]
+                                                  
                                               : '',
                                         ),
                                         readOnly: true,
@@ -827,11 +828,11 @@ class _Discount_screenState extends State<Discount_screen> {
                                 });
                                 Api.FacilityDiscountInsert(
                                         DiscountStartDate:
-                                            "${_startDate!.toLocal()}"
-                                                .split(' ')[0],
+                                            "${_startDate!.toLocal()}".split(' ')[0]
+                                                ,
                                         DiscountEndDate:
-                                            "${_endDate!.toLocal()}"
-                                                .split(' ')[0],
+                                            "${_endDate!.toLocal()}".split(' ')[0]
+                                               ,
                                         DiscountAmount: discount_con.text,
                                         FacilityId:
                                             _data[index]["Id"].toString(),
@@ -2994,7 +2995,7 @@ class _AddServiceState extends State<AddService> {
                               ).then(
                                 (value) {
                                   if (value) {
-                                    widget.ref(true);
+                                    // widget.ref(true);
                                     setState(() {
                                       _loader = false;
                                     });

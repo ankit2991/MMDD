@@ -347,7 +347,7 @@ class _MyVideoState extends State<MyVideo> {
         // spacing: 50,
         children: [
           SizedBox(width: 5,),
-          Text("Max. 2 Clips can be uploaded Upto 2 MB".tr,style: TextStyle(color: Colors.black38,fontSize:13 ),),
+          Text("Max.2 Clips can be uploaded Upto 2 MB".tr,style: TextStyle(color: Colors.black38,fontSize:13 ),),
           FloatingActionButton(
             onPressed: () {
               if (_Work_data.length<2) {
