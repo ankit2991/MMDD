@@ -140,7 +140,7 @@ class _QualityAssState extends State<QualityAss> {
                                               // childAspectRatio: 3,
                                               crossAxisSpacing: 0,
                                               mainAxisSpacing: 0,
-                                              mainAxisExtent: 75),
+                                              mainAxisExtent: 80),
 
                                       // itemExtent: 30,
                                       shrinkWrap: true,

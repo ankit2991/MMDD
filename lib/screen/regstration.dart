@@ -41,10 +41,10 @@ class _CheckboxExampleState extends State<RegisTration> {
   var B_location_con = TextEditingController();
   var M_pin_con = TextEditingController();
   var ref_code_con = TextEditingController();
-  bool loader=false;
-  void loding (bool a){
+  bool loader = false;
+  void loding(bool a) {
     setState(() {
-      loader=a;
+      loader = a;
     });
   }
 
@@ -53,12 +53,12 @@ class _CheckboxExampleState extends State<RegisTration> {
     // TODO: implement initState
     super.initState();
     // Api.CategoryList_data.clear();
-     _selectedState = null; // Default selected language
- _selectedSyCity = null;
+    _selectedState = null; // Default selected language
+    _selectedSyCity = null;
     _Category!.clear();
     _selectedCategory = null;
     _selectedSubCategory = null;
-    loader=true;
+    loader = true;
     Api.CategoryList().then(
       (value) {
         for (var i = 0; i < Api.CategoryList_data.length; i++) {
@@ -67,17 +67,12 @@ class _CheckboxExampleState extends State<RegisTration> {
             "ServiceName": Api.CategoryList_data[i]["ServiceName"]
           });
         }
-        setState(() {});
+        // setState(() {});
         Api.StateList().then(
           (value) {
-            setState(() {});
-            Api.CityList().then(
-              (value) {
-                setState(() {
-                  loader=false;
-                });
-              },
-            );
+            setState(() {
+              loader = false;
+            });
           },
         );
       },
@@ -90,7 +85,7 @@ class _CheckboxExampleState extends State<RegisTration> {
   int city_index = -1;
   String? lett;
   String? lott;
-    final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     mob_no_con.text = widget.Mob;
@@ -123,14 +118,15 @@ class _CheckboxExampleState extends State<RegisTration> {
                 child: Column(
                   children: [
                     TextFormField(
-                       validator: (value) {
-                     if (value == null || value.isEmpty) {
-                    return "Please enter Name";
-                  }
-                  },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter Name";
+                        }
+                      },
                       controller: name_con,
                       decoration: InputDecoration(
-                        errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red)),
                         labelText: "Name",
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
@@ -142,7 +138,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                           borderSide: BorderSide(color: Color(0xffC4A68B)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                          borderSide:
+                              BorderSide(color: Color(0xffC4A68B), width: 2),
                         ),
                       ),
                       style: TextStyle(
@@ -156,13 +153,14 @@ class _CheckboxExampleState extends State<RegisTration> {
                     const SizedBox(height: 15),
                     TextFormField(
                       controller: Bus_name_con,
-                           validator: (value) {
-                     if (value == null || value.isEmpty) {
-                    return "Please enter Business Name";
-                  }
-                  },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter Business Name";
+                        }
+                      },
                       decoration: InputDecoration(
-                        errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red)),
                         labelText: "Business Name",
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
@@ -174,7 +172,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                           borderSide: BorderSide(color: Color(0xffC4A68B)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                          borderSide:
+                              BorderSide(color: Color(0xffC4A68B), width: 2),
                         ),
                       ),
                       style: TextStyle(
@@ -191,33 +190,33 @@ class _CheckboxExampleState extends State<RegisTration> {
                     DropdownButtonFormField<String>(
                       value: _selectedCategory,
                       // iconSize: 20,
-                           validator: (value) {
-                     if (value == null || value.isEmpty) {
-                    return "Please Select Business Category";
-                  }
-                  },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Select Business Category";
+                        }
+                      },
                       isExpanded: true,
                       decoration: InputDecoration(
-                        errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red)),
                         border: OutlineInputBorder(),
                         labelText: 'Business Category',
                       ),
-                
+
                       onChanged: (String? newValue) async {
                         setState(() {
-                        loader=true;
-                          
+                          loader = true;
                         });
-                        int index = _Category!
-                            .indexWhere((map) => map['ServiceName'] == newValue);
+                        int index = _Category!.indexWhere(
+                            (map) => map['ServiceName'] == newValue);
                         Business_category_index = index;
-                
+
                         setState(() {
                           _selectedCategory = newValue!;
                           _selectedSubCategory = null;
                           // print(_Category![index].toString());
                         });
-                
+
                         print(Api.CategoryList_data![index]["ID"].toString());
                         _SubCategory.clear();
                         await Api.Sub_CategoryList(
@@ -236,10 +235,11 @@ class _CheckboxExampleState extends State<RegisTration> {
                           },
                         );
                         setState(() {
-                          loader=false;
+                          loader = false;
                         });
                       },
-                      items: _Category!.map<DropdownMenuItem<String>>((var value) {
+                      items:
+                          _Category!.map<DropdownMenuItem<String>>((var value) {
                         return DropdownMenuItem<String>(
                           value: value["ServiceName"] ?? "",
                           child: Text(value["ServiceName"] ?? ""),
@@ -252,26 +252,27 @@ class _CheckboxExampleState extends State<RegisTration> {
                     DropdownButtonFormField<String>(
                       isExpanded: true,
                       value: _selectedSubCategory,
-                           validator: (value) {
-                     if (value == null || value.isEmpty) {
-                    return "Please Select Business SubCategory";
-                  }
-                  },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Select Business SubCategory";
+                        }
+                      },
                       decoration: InputDecoration(
-                        errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red)),
                         border: OutlineInputBorder(),
                         labelText: 'Business SubCategory',
                       ),
                       onChanged: (String? newValue) {
                         setState(() {
                           _selectedSubCategory = newValue!;
-                          int index = Api.Sub_CategoryList_data!
-                              .indexWhere((map) => map['ServiceName'] == newValue);
+                          int index = Api.Sub_CategoryList_data!.indexWhere(
+                              (map) => map['ServiceName'] == newValue);
                           Business_Sub_category_index = index;
                         });
                       },
-                      items: Api.Sub_CategoryList_data.map<DropdownMenuItem<String>>(
-                          (var value) {
+                      items: Api.Sub_CategoryList_data.map<
+                          DropdownMenuItem<String>>((var value) {
                         return DropdownMenuItem<String>(
                           value: value["ServiceName"],
                           child: Text(value["ServiceName"]),
@@ -291,7 +292,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                             fontSize: 14,
                           ),
                           // Default label color
-                          floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                          floatingLabelStyle:
+                              TextStyle(color: Color(0xffC4A68B)),
                           // Label color when focused
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -314,6 +316,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                     ),
                     const SizedBox(height: 15),
                     TextFormField(
+                      maxLength: 10,
+                      keyboardType: TextInputType.number,
                       controller: Alt_mob_no_con,
                       decoration: InputDecoration(
                         labelText: "Alternate Mobile Number",
@@ -326,8 +330,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                         floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
                         // Label color when focused
                         border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey), // Default border color
+                          borderSide: BorderSide(
+                              color: Colors.grey), // Default border color
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -351,14 +355,13 @@ class _CheckboxExampleState extends State<RegisTration> {
                         // _formKey.currentState!.validate();
                       },
                       controller: email_con,
-                           validator: (value) {
-                     if (value == null || value.isEmpty) {
-                    return "Enter Email";
-                  }else if(value.isEmail==false){
-                    return "Invalid Email";
-
-                  }
-                  },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter Email";
+                        } else if (value.isEmail == false) {
+                          return "Invalid Email";
+                        }
+                      },
                       decoration: InputDecoration(
                         labelText: "Email",
                         labelStyle: TextStyle(
@@ -371,7 +374,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                           borderSide: BorderSide(color: Color(0xffC4A68B)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                          borderSide:
+                              BorderSide(color: Color(0xffC4A68B), width: 2),
                         ),
                       ),
                       style: TextStyle(
@@ -387,26 +391,41 @@ class _CheckboxExampleState extends State<RegisTration> {
                     ),
                     DropdownButtonFormField<String>(
                       value: _selectedState,
-                           validator: (value) {
-                     if (value == null || value.isEmpty) {
-                    return "Please select State";
-                  }
-                  },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please select State";
+                        }
+                      },
                       decoration: InputDecoration(
-                        errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red)),
                         border: OutlineInputBorder(),
                         labelText: 'State',
                       ),
                       onChanged: (String? newValue) {
                         setState(() {
-                          _selectedState = newValue!;
-                          int index = Api.state_list!
-                              .indexWhere((map) => map['Name'] == newValue);
-                          State_index = index;
+                          loader = true;
                         });
+                        _selectedSyCity = null;
+                        _selectedState = newValue!;
+                        int index = Api.state_list!
+                            .indexWhere((map) => map['Name'] == newValue);
+                        State_index = index;
+
+                        Api.CityList(
+                                stateId: Api.state_list[index]["Id"]
+                                    .toInt()
+                                    .toString())
+                            .then(
+                          (value) {
+                            setState(() {
+                              loader = false;
+                            });
+                          },
+                        );
                       },
-                      items:
-                          Api.state_list.map<DropdownMenuItem<String>>((var value) {
+                      items: Api.state_list
+                          .map<DropdownMenuItem<String>>((var value) {
                         return DropdownMenuItem<String>(
                           value: value["Name"],
                           child: Text(value["Name"]),
@@ -418,13 +437,14 @@ class _CheckboxExampleState extends State<RegisTration> {
                     ),
                     DropdownButtonFormField<String>(
                       value: _selectedSyCity,
-                           validator: (value) {
-                     if (value == null || value.isEmpty) {
-                    return "Please Select City";
-                  }
-                  },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Select City";
+                        }
+                      },
                       decoration: InputDecoration(
-                        errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red)),
                         border: OutlineInputBorder(),
                         labelText: 'City',
                       ),
@@ -436,7 +456,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                           city_index = index;
                         });
                       },
-                      items: Api.city_list.map<DropdownMenuItem<String>>((var value) {
+                      items: Api.city_list
+                          .map<DropdownMenuItem<String>>((var value) {
                         return DropdownMenuItem<String>(
                           value: value["Name"],
                           child: Text(value["Name"]),
@@ -447,14 +468,15 @@ class _CheckboxExampleState extends State<RegisTration> {
                       height: 15,
                     ),
                     TextFormField(
-                           validator: (value) {
-                     if (value == null || value.isEmpty) {
-                    return "Please enter Locality Area";
-                  }
-                  },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter Locality Area";
+                        }
+                      },
                       controller: locality_Area_con,
                       decoration: InputDecoration(
-                      errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red)),
                         labelText: "Locality Area",
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
@@ -466,7 +488,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                           borderSide: BorderSide(color: Color(0xffC4A68B)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                          borderSide:
+                              BorderSide(color: Color(0xffC4A68B), width: 2),
                         ),
                       ),
                       style: TextStyle(
@@ -482,13 +505,14 @@ class _CheckboxExampleState extends State<RegisTration> {
                     ),
                     TextFormField(
                       controller: address_con,
-                           validator: (value) {
-                     if (value == null || value.isEmpty) {
-                    return "Please enter Address";
-                  }
-                  },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter Address";
+                        }
+                      },
                       decoration: InputDecoration(
-                        errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red)),
                         labelText: "Address",
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
@@ -500,7 +524,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                           borderSide: BorderSide(color: Color(0xffC4A68B)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                          borderSide:
+                              BorderSide(color: Color(0xffC4A68B), width: 2),
                         ),
                       ),
                       style: TextStyle(
@@ -517,10 +542,10 @@ class _CheckboxExampleState extends State<RegisTration> {
                     InkWell(
                       onTap: () {
                         setState(() {
-                          loader=true;
+                          loader = true;
                         });
                         print("object");
-                        Api.get_loc(context,loding).then(
+                        Api.get_loc(context, loding).then(
                           (value) {
                             print("----------------------");
                             log("${value.latitude}");
@@ -529,10 +554,11 @@ class _CheckboxExampleState extends State<RegisTration> {
                             print("----------------------");
                             lett = value.latitude.toString();
                             lott = value.longitude.toString();
-                            String address = "${value.latitude},${value.longitude}";
+                            String address =
+                                "${value.latitude},${value.longitude}";
                             B_location_con.text = address;
                             setState(() {
-                              loader=false;
+                              loader = false;
                             });
                           },
                         );
@@ -540,27 +566,29 @@ class _CheckboxExampleState extends State<RegisTration> {
                       child: IgnorePointer(
                         ignoring: true,
                         child: TextFormField(
-                               validator: (value) {
-                     if (value == null || value.isEmpty) {
-                    return "Please Set Your Bussiness Location";
-                  }
-                  },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please Set Your Bussiness Location";
+                            }
+                          },
                           controller: B_location_con,
                           decoration: InputDecoration(
-                            errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                            errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red)),
                             labelText: "Set Your Bussiness Location",
                             labelStyle: TextStyle(
                               color: Color(0xe5777474),
                               fontFamily: 'sub-tittle',
                               fontSize: 14,
                             ),
-                            floatingLabelStyle: TextStyle(color: Color(0xffC4A68B)),
+                            floatingLabelStyle:
+                                TextStyle(color: Color(0xffC4A68B)),
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: Color(0xffC4A68B)),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Color(0xffC4A68B), width: 2),
+                              borderSide: BorderSide(
+                                  color: Color(0xffC4A68B), width: 2),
                             ),
                           ),
                           style: TextStyle(
@@ -568,7 +596,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                             fontSize: 16.0,
                           ),
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[a-zA-Z\s]'))
                           ],
                         ),
                       ),
@@ -578,15 +607,16 @@ class _CheckboxExampleState extends State<RegisTration> {
                     ),
                     TextFormField(
                       maxLength: 6,
-                           validator: (value) {
-                     if (value == null || value.isEmpty) {
-                    return "Please Enter 6 Digit for create MPIN";
-                  }
-                  },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Enter 6 Digit for create MPIN";
+                        }
+                      },
                       controller: M_pin_con,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red)),
                         labelText: "Enter 6 Digit for create MPIN",
                         labelStyle: TextStyle(
                           color: Color(0xe5777474),
@@ -598,7 +628,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                           borderSide: BorderSide(color: Color(0xffC4A68B)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                          borderSide:
+                              BorderSide(color: Color(0xffC4A68B), width: 2),
                         ),
                       ),
                       style: TextStyle(
@@ -626,7 +657,8 @@ class _CheckboxExampleState extends State<RegisTration> {
                           borderSide: BorderSide(color: Color(0xffC4A68B)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffC4A68B), width: 2),
+                          borderSide:
+                              BorderSide(color: Color(0xffC4A68B), width: 2),
                         ),
                       ),
                       style: TextStyle(
@@ -645,19 +677,23 @@ class _CheckboxExampleState extends State<RegisTration> {
                       children: [
                         Checkbox(
                           value: isChecked,
-                          isError: isChecked?false:true,
+                          isError: isChecked ? false : true,
                           onChanged: (bool? value) {
                             setState(() {
-                              isChecked = value!;                              
+                              isChecked = value!;
                             });
                           },
                           activeColor: Color(0xffC4A68B),
                         ),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             // if (isChecked) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => read_TermsAndConditation(),));                                
-                              
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      read_TermsAndConditation(),
+                                ));
                           },
                           child: Text(
                             'I Agree Terms & Conditions',
@@ -678,63 +714,82 @@ class _CheckboxExampleState extends State<RegisTration> {
                         ),
                         minimumSize: Size(650, 50),
                       ),
-                      onPressed: () async{
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           if (isChecked) {
-                            print(Api.CategoryList_data[Business_category_index]["ID"]);
-                        print(Api.Sub_CategoryList_data[Business_Sub_category_index]
-                            ["ID"]);
-                        print((Api.state_list[State_index]["Id"]).toString());
-                        print((Api.city_list[city_index]["Id"]).toString());
-                          setState(() {
-                            loader=true;
-                          });
-                      String result=await  Api.MerchantRegistration(
-                          BName: Bus_name_con.text.trim(),
-                          MName: name_con.text.trim(),
-                          CityId:Api.city_list[city_index]["Id"].round().toString().trim(),
-                          email: email_con.text.trim(),
-                          MPin: M_pin_con.text.trim(),
-                          F_SubServiceCategory: Api.Sub_CategoryList_data[Business_Sub_category_index]["ID"].toString().trim(),
-                          ServiceId: Api.CategoryList_data[Business_category_index]["ID"].toString().trim(),
-                          Latitude:lett.toString().trim(),
-                          Longitude: lott.toString().trim(),
-                          StateId:  Api.state_list[State_index]["Id"].round().toString().trim(),
-                          mobile: mob_no_con.text.trim(),
-                          othermobileno: Alt_mob_no_con.text.trim(),
-                          IsMasterReferCode: ref_code_con.text.trim(),
-                          AreaId: locality_Area_con.text.trim(),
-                          OrgAddress: address_con.text.trim()
-                        );
-                        if (result=="R100") {
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) => LogOutPage())); 
-                         setState(() {
-                            loader=false;
-                          });
-                           Navigator.pushAndRemoveUntil(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          MpinPage(mob_no:widget.Mob ,)), // The new page to display
-                                                  (Route<dynamic> route) =>
-                                                      false, // Remove all previous routes
-                                                );                   
-                        }else{
-                           setState(() {
-                            loader=false;
-                          });
-                          Api.snack_bar(context: context, message: "Something Went Wrong");
-                        }
-                          }else{
-                          Api.snack_bar(context: context, message: "Please Agree Terms & Conditions");
-
+                            print(Api.CategoryList_data[Business_category_index]
+                                ["ID"]);
+                            print(Api.Sub_CategoryList_data[
+                                Business_Sub_category_index]["ID"]);
+                            print(
+                                (Api.state_list[State_index]["Id"]).toString());
+                            print((Api.city_list[city_index]["Id"]).toString());
+                            setState(() {
+                              loader = true;
+                            });
+                            String result = await Api.MerchantRegistration(
+                                BName: Bus_name_con.text.trim(),
+                                MName: name_con.text.trim(),
+                                CityId: Api.city_list[city_index]["Id"]
+                                    .round()
+                                    .toString()
+                                    .trim(),
+                                email: email_con.text.trim(),
+                                MPin: M_pin_con.text.trim(),
+                                F_SubServiceCategory: Api.Sub_CategoryList_data[
+                                        Business_Sub_category_index]["ID"]
+                                    .toString()
+                                    .trim(),
+                                ServiceId: Api
+                                    .CategoryList_data[Business_category_index]
+                                        ["ID"]
+                                    .toString()
+                                    .trim(),
+                                Latitude: lett.toString().trim(),
+                                Longitude: lott.toString().trim(),
+                                StateId: Api.state_list[State_index]["Id"]
+                                    .round()
+                                    .toString()
+                                    .trim(),
+                                mobile: mob_no_con.text.trim(),
+                                othermobileno: Alt_mob_no_con.text.trim(),
+                                IsMasterReferCode: ref_code_con.text.trim(),
+                                AreaId: locality_Area_con.text.trim(),
+                                OrgAddress: address_con.text.trim());
+                            if (result == "R100") {
+                              // Navigator.push(context,
+                              //     MaterialPageRoute(builder: (context) => LogOutPage()));
+                              setState(() {
+                                loader = false;
+                              });
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MpinPage(
+                                          mob_no: widget.Mob,
+                                        )), // The new page to display
+                                (Route<dynamic> route) =>
+                                    false, // Remove all previous routes
+                              );
+                            } else {
+                              setState(() {
+                                loader = false;
+                              });
+                              Api.snack_bar(
+                                  context: context,
+                                  message: "Something Went Wrong");
+                            }
+                          } else {
+                            Api.snack_bar(
+                                context: context,
+                                message: "Please Agree Terms & Conditions");
                           }
                         }
                       },
                       child: Text(
                         'SUBMIT',
-                        style: TextStyle(color: Colors.white, fontFamily: 'Fontmain'),
+                        style: TextStyle(
+                            color: Colors.white, fontFamily: 'Fontmain'),
                       ),
                     ),
                   ],
@@ -742,7 +797,7 @@ class _CheckboxExampleState extends State<RegisTration> {
               ),
             ),
           ),
-            if (loader)
+          if (loader)
             Container(
               color: Colors.black.withOpacity(0.5),
               child: Center(

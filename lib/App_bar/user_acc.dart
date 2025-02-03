@@ -1383,7 +1383,9 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
               ),
               IgnorePointer(
                 ignoring: true,
+                
                 child: TextFormField(
+                  maxLength: 10,
                   controller: alt_mob_con,
                   decoration: InputDecoration(
                     labelText: "Alternate Mobile Number",
@@ -1405,6 +1407,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                           width: 2), // Border color when focused
                     ),
                   ),
+                  keyboardType: TextInputType.number,
                   style: TextStyle(
                     fontFamily: 'sub-tittle',
                     fontSize: 16.0,

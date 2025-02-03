@@ -304,22 +304,25 @@ class Api {
       data = jsonDecode(res.body);
       state_list.clear();
       state_list = data["Table1"];
+      print(state_list);
     } else {
       log("Error........ StateList Api ");
     }
   }
 
   // -------------------------------------------------------------------------------------------  (CityList)
-  static Future<void> CityList() async {
+  static Future<void> CityList({required String stateId}) async {
     String url =
-        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"StateId": "1","ApiAdd":"CityList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=CityList';
+        'https://wedingappapi.systranstechnology.com/MobApi.asmx/MobileApi?ParmCriteria={"StateId": "$stateId","ApiAdd":"CityList","CallBy":"MobileApi","AuthKey":"SYS101"}&OrgID=0061&ApiAdd=CityList';
     var res = await http.get(Uri.parse(url));
     Map<String, dynamic> data;
+    print(url);
     if (res.statusCode == 200) {
       log("CityList Api Call.............");
       data = jsonDecode(res.body);
       city_list.clear();
       city_list = data["Table1"];
+      print(city_list);
     } else {
       log("Error........ CityList Api ");
     }

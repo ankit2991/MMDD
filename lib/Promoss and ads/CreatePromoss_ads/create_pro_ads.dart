@@ -46,55 +46,6 @@ class _CreateProAdsState extends State<CreateProAds> {
       });
     }
   }
-
-//  Future<void> _selectDate(
-//                         BuildContext context, bool isStart) async {
-//                       final DateTime? pickedDate;
-//                       if (isStart) {
-//                         pickedDate = await showDatePicker(
-//                           context: context,
-//                           initialDate: DateTime.now(),
-//                           firstDate: DateTime.now(),
-//                           lastDate: DateTime(2100),
-//                         );
-//                       } else {
-//                         pickedDate = await showDatePicker(
-//                           context: context,
-//                           initialDate: _startDate,
-//                           firstDate: _startDate ?? DateTime.now(),
-//                           lastDate: DateTime(2100),
-//                         );
-//                       }
-
-//                       if (pickedDate != null) {
-//                         if (isStart) {
-//                           _startDate = pickedDate;
-//                           date_ref.value =
-//                               date_ref.value == true ? false : true;
-//                         } else {
-//                           _endDate = pickedDate;
-//                           date_ref.value =
-//                               date_ref.value == true ? false : true;
-//                         }
-//                       }
-//                     }
-
-//                     bool dis_read_only = false;
-//                     bool dis_date_only = false;
-//                     if (bools[index] == true) {
-//                       if (_endDate != null) {
-//                         if (_endDate!.isBefore(DateTime.now())) {
-//                           dis_read_only = false;
-//                           dis_date_only = false;
-//                         } else {
-//                           dis_read_only = true;
-//                           dis_date_only = true;
-//                         }
-//                       }
-//                     } else {
-//                       dis_read_only = true;
-//                       dis_date_only = true;
-//                     }
   File? _image;
   final GlobalKey _globalKey = GlobalKey();
   @override
