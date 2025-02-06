@@ -298,23 +298,16 @@ class _QualityAssState extends State<QualityAss> {
                                           value: check_box_ans_bool[index].isEmpty||check_box_ans_bool[index][index2]==true?true:false,
                                           onChanged: (bool? value) {
                                             setState(() {
-                                              check_box_ans_bool[index]
-                                                  .removeAt(index2);
-                                              check_box_ans[index]
-                                                  .removeAt(index2);
-                                              check_box_ans_bool[index]
-                                                  .insert(index2, value);
-
-                                              check_box_ans[index].insert(
-                                                  index2,
-                                                  utf8.decode((Api.H_Questions[
-                                                              "Table1"][index][
-                                                          "Option" +
-                                                              "${index2 + 1}"])
-                                                      .runes
-                                                      .toList()));
+                                              check_box_ans_bool[index].removeAt(index2);
+                                              check_box_ans_bool[index].insert(index2, value);
+                                              check_box_ans[index].removeAt(index2);
+                                              if(value==false){
+                                                check_box_ans[index].insert(index2,"");
+                                              }else{
+                                              check_box_ans[index].insert(index2,utf8.decode((Api.H_Questions["Table1"][index]["Option" +"${index2 + 1}"]).runes.toList()));
                                               // selectedOption =
                                               //     value; // Update the selected value
+                                              }
                                             });
                                           },
                                         );
@@ -352,6 +345,11 @@ class _QualityAssState extends State<QualityAss> {
                                                       Answer1: op_ans[index])
                                                   .then(
                                                 (value) {
+                                                for(int i=0;i<op_ans.length;i++){
+                                                    if(op_ans[i]!=null){
+                                                      op_ans[i]=null;
+                                                    }
+                                                  }
                                                   setState(() {
                                                     loader = false;
                                                   });
@@ -546,6 +544,7 @@ class _QualityAssState extends State<QualityAss> {
                                                 .then(
                                               (value) {
                                                 check_box_ans_bool[index].clear();
+                                                check_box_ans[index].clear();
                                                 setState(() {
                                                   loader = false;
                                                 });
