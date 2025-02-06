@@ -992,7 +992,7 @@ class _Account_DocumentState extends State<Account_Document> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Account Document",
+          "Account Document".tr,
           style: TextStyle(
             fontFamily: "Fontmain",
           ),
@@ -1021,7 +1021,7 @@ class _Account_DocumentState extends State<Account_Document> {
                         });
                         Api.snack_bar(
                             context: context,
-                            message: "check your download folder");
+                            message: "check your download folder".tr);
                       },
                     );
                   },
@@ -1040,7 +1040,7 @@ class _Account_DocumentState extends State<Account_Document> {
                     padding: EdgeInsets.all(10),
                     margin: EdgeInsets.all(10),
                     child: Text(
-                      "Download pdf",
+                      "Download pdf".tr,
                       style: TextStyle(fontFamily: "Fontmain"),
                     ),
                   ),
@@ -1093,7 +1093,7 @@ class _Account_DocumentState extends State<Account_Document> {
                         borderRadius: BorderRadius.circular(10)),
                     padding: EdgeInsets.all(10),
                     margin: EdgeInsets.all(10),
-                    child: Text("Upload pdf",
+                    child: Text("Upload pdf".tr,
                         style: TextStyle(fontFamily: "Fontmain")),
                   ),
                 ),
@@ -1110,7 +1110,7 @@ class _Account_DocumentState extends State<Account_Document> {
                         });
                         Api.snack_bar(
                             context: context,
-                            message: "check your download folder");
+                            message: "check your download folder".tr);
                       },
                     );
                   },
@@ -1182,7 +1182,7 @@ class _Account_DocumentState extends State<Account_Document> {
                         borderRadius: BorderRadius.circular(10)),
                     padding: EdgeInsets.all(10),
                     margin: EdgeInsets.all(10),
-                    child: Text("Gst Upload pdf",
+                    child: Text("Gst Upload pdf".tr,
                         style: TextStyle(fontFamily: "Fontmain")),
                   ),
                 )

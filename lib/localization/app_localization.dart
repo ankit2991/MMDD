@@ -187,9 +187,16 @@ class AppTranslations extends Translations {
           'Payment History':'Payment History',
           'payment Error':'payment Error',
           'payment Cancel':'payment Cancel',
+          'Gst Upload pdf':'Gst Upload pdf',
+          'check your download folder':'check your download folder',
+          'Upload pdf':'Upload pdf',
+          'Download pdf':'Download pdf',
           
         },
         'hi_IN': {
+          'Download pdf':'पीडीएफ डाउनलोड करें',
+          'Upload pdf':'पीडीएफ अपलोड करें',
+          'check your download folder':'अपना डाउनलोड फ़ोल्डर जांचें',
           'payment Cancel':'भुगतान रद्द',
           'payment Error':'भुगतान समस्या',
           'Payment History':'भुगतान इतिहास',
@@ -377,7 +384,8 @@ class AppTranslations extends Translations {
           'CONFIRM BOOKING': 'बुकिंग की पुष्टि करें',
           'Enter Quantity': 'मात्रा दर्ज करें',
           'Invalid Amount': 'अमान्य राशि',
-          'Enter the Amount': 'राशि दर्ज करें'
+          'Enter the Amount': 'राशि दर्ज करें',
+          'Gst Upload pdf':'जीएसटी अपलोड पीडीएफ'
           //  'Storage Full on this Section':'इस अनुभाग पर संग्रहण पूर्ण',
         },
       };
