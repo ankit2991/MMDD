@@ -1,4 +1,4 @@
-package com.example.mddmerchant
+package app.sys.merchant
 
 import io.flutter.embedding.android.FlutterActivity
 

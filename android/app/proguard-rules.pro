@@ -1,3 +1,21 @@
+# ProGuard rules to keep necessary classes and prevent warnings
+
+# Keep all Play Core classes
+-keep class com.google.android.play.core.** { *; }
+
+# Keep Play Core and SplitCompatApplication classes
+-keep class com.google.android.play.core.splitcompat.** { *; }
+-dontwarn com.google.android.play.core.**
+
+# Keep SplitCompatApplication and related classes if you use Play Core features
+-keep class com.google.android.play.core.splitcompat.** { *; }
+
+# Flutter ProGuard rules
+-keep class io.flutter.** { *; }
+-keep class com.example.mddmerchant.** { *; }
+-dontwarn io.flutter.embedding.**
+
+# Don't warn on specific libraries
 -dontwarn com.payu.cardscanner.PayU
 -dontwarn com.payu.cardscanner.callbacks.PayUCardListener
 -dontwarn com.payu.olamoney.OlaMoney
